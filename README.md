@@ -21,5 +21,5 @@ firebase serve
 ## Deploy
 
 ```shell script
-firebase deploy
+npm deploy
 ```
