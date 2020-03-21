@@ -6,7 +6,7 @@ Install Firebase tools
 npm install -g firebase-tools
 ```
 
-Login to Firebase:
+LoginPage to Firebase:
 
  ```shell script
  firebase login
