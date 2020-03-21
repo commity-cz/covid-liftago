@@ -29,8 +29,6 @@ returns error `Port 5000 is not open on localhost, could not start functions emu
 npm run shell -- --port 5002
 ``` 
 
- 
-
 ## Deployment
 
 Deploy all cloud functions

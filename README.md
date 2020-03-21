@@ -6,7 +6,7 @@ Install Firebase tools
 npm install -g firebase-tools
 ```
 
-LoginPage to Firebase:
+Login to Firebase:
 
  ```shell script
  firebase login
@@ -17,6 +17,14 @@ Run local development:
 ```shell script
 firebase serve
 ```
+
+### Cloud functions
+
+See [Cloud functions readme](functions/README.md).
+
+### Frontend
+
+See [Frontend readme](frontend/README.md).
 
 ## Deploy staging
 
