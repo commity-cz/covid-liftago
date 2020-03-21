@@ -30,7 +30,7 @@ const LoginPage: React.FC<Props> = ({ onSubmit }) => {
     <form onSubmit={handleForm}>
       <Paper className={classes.padding}>
           <div className={classes.margin}>
-              <Grid container spacing={8} alignItems="flex-end">
+              <Grid container spacing={2} alignItems="flex-end">
                   <Grid item>
                       <Face />
                   </Grid>
@@ -38,7 +38,7 @@ const LoginPage: React.FC<Props> = ({ onSubmit }) => {
                       <TextField value={email} onChange={e => setEmail(e.target.value)} label="Email" type="email" fullWidth autoFocus required />
                   </Grid>
               </Grid>
-              <Grid container spacing={8} alignItems="flex-end">
+              <Grid container spacing={2} alignItems="flex-end">
                   <Grid item>
                       <Fingerprint />
                   </Grid>

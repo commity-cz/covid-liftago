@@ -3,17 +3,19 @@ import './App.css';
 import {BrowserRouter, Link, Route, Switch} from "react-router-dom";
 import LoginView from "./app/loginView/LoginView";
 import {FirebaseContext} from "./firebase";
+import {Container} from "@material-ui/core";
+import RidesFromView from "./app/ridesFormView/RidesFromView";
 
 function App() {
   const firebase = useContext(FirebaseContext);
 
   return (
     <BrowserRouter>
-      <div>
+      <Container>
         <nav>
           <ul>
             <li>
-              <Link to="/">Home</Link>
+              <Link to="/">Jízda</Link>
             </li>
             <li>
               <Link to="/login">Login</Link>
@@ -26,11 +28,10 @@ function App() {
             <LoginView />
           </Route>
           <Route path="/">
-            <div>Homepage</div>
-            <button onClick={_ => firebase?.addDeliveryRide({id: 'test'})}>Test request</button>
+            <RidesFromView/>
           </Route>
         </Switch>
-      </div>
+      </Container>
     </BrowserRouter>
   );
 }

@@ -1,6 +1,6 @@
-import { action } from '@storybook/addon-actions';
+import {action} from '@storybook/addon-actions';
 import React from 'react';
-import { FormContext, useForm } from "react-hook-form";
+import {FormContext, useForm} from "react-hook-form";
 import ContactFormContainer from "./ContactFormContainer";
 import RidesForm from "./RidesForm";
 import StopFormContainer from "./StopFormContainer";
