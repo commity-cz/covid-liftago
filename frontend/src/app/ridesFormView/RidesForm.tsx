@@ -1,9 +1,8 @@
-import { Button, Grid, Theme, Typography } from "@material-ui/core";
-import { makeStyles } from '@material-ui/styles';
+import {Button, Grid, makeStyles, Theme, Typography} from "@material-ui/core";
 import classNames from 'classnames';
 import React from 'react';
-import { FormContext, useFieldArray, useForm } from "react-hook-form";
-import { v4 as uuidv4 } from 'uuid';
+import {FormContext, useFieldArray, useForm} from "react-hook-form";
+import {v4 as uuidv4} from 'uuid';
 import StopFormContainer from "./StopFormContainer";
 
 const useStyles = makeStyles((theme: Theme) => {
