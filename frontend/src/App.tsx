@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
-import {Link, BrowserRouter, Route, Switch} from "react-router-dom";
-import Login from "./app/Login";
+import {BrowserRouter, Link, Route, Switch} from "react-router-dom";
+import LoginView from "./app/loginView/LoginView";
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
 
         <Switch>
           <Route path="/login">
-            <Login />
+            <LoginView />
           </Route>
           <Route path="/">
             <div>Homepage</div>

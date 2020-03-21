@@ -1,7 +1,8 @@
 import React, {useContext} from 'react';
-import {FirebaseContext} from "../firebase";
+import {FirebaseContext} from "../../firebase";
+import LoginPage from "./LoginPage";
 
-function Login() {
+function LoginView() {
   const firebase = useContext(FirebaseContext);
 
   const logIn = () => {
@@ -11,8 +12,8 @@ function Login() {
   };
 
   return (
-    <button onClick={_ => logIn()}>Log In</button>
+    <LoginPage />
   );
 }
 
-export default Login;
+export default LoginView;
