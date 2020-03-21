@@ -53,12 +53,14 @@ const RidesForm: React.FC<Props> = ({ onSubmit, ...others }) => {
       defaultValues: {
         stops: [
           {
-            "stopId": uuidv4(),
-            "kind": "PICKUP"
+            stopId: uuidv4(),
+            kind: "PICKUP",
+            notesForDriver: "COVID 19 cz"
           },
           {
-            "stopId": uuidv4(),
-            "kind": "DESTINATION"
+            stopId: uuidv4(),
+            kind: "DESTINATION",
+            notesForDriver: "COVID 19 cz"
           }
         ]
       }
