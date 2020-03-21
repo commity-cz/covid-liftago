@@ -4,7 +4,7 @@ import UserContext from "../../user/context";
 
 
 type Props = {
-  path: any;
+  path: string;
 };
 
 const PrivateRoute: React.FC<Props> = ({ children, ...rest }) => {
