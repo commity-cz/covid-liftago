@@ -1,6 +1,7 @@
 import {action} from '@storybook/addon-actions';
 import React from 'react';
 import {FormContext, useForm} from "react-hook-form";
+import AddressAutocomplete from "./AddressAutocomplete";
 import ContactFormContainer from "./ContactFormContainer";
 import RidesForm from "./RidesForm";
 import StopFormContainer from "./StopFormContainer";
@@ -45,5 +46,11 @@ export const RidesFormStory = () => {
 
     <RidesForm onSubmit={action('onSubmit')}/>
 
+  )
+}
+
+export const AddressAutocompleteStory = () => {
+  return (
+    <AddressAutocomplete onSelect={action('onSelect')}/>
   )
 }
