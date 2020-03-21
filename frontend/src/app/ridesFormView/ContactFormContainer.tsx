@@ -31,7 +31,6 @@ const ContactFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], 
 
   const names = useMemo(() => ({
     name: getFullName(baseName, 'name'),
-    email: getFullName(baseName, 'email'),
     phoneNumber: getFullName(baseName, 'phoneNumber'),
     company: getFullName(baseName, 'company'),
   }), [baseName]);
@@ -49,20 +48,6 @@ const ContactFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], 
                   control={control}
                   defaultValue=""
                   helperText={<ErrorMessage errors={currentErrors} name={names.name}/>}
-      />
-
-      <Controller as={TextField}
-                  name={names.email}
-                  error={Boolean(currentErrors.email)}
-                  label="Email"
-                  rules={{
-                    required: "Vyplňte email",
-                    pattern: {value: EMAIL_REGEXP, message: 'Zadejte platný email'}
-                  }}
-                  helperText={<ErrorMessage errors={currentErrors} name={names.email}/>}
-                  type="email"
-                  control={control}
-                  defaultValue=""
       />
 
       <Controller as={TextField}
