@@ -1,13 +1,11 @@
-import {Grid, Paper, TextField, Typography} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import { Grid, LinearProgress, Paper, TextField, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 import parse from "autosuggest-highlight/parse";
 import React from 'react';
 // @ts-ignore
-import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
-// If you want to use the provided css
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-
-import 'react-google-places-autocomplete/dist/assets/index.css';
+import GooglePlacesAutocomplete, { geocodeByPlaceId } from 'react-google-places-autocomplete';
+import { convert } from "./addressConversion";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,23 +19,27 @@ const useStyles = makeStyles(theme => ({
   suggestions: {
     position: 'absolute',
     zIndex: 101,
-    padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`
+    padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
+    minWidth: 300
+  },
+  suggestion: {
+    cursor: 'pointer'
   }
 }));
 
 
 type Props = StandardProps & {
-  onSelect: (address: any) => void
+  onSelect: (address: any) => void,
+  error?: boolean
 };
 
-const AddressAutocomplete: React.FC<Props> = ({ onSelect }) => {
+const AddressAutocomplete: React.FC<Props> = ({ error, onSelect }) => {
   const classes = useStyles();
 
-  function selectHandler(place:any) {
-    console.log('TODO process place to address', place);
-    // const placesService = new window.google.maps.places.AutocompleteService();
-    // placesService.getDetails(request, callback);
-    onSelect(place)
+  function selectHandler(place: any) {
+    geocodeByPlaceId(place.place_id)
+      .then(convert)
+      .then(onSelect);
   }
 
   const renderItem = (option: any, onSelectSuggestion: any) => {
@@ -48,7 +50,10 @@ const AddressAutocomplete: React.FC<Props> = ({ onSelect }) => {
     );
 
     return (
-      <Grid container alignItems="center"
+      <Grid key={option.id}
+            container
+            alignItems="center"
+            className={classes.suggestion}
             onClick={() => onSelectSuggestion(option)}>
         <Grid item>
           <LocationOnIcon className={classes.icon}/>
@@ -56,10 +61,10 @@ const AddressAutocomplete: React.FC<Props> = ({ onSelect }) => {
         <Grid item xs>
           <Typography>
             {parts.map((part, index) => (
-            <span key={index} style={{ fontWeight: part.highlight ? 700 : 400 }}>
+              <span key={index} style={{ fontWeight: part.highlight ? 700 : 400 }}>
               {part.text}
             </span>
-          ))}
+            ))}
           </Typography>
 
           <Typography variant="body2" color="textSecondary">
@@ -80,7 +85,8 @@ const AddressAutocomplete: React.FC<Props> = ({ onSelect }) => {
           <TextField
             inputProps={props}
             label="Vyhledat adresu"
-            style={{marginBottom: 3}}
+            style={{ marginBottom: 3 }}
+            error={error}
             fullWidth
           />
         )}
@@ -90,6 +96,13 @@ const AddressAutocomplete: React.FC<Props> = ({ onSelect }) => {
             country: ['cz'],
           }
         }}
+
+        loader={
+          <Paper className={classes.suggestions}>
+            <LinearProgress variant="indeterminate"/>
+            <Typography>Loading...</Typography>
+          </Paper>
+        }
 
         renderSuggestions={(active: any, suggestions: any, onSelectSuggestion: any) => (
           <Paper className={classes.suggestions}>
