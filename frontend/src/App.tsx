@@ -7,12 +7,13 @@ import Header from "./app/common/Header";
 import PrivateRoute from "./app/common/ProtectedRoute";
 import {FirebaseContext} from "./firebase";
 import UserContext from "./user/context";
+import firebase from "firebase";
 
 function App() {
   const firebase = useContext(FirebaseContext);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<firebase.User | null>(null);
 
-  firebase?.addAuthObserver((user: any) => setUser(user));
+  firebase?.addAuthObserver((user: firebase.User | null) => setUser(user));
 
   return (
     <UserContext.Provider value={user}>

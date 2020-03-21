@@ -28,7 +28,7 @@ class Firebase {
         return this.deliveryRides(data)
     };
 
-    addAuthObserver = (callback: any) => {
+    addAuthObserver = (callback: (user: firebase.User | null) => void) => {
       this.auth.onAuthStateChanged(callback)
     };
 
