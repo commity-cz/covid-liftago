@@ -28,18 +28,23 @@ type Props = StandardProps & {
 
 const StopFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], ...others }) => {
   const classes = useStyles();
-  const { control } = useFormContext();
+  const { control, register } = useFormContext();
 
   const names = useMemo(() => ({
     contact: getFullName(baseName, 'contact'),
     locationAddress: getFullName(baseName, 'location.address'),
-    noteForDriver: getFullName(baseName, 'noteForDriver')
+    noteForDriver: getFullName(baseName, 'noteForDriver'),
+    stopId: getFullName(baseName, 'stopId'),
+    kind: getFullName(baseName, 'kind'),
   }), [baseName]);
 
   return (
 
     <Grid  {...others}
            className={classNames(classes.root, others.className)} container spacing={3}>
+
+      <input type="hidden" name={names.stopId} ref={register}/>
+      <input type="hidden" name={names.kind} ref={register}/>
 
       <Grid item xs={12} md={6}>
         <ContactFormContainer baseName={names.contact} errorPath={[...errorPath, 'contact']}/>

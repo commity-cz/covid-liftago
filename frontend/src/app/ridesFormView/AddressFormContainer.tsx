@@ -135,8 +135,7 @@ const AddressFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], 
                         fullWidth
             />
           </div>
-
-          <input type="hidden" name="country" ref={register}/>
+          <input type="hidden" name={names.country} ref={register}/>
 
         </>
       )}

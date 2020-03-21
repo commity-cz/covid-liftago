@@ -1,11 +1,11 @@
-import {Button, Grid, makeStyles, Paper, Theme, Typography} from "@material-ui/core";
+import { Button, Grid, Link, makeStyles, Paper, Theme, Typography } from "@material-ui/core";
 import classNames from 'classnames';
 import React from 'react';
-import {FormContext, useFieldArray, useForm} from "react-hook-form";
-import {v4 as uuidv4} from 'uuid';
+import { FormContext, useFieldArray, useForm } from "react-hook-form";
+import { v4 as uuidv4 } from 'uuid';
 import StopFormContainer from "./StopFormContainer";
 
-const useStyles = makeStyles(({spacing}: Theme) => {
+const useStyles = makeStyles(({ spacing }: Theme) => {
 
   return {
     root: {},
@@ -86,7 +86,8 @@ const RidesForm: React.FC<Props> = ({ onSubmit, ...others }) => {
         <form {...others}
               className={classNames(classes.root, others.className)}
               onSubmit={handleSubmit(onSubmit)}>
-          <Typography variant="h4" className={classes.title}>Pro objednání rozvozu prosím vyplňte následující formulář</Typography>
+          <Typography variant="h4" className={classes.title}>Pro objednání rozvozu prosím vyplňte následující
+            formulář</Typography>
           {fields.map((stop, index) => (
             <Grid item xs={12} key={stop.stopId}>
 
@@ -107,8 +108,9 @@ const RidesForm: React.FC<Props> = ({ onSubmit, ...others }) => {
             <Typography variant={"body2"}>
               Odesláním poptávky rozvozu vyjadřujete souhlas se Všeobecnými obchodními podmínkami spolecnosti Liftago
               CZ, s.r.o.
-              (<a target="_blank"
-              href={"https://www.liftago.com/vseobecne-obchodni-podminky/"}>https://www.liftago.com/vseobecne-obchodni-podminky/</a>).
+              (
+              <Link target="_blank"
+                    href={"https://www.liftago.com/vseobecne-obchodni-podminky/"}>https://www.liftago.com/vseobecne-obchodni-podminky/</Link>).
             </Typography>
           </Grid>
 

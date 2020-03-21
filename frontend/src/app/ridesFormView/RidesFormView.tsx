@@ -33,21 +33,7 @@ function RidesFormView() {
 }
 
 function createDeliveryRidesBody(data: Object) {
-  // @ts-ignore
-  const stops = data.stops.map(stop => ({
-    ...stop,
-    stopId: uuidv4(),
-    location: {
-      ...stop.location,
-      address: {
-        ...stop.location.address,
-        country: 'Czech republic'
-      },
-    }
-  }));
-  stops[0].kind = 'PICKUP';
-  stops[1].kind = 'DESTINATION';
-  return {...data, id: uuidv4(), stops};
+  return {...data, id: uuidv4()};
 }
 
 export default RidesFormView;
