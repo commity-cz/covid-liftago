@@ -6,6 +6,7 @@ admin.initializeApp();
 exports.deliveryRides = functions
   .region('europe-west1')
   .https.onCall((data, context) => {
+    checkAuthentication(context);
     console.log('deliveryRides request', data);
     return fetch(`${functions.config().liftago.url}/deliveryRides`, {
         method: 'post',
@@ -31,6 +32,12 @@ exports.deliveryRides = functions
         return json;
       });
   });
+
+function checkAuthentication(context) {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated', 'Unauthenticated');
+  }
+}
 
 function checkStatus(res) {
   if (res.ok) {
