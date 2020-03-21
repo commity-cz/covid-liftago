@@ -2,8 +2,8 @@ import {Grid, TextField} from '@material-ui/core';
 import {makeStyles} from '@material-ui/styles';
 import classNames from 'classnames';
 import React, {useMemo} from 'react';
-import {Controller, useFormContext} from "react-hook-form";
-import {getFullName} from "../../formFunctions";
+import {Controller, ErrorMessage, useFormContext} from "react-hook-form";
+import {getCurrentErrors, getFullName} from "../../formFunctions";
 import AddressFormContainer from "./AddressFormContainer";
 import ContactFormContainer, {Contact} from "./ContactFormContainer";
 
@@ -28,7 +28,7 @@ type Props = StandardProps & {
 
 const StopFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], ...others }) => {
   const classes = useStyles();
-  const { control, register } = useFormContext();
+  const { control, register, errors } = useFormContext();
 
   const names = useMemo(() => ({
     contact: getFullName(baseName, 'contact'),
@@ -37,6 +37,8 @@ const StopFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], ...
     stopId: getFullName(baseName, 'stopId'),
     kind: getFullName(baseName, 'kind'),
   }), [baseName]);
+
+  const currentErrors = useMemo(() => getCurrentErrors(errorPath, errors) as Stop, [errorPath, errors]);
 
   return (
 
@@ -56,9 +58,12 @@ const StopFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], ...
       <Grid item xs={12} className={classes.row}>
         <Controller as={TextField}
                     name={names.noteForDriver}
+                    error={Boolean(currentErrors.noteForDriver)}
                     label="Poznámka pro řidiče / instrukce na místě (nepovinné)"
                     control={control}
+                    rules={{maxLength: {value: 80, message: "Poznámka může obsahovat maximálně 80 znaků"}}}
                     defaultValue=""
+                    helperText={<ErrorMessage errors={currentErrors} name={names.noteForDriver}/>}
         />
       </Grid>
 
