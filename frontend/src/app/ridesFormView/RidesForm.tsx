@@ -40,13 +40,13 @@ enum StopKind {
 function getStopLabel(stopKind: StopKind) {
   switch (stopKind) {
     case 'PICKUP':
-      return "Odesílatel (místo vyzvednutí):";
+      return "Odesílatel (místo vyzvednutí)";
 
     case 'DESTINATION':
       return "Příjemce (místo doručení)";
 
     case 'FALLBACK_DESTINATION':
-      return "Náhradní příjemce:";
+      return "Náhradní příjemce (náhradní místo doručení)";
 
   }
 }
@@ -86,7 +86,7 @@ const RidesForm: React.FC<Props> = ({ onSubmit, ...others }) => {
         <form {...others}
               className={classNames(classes.root, others.className)}
               onSubmit={handleSubmit(onSubmit)}>
-          <Typography variant="h4" className={classes.title}>Pro objednání rozvozu prosím vyplňte následující formulář.</Typography>
+          <Typography variant="h4" className={classes.title}>Pro objednání rozvozu prosím vyplňte následující formulář</Typography>
           {fields.map((stop, index) => (
             <Grid item xs={12} key={stop.stopId}>
 
