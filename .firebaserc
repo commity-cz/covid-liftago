@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "covid-liftago"
+    "default": "covid-liftago-staging",
+    "production": "covid-liftago"
   }
 }

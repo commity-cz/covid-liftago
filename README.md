@@ -18,8 +18,14 @@ Run local development:
 firebase serve
 ```
 
-## Deploy
+## Deploy staging
 
 ```shell script
-npm deploy
+npm run deploy:staging
+```
+
+## Deploy production
+
+```shell script
+npm run deploy:production
 ```
