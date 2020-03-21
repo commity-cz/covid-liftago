@@ -7,11 +7,11 @@ import {Redirect} from "react-router-dom";
 function LoginView() {
   const firebase = useContext(FirebaseContext);
   const user = useContext(UserContext);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const signIn = (email: string, password: string) => {
     firebase?.doSignIn(email, password)
-      .catch(error => setErrorMessage(error.message));
+      .catch(error => setErrorMessage('Nepodařilo se přihlásit'));
   };
 
   if (user) {

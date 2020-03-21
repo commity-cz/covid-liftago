@@ -13,6 +13,7 @@ class Firebase {
         const application = app.initializeApp(config);
 
         this.auth = application.auth();
+        this.auth.languageCode = 'cs';
         this.functions = application.functions('europe-west1');
         // this.appVerifier = new auth.RecaptchaVerifier('recaptcha-container');
         this.deliveryRides = this.functions.httpsCallable('deliveryRides');
@@ -24,11 +25,7 @@ class Firebase {
     };
 
     addDeliveryRide = (data: Object) => {
-        this.deliveryRides(data).then(function(result) {
-            console.log(result);
-            const sanitizedMessage = result.data.text;
-            console.log(sanitizedMessage);
-        });
+        return this.deliveryRides(data)
     };
 
     addAuthObserver = (callback: any) => {
