@@ -23,3 +23,16 @@ Deploy all cloud functions
 ```shell script
 npm run deploy
 ```
+
+## Environment variables
+
+Available variables
+* liftago.url
+* liftago.token
+
+Setting environment variable 
+
+```shell script
+firebase firebase functions:config:set <VARIABLE_NAME>="<VARIABLE_VALUE>"
+
+```
