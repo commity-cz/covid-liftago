@@ -16,10 +16,6 @@ class Firebase {
         this.functions = application.functions('europe-west1');
         // this.appVerifier = new auth.RecaptchaVerifier('recaptcha-container');
         this.deliveryRides = this.functions.httpsCallable('deliveryRides');
-
-        this.auth.onAuthStateChanged(user => {
-          console.log(user);
-        })
     }
 
     doSignOut = () => this.auth.signOut();

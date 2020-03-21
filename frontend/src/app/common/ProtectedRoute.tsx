@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {Route} from "react-router-dom";
+import {Link, Route} from "react-router-dom";
 import UserContext from "../../user/context";
 
 
@@ -17,7 +17,7 @@ const PrivateRoute: React.FC<Props> = ({ children, ...rest }) => {
         user ? (
           children
         ) : (
-          <div>Prosím přihlaste se</div>
+          <div>Prosím <Link to="/login">přihlaste se</Link></div>
         )
       }
     />

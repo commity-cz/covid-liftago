@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {AppBar, makeStyles, Theme, Toolbar, Typography} from "@material-ui/core";
 import {FirebaseContext} from "../../firebase";
-import {Link} from "react-router-dom";
+import {ExitToApp} from '@material-ui/icons';
 import UserContext from "../../user/context";
 
 const useStyles = makeStyles(({spacing}: Theme) => ({
@@ -10,6 +10,9 @@ const useStyles = makeStyles(({spacing}: Theme) => ({
   },
   spaceBottom: {
     marginBottom: spacing(2)
+  },
+  icon: {
+    cursor: 'pointer'
   }
 }));
 
@@ -23,7 +26,8 @@ function Header() {
         <Toolbar>
           <Typography variant="h6" className={classes.title}>App Bar</Typography>
           {
-            user ? <div onClick={_ => firebase?.doSignOut()}>Logout</div> : <Link to="/login">Login</Link>
+            user &&
+              <ExitToApp className={classes.icon} onClick={_ => firebase?.doSignOut()}/>
           }
         </Toolbar>
       </AppBar>
