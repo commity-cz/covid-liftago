@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import './App.css';
 import {BrowserRouter, Link, Route, Switch} from "react-router-dom";
 import LoginView from "./app/loginView/LoginView";
+import {FirebaseContext} from "./firebase";
 
 function App() {
+  const firebase = useContext(FirebaseContext);
+
   return (
     <BrowserRouter>
       <div>
@@ -24,6 +27,7 @@ function App() {
           </Route>
           <Route path="/">
             <div>Homepage</div>
+            <button onClick={_ => firebase?.addDeliveryRide({id: 'test'})}>Test request</button>
           </Route>
         </Switch>
       </div>
