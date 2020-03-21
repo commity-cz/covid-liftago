@@ -2,7 +2,7 @@ import React, {useContext, useState} from 'react';
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import LoginView from "./app/loginView/LoginView";
 import {Container} from "@material-ui/core";
-import RidesFromView from "./app/ridesFormView/RidesFromView";
+import RidesFormView from "./app/ridesFormView/RidesFormView";
 import Header from "./app/common/Header";
 import PrivateRoute from "./app/common/ProtectedRoute";
 import {FirebaseContext} from "./firebase";
@@ -24,7 +24,7 @@ function App() {
               <LoginView />
             </Route>
             <PrivateRoute path="/">
-              <RidesFromView/>
+              <RidesFormView/>
             </PrivateRoute>
           </Switch>
         </Container>
