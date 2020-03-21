@@ -26,6 +26,13 @@ class Firebase {
 
     addDeliveryRide = (data: Object) => {
         return this.deliveryRides(data)
+          .then(data => {
+            if (data.data.code !== undefined) {
+              throw data.data.code;
+            }
+
+            return data.data;
+          })
     };
 
     addAuthObserver = (callback: (user: firebase.User | null) => void) => {

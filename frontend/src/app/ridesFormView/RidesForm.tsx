@@ -1,8 +1,8 @@
-import { Button, Grid, Link, makeStyles, Paper, Theme, Typography } from "@material-ui/core";
+import {Button, CircularProgress, Grid, Link, makeStyles, Paper, Theme, Typography} from "@material-ui/core";
 import classNames from 'classnames';
 import React from 'react';
-import { FormContext, useFieldArray, useForm } from "react-hook-form";
-import { v4 as uuidv4 } from 'uuid';
+import {FormContext, useFieldArray, useForm} from "react-hook-form";
+import {v4 as uuidv4} from 'uuid';
 import StopFormContainer from "./StopFormContainer";
 
 const useStyles = makeStyles(({ spacing }: Theme) => {
@@ -11,7 +11,8 @@ const useStyles = makeStyles(({ spacing }: Theme) => {
     root: {},
     row: {
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      position: 'relative',
     },
     title: {
       marginBottom: spacing(2)
@@ -23,12 +24,21 @@ const useStyles = makeStyles(({ spacing }: Theme) => {
     fieldset: {
       padding: spacing(2),
       marginBottom: spacing(2),
-    }
+    },
+    buttonProgress: {
+      // color: green[500],
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      marginTop: -12,
+      marginLeft: -12,
+    },
   }
 });
 
 type Props = StandardProps & {
   onSubmit: (event: any) => void;
+  isSubmittingData: boolean;
 };
 
 enum StopKind {
@@ -51,7 +61,7 @@ function getStopLabel(stopKind: StopKind) {
   }
 }
 
-const RidesForm: React.FC<Props> = ({ onSubmit, ...others }) => {
+const RidesForm: React.FC<Props> = ({ onSubmit, isSubmittingData, ...others }) => {
   const classes = useStyles();
   const formMethods = useForm<any>({
       defaultValues: {
@@ -101,7 +111,8 @@ const RidesForm: React.FC<Props> = ({ onSubmit, ...others }) => {
           ))}
 
           <Grid item xs={12} className={classes.row}>
-            <Button type="submit" size="large" variant="contained" color="primary">Odeslat</Button>
+            <Button type="submit" size="large" variant="contained" color="primary" disabled={isSubmittingData}>Odeslat</Button>
+            {isSubmittingData && <CircularProgress size={24} className={classes.buttonProgress} />}
           </Grid>
 
           <Grid item xs={12} className={classes.conditions}>

@@ -43,9 +43,10 @@ export const ContactFormContainerStory = () => {
 
 export const RidesFormStory = () => {
   return (
-
-    <RidesForm onSubmit={action('onSubmit')}/>
-
+    <RidesForm
+      onSubmit={action('onSubmit')}
+      isSubmittingData={false}
+    />
   )
 }
 
