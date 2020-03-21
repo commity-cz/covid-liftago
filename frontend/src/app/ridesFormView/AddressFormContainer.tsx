@@ -1,8 +1,8 @@
-import { TextField, Theme, makeStyles } from "@material-ui/core";
+import {makeStyles, TextField, Theme} from "@material-ui/core";
 import classNames from 'classnames';
-import React, { useMemo } from 'react';
-import { Controller, ErrorMessage, useFormContext } from "react-hook-form";
-import { getCurrentErrors, getFullName } from "../../formFunctions";
+import React, {useMemo} from 'react';
+import {Controller, ErrorMessage, useFormContext} from "react-hook-form";
+import {getCurrentErrors, getFullName} from "../../formFunctions";
 import AddressAutocomplete from "./AddressAutocomplete";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -106,7 +106,7 @@ const AddressFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], 
 
       <Controller as={TextField}
                   name={names.description}
-                  label="Doplňující popis"
+                  label="Doplňující popis (nepovinné)"
                   control={control}
                   defaultValue=""
                   multiline

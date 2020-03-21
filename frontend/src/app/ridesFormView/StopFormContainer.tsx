@@ -1,9 +1,9 @@
 import {Grid, TextField} from '@material-ui/core';
 import {makeStyles} from '@material-ui/styles';
 import classNames from 'classnames';
-import React, { useMemo } from 'react';
+import React, {useMemo} from 'react';
 import {Controller, useFormContext} from "react-hook-form";
-import { getFullName } from "../../formFunctions";
+import {getFullName} from "../../formFunctions";
 import AddressFormContainer from "./AddressFormContainer";
 import ContactFormContainer, {Contact} from "./ContactFormContainer";
 
@@ -51,7 +51,7 @@ const StopFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], ...
       <Grid item xs={12} className={classes.row}>
         <Controller as={TextField}
                     name={names.noteForDriver}
-                    label="Poznámka pro řidiče"
+                    label="Poznámka pro řidiče / instrukce na místě (nepovinné)"
                     control={control}
                     defaultValue=""
         />
