@@ -24,7 +24,8 @@ exports.deliveryRides = functions
           console.info('deliveryRides response', JSON.stringify(json));
           admin.firestore().collection('deliveryRides').add({
             id: json.id,
-            created: new Date().toISOString()
+            created: new Date().toISOString(),
+            userId: context.auth.uid
           });
         } else {
           console.error('Missing ID in deliveryRides response', JSON.stringify(json));
