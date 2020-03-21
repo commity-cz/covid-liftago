@@ -5,7 +5,7 @@ import {FormContext, useFieldArray, useForm} from "react-hook-form";
 import {v4 as uuidv4} from 'uuid';
 import StopFormContainer from "./StopFormContainer";
 
-const useStyles = makeStyles((theme: Theme) => {
+const useStyles = makeStyles(({spacing}: Theme) => {
 
   return {
     root: {},
@@ -13,13 +13,16 @@ const useStyles = makeStyles((theme: Theme) => {
       display: 'flex',
       flexDirection: 'column'
     },
+    title: {
+      marginBottom: spacing(2)
+    },
     conditions: {
       textAlign: 'center',
-      paddingTop: `${theme.spacing(4)}px`
+      paddingTop: spacing(4)
     },
     fieldset: {
-      padding: theme.spacing(2),
-      marginBottom: theme.spacing(2),
+      padding: spacing(2),
+      marginBottom: spacing(2),
     }
   }
 });
@@ -37,10 +40,10 @@ enum StopKind {
 function getStopLabel(stopKind: StopKind) {
   switch (stopKind) {
     case 'PICKUP':
-      return "Odesílatel:";
+      return "Odesílatel (místo vyzvednutí):";
 
     case 'DESTINATION':
-      return "Příjemce:";
+      return "Příjemce (místo doručení)";
 
     case 'FALLBACK_DESTINATION':
       return "Náhradní příjemce:";
@@ -83,12 +86,14 @@ const RidesForm: React.FC<Props> = ({ onSubmit, ...others }) => {
         <form {...others}
               className={classNames(classes.root, others.className)}
               onSubmit={handleSubmit(onSubmit)}>
-
+          <Typography variant="h4" className={classes.title}>Pro objednání rozvozu prosím vyplňte následující formulář.</Typography>
           {fields.map((stop, index) => (
             <Grid item xs={12} key={stop.stopId}>
 
               <Paper className={classes.fieldset}>
-                <legend><Typography>{getStopLabel(stop.kind)}</Typography></legend>
+                <legend>
+                  <Typography variant="h5">{getStopLabel(stop.kind)}</Typography>
+                </legend>
                 <StopFormContainer key={`stops[${index}]`} baseName={`stops[${index}]`} errorPath={['stops', index]}/>
               </Paper>
             </Grid>
@@ -102,7 +107,7 @@ const RidesForm: React.FC<Props> = ({ onSubmit, ...others }) => {
             <Typography variant={"body2"}>
               Odesláním poptávky rozvozu vyjadřujete souhlas se Všeobecnými obchodními podmínkami spolecnosti Liftago
               CZ, s.r.o.
-              (<a
+              (<a target="_blank"
               href={"https://www.liftago.com/vseobecne-obchodni-podminky/"}>https://www.liftago.com/vseobecne-obchodni-podminky/</a>).
             </Typography>
           </Grid>

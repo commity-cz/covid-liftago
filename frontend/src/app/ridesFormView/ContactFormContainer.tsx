@@ -43,7 +43,7 @@ const ContactFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], 
                   name={names.name}
                   error={Boolean(currentErrors.name)}
                   rules={{ required: "Vyplňte celé jméno" }}
-                  label="Jméno a příjmení"
+                  label="Jméno a příjmení / Firma / Místo"
                   control={control}
                   defaultValue=""
                   helperText={<ErrorMessage errors={currentErrors} name={names.name}/>}
@@ -63,7 +63,7 @@ const ContactFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], 
 
       <Controller as={TextField}
                   name={names.company}
-                  label="Společnost"
+                  label="Společnost (nepovinné)"
                   control={control}
                   defaultValue=""
       />
