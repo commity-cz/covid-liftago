@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import React, { useMemo } from 'react';
 import {Controller, useFormContext} from "react-hook-form";
 import { getFullName } from "../../formFunctions";
+import AddressFormContainer from "./AddressFormContainer";
 import ContactFormContainer, {Contact} from "./ContactFormContainer";
 
 const useStyles = makeStyles(() => ({
@@ -44,8 +45,7 @@ const StopFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], ...
         <ContactFormContainer baseName={names.contact} errorPath={[...errorPath, 'contact']}/>
       </Grid>
       <Grid item xs={12} md={6}>
-        {/* TODO address ￿*/}
-        <ContactFormContainer baseName={names.locationAddress} errorPath={[...errorPath, 'location', 'address']}/>
+        <AddressFormContainer baseName={names.locationAddress} errorPath={[...errorPath, 'location', 'address']}/>
       </Grid>
 
       <Grid item xs={12} className={classes.row}>

@@ -58,12 +58,12 @@ const RidesForm: React.FC<Props> = ({ onSubmit, ...others }) => {
           {
             stopId: uuidv4(),
             kind: "PICKUP",
-            notesForDriver: "COVID 19 cz"
+            noteForDriver: "COVID 19 cz"
           },
           {
             stopId: uuidv4(),
             kind: "DESTINATION",
-            notesForDriver: "COVID 19 cz"
+            noteForDriver: "COVID 19 cz"
           }
         ]
       }
@@ -87,14 +87,11 @@ const RidesForm: React.FC<Props> = ({ onSubmit, ...others }) => {
               onSubmit={handleSubmit(onSubmit)}>
 
           {fields.map((stop, index) => (
-            <Grid item xs={12}>
+            <Grid item xs={12} key={stop.stopId}>
 
               <fieldset className={classes.fieldset}>
                 <legend><Typography>{getStopLabel(stop.kind)}</Typography></legend>
-                <div key={stop.stopId}>
-                  <StopFormContainer key={`stops[${index}]`} baseName={`stops[${index}]`} errorPath={['stops', index]}/>
-                </div>
-
+                <StopFormContainer key={`stops[${index}]`} baseName={`stops[${index}]`} errorPath={['stops', index]}/>
               </fieldset>
             </Grid>
           ))}
