@@ -23,7 +23,7 @@ function RidesFormView() {
     <>
       {
         errorMessage &&
-          <Alert severity="error">{errorMessage}</Alert>
+          <Alert style={{marginBottom: 16}} severity="error">{errorMessage}</Alert>
       }
       <RidesForm onSubmit={onFormSubmit} />
     </>

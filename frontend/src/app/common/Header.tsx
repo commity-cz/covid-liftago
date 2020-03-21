@@ -24,7 +24,7 @@ function Header() {
   return (
       <AppBar position="static" className={classes.spaceBottom}>
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>App Bar</Typography>
+          <Typography variant="h6" className={classes.title}>DobroVoz</Typography>
           {
             user &&
               <ExitToApp className={classes.icon} onClick={_ => firebase?.doSignOut()}/>
