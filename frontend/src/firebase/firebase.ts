@@ -16,6 +16,10 @@ class Firebase {
         this.functions = application.functions('europe-west1');
         // this.appVerifier = new auth.RecaptchaVerifier('recaptcha-container');
         this.deliveryRides = this.functions.httpsCallable('deliveryRides');
+
+        this.auth.onAuthStateChanged(user => {
+          console.log(user);
+        })
     }
 
     doSignOut = () => this.auth.signOut();
@@ -29,6 +33,14 @@ class Firebase {
             const sanitizedMessage = result.data.text;
             console.log(sanitizedMessage);
         });
-    }
+    };
+
+    addAuthObserver = (callback: any) => {
+      this.auth.onAuthStateChanged(callback)
+    };
+
+    getUser = () => {
+      return this.auth.currentUser;
+    };
 }
 export default Firebase;
