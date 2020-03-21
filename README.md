@@ -3,7 +3,7 @@ Ask someone to add you to the `covid-liftago` Firebase project.
 
 Install Firebase tools
 ```shell script
-npm install -g firebase-tools
+sudo npm install -g firebase-tools
 ```
 
 LoginPage to Firebase:
