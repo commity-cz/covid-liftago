@@ -5,14 +5,14 @@ import LoginPage from "./LoginPage";
 function LoginView() {
   const firebase = useContext(FirebaseContext);
 
-  const logIn = () => {
-    firebase?.doSignIn()
+  const signIn = (email: string, password: string) => {
+    firebase?.doSignIn(email, password)
       .then(user => console.log(user))
       .catch(error => console.log(error));
   };
 
   return (
-    <LoginPage />
+    <LoginPage onSubmit={signIn} />
   );
 }
 
