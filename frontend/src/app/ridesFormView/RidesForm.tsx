@@ -1,8 +1,8 @@
-import {Button, Grid, makeStyles, Theme, Typography} from "@material-ui/core";
+import { Button, Grid, makeStyles, Theme, Typography } from "@material-ui/core";
 import classNames from 'classnames';
 import React from 'react';
-import {FormContext, useFieldArray, useForm} from "react-hook-form";
-import {v4 as uuidv4} from 'uuid';
+import { FormContext, useFieldArray, useForm } from "react-hook-form";
+import { v4 as uuidv4 } from 'uuid';
 import StopFormContainer from "./StopFormContainer";
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -12,6 +12,10 @@ const useStyles = makeStyles((theme: Theme) => {
     row: {
       display: 'flex',
       flexDirection: 'column'
+    },
+    conditions: {
+      textAlign: 'center',
+      paddingTop: `${theme.spacing(4)}px`
     },
     fieldset: {
       border: 0,
@@ -97,6 +101,15 @@ const RidesForm: React.FC<Props> = ({ onSubmit, ...others }) => {
 
           <Grid item xs={12} className={classes.row}>
             <Button type="submit" variant="contained" color="primary">Odeslat</Button>
+          </Grid>
+
+          <Grid item xs={12} className={classes.conditions}>
+            <Typography variant={"body2"}>
+              Odesláním poptávky rozvozu vyjadřujete souhlas se Všeobecnými obchodními podmínkami spolecnosti Liftago
+              CZ, s.r.o.
+              (<a
+              href={"https://www.liftago.com/vseobecne-obchodni-podminky/"}>https://www.liftago.com/vseobecne-obchodni-podminky/</a>).
+            </Typography>
           </Grid>
 
         </form>
