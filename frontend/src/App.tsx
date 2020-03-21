@@ -1,34 +1,35 @@
-import React from 'react';
-import {BrowserRouter, Link, Route, Switch} from "react-router-dom";
+import React, {useContext, useState} from 'react';
+import {BrowserRouter, Route, Switch} from "react-router-dom";
 import LoginView from "./app/loginView/LoginView";
 import {Container} from "@material-ui/core";
 import RidesFromView from "./app/ridesFormView/RidesFromView";
+import Header from "./app/common/Header";
+import PrivateRoute from "./app/common/ProtectedRoute";
+import {FirebaseContext} from "./firebase";
+import UserContext from "./user/context";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Container>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Jízda</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-          </ul>
-        </nav>
+  const firebase = useContext(FirebaseContext);
+  const [user, setUser] = useState(null);
 
-        <Switch>
-          <Route path="/login">
-            <LoginView />
-          </Route>
-          <Route path="/">
-            <RidesFromView/>
-          </Route>
-        </Switch>
-      </Container>
-    </BrowserRouter>
+  firebase?.addAuthObserver((user: any) => setUser(user));
+
+  return (
+    <UserContext.Provider value={user}>
+      <BrowserRouter>
+        <Header/>
+        <Container >
+          <Switch>
+            <Route path="/login">
+              <LoginView />
+            </Route>
+            <PrivateRoute path="/">
+              <RidesFromView/>
+            </PrivateRoute>
+          </Switch>
+        </Container>
+      </BrowserRouter>
+    </UserContext.Provider>
   );
 }
 

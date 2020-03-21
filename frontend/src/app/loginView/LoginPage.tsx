@@ -1,6 +1,7 @@
 import React, {FormEvent, useState} from 'react';
 import {Button, Grid, makeStyles, Paper, TextField, Theme} from '@material-ui/core';
 import {Face, Fingerprint} from '@material-ui/icons'
+import {Alert} from "@material-ui/lab";
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   margin: {
@@ -12,11 +13,11 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 }));
 
 type Props = {
-  errorMessage?: string;
+  errorMessage: string | null;
   onSubmit: (email: string, password: string) => void;
 };
 
-const LoginPage: React.FC<Props> = ({ onSubmit }) => {
+const LoginPage: React.FC<Props> = ({ onSubmit, errorMessage }) => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,6 +30,10 @@ const LoginPage: React.FC<Props> = ({ onSubmit }) => {
   return (
     <form onSubmit={handleForm}>
       <Paper className={classes.padding}>
+        {
+          errorMessage &&
+          <Alert severity="error">{errorMessage}</Alert>
+        }
           <div className={classes.margin}>
               <Grid container spacing={2} alignItems="flex-end">
                   <Grid item>

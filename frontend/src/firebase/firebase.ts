@@ -29,6 +29,14 @@ class Firebase {
             const sanitizedMessage = result.data.text;
             console.log(sanitizedMessage);
         });
-    }
+    };
+
+    addAuthObserver = (callback: any) => {
+      this.auth.onAuthStateChanged(callback)
+    };
+
+    getUser = () => {
+      return this.auth.currentUser;
+    };
 }
 export default Firebase;
