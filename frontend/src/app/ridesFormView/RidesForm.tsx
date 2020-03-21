@@ -1,8 +1,8 @@
-import { Button, Grid, makeStyles, Theme, Typography } from "@material-ui/core";
+import {Button, Grid, makeStyles, Paper, Theme, Typography} from "@material-ui/core";
 import classNames from 'classnames';
 import React from 'react';
-import { FormContext, useFieldArray, useForm } from "react-hook-form";
-import { v4 as uuidv4 } from 'uuid';
+import {FormContext, useFieldArray, useForm} from "react-hook-form";
+import {v4 as uuidv4} from 'uuid';
 import StopFormContainer from "./StopFormContainer";
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -18,10 +18,8 @@ const useStyles = makeStyles((theme: Theme) => {
       paddingTop: `${theme.spacing(4)}px`
     },
     fieldset: {
-      border: 0,
-      borderTop: `1px solid ${theme.palette.primary.light}`,
-      borderLeft: `1px solid ${theme.palette.primary.light}`,
-      marginBottom: theme.spacing(1)
+      padding: theme.spacing(2),
+      marginBottom: theme.spacing(2),
     }
   }
 });
@@ -89,10 +87,10 @@ const RidesForm: React.FC<Props> = ({ onSubmit, ...others }) => {
           {fields.map((stop, index) => (
             <Grid item xs={12} key={stop.stopId}>
 
-              <fieldset className={classes.fieldset}>
+              <Paper className={classes.fieldset}>
                 <legend><Typography>{getStopLabel(stop.kind)}</Typography></legend>
                 <StopFormContainer key={`stops[${index}]`} baseName={`stops[${index}]`} errorPath={['stops', index]}/>
-              </fieldset>
+              </Paper>
             </Grid>
           ))}
 

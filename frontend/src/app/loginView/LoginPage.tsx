@@ -7,8 +7,10 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   margin: {
     margin: spacing(2),
   },
-  padding: {
-    padding: spacing()
+  paper: {
+    padding: spacing(),
+    margin: '0 auto',
+    maxWidth: 500,
   }
 }));
 
@@ -29,7 +31,7 @@ const LoginPage: React.FC<Props> = ({ onSubmit, errorMessage }) => {
 
   return (
     <form onSubmit={handleForm}>
-      <Paper className={classes.padding}>
+      <Paper className={classes.paper}>
         {
           errorMessage &&
           <Alert severity="error">{errorMessage}</Alert>
