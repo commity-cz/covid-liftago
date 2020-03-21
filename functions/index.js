@@ -1,8 +1,20 @@
 const functions = require('firebase-functions');
+const fetch = require('node-fetch');
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+exports.deliveryRides = functions.https.onRequest((request, response) => {
+    fetch(`${functions.config().liftago.url}/deliveryRides`, {
+            method: 'post',
+            body: JSON.stringify(request.body),
+            headers: {
+             'Content-Type': 'application/json',
+             'Authorization': `Bearer ${functions.config().liftago.token}`
+            },
+        }
+    )
+        .then(res => res.json())
+        .then(json => {
+            response.send(json);
+            return json;
+        })
+        .catch(e => response.status(500).send(e));
+});
