@@ -3,19 +3,21 @@ import {FirebaseContext} from "../../firebase";
 import RidesForm from "./RidesForm";
 import {Alert} from "@material-ui/lab";
 import {v4 as uuidv4} from 'uuid';
+import {useHistory} from "react-router-dom";
 
 function RidesFormView() {
   const firebase = useContext(FirebaseContext);
+  const history = useHistory();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const onFormSubmit = (data: Object) => {
     // TODO: in case of duplicity, submit again
     firebase?.addDeliveryRide(createDeliveryRidesBody(data))
       .then(_ => {
-        // TODO: on success clear form
+        history.push('/detail')
       })
       .catch(_ => {
-        setErrorMessage("Chyba při odesílání: " + _);
+        setErrorMessage(`Chyba při odesílání: ${_}`);
       });
   };
 

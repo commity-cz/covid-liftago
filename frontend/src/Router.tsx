@@ -5,6 +5,7 @@ import {Container} from "@material-ui/core";
 import RidesFormView from "./app/ridesFormView/RidesFormView";
 import Header from "./app/common/Header";
 import PrivateRoute from "./app/common/ProtectedRoute";
+import RidesDetailView from "./app/ridesDetailView/RidesDetailView";
 
 function Router() {
   return (
@@ -15,6 +16,9 @@ function Router() {
           <Route path="/login">
             <LoginView/>
           </Route>
+          <PrivateRoute path="/detail">
+            <RidesDetailView/>
+          </PrivateRoute>
           <PrivateRoute path="/">
             <RidesFormView/>
           </PrivateRoute>
