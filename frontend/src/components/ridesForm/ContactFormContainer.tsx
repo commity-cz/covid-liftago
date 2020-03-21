@@ -1,7 +1,6 @@
 import { TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import classNames from 'classnames';
-import { Path, pathOr } from 'ramda';
 import React, { useMemo } from 'react';
 import { Controller, ErrorMessage, useFormContext } from "react-hook-form";
 import { getCurrentErrors, getFullName } from "../../formFunctions";
