@@ -1,14 +1,10 @@
-import React, {useContext} from 'react';
-import './App.css';
+import React from 'react';
 import {BrowserRouter, Link, Route, Switch} from "react-router-dom";
 import LoginView from "./app/loginView/LoginView";
-import {FirebaseContext} from "./firebase";
 import {Container} from "@material-ui/core";
 import RidesFromView from "./app/ridesFormView/RidesFromView";
 
 function App() {
-  const firebase = useContext(FirebaseContext);
-
   return (
     <BrowserRouter>
       <Container>

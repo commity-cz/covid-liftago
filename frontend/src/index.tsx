@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
 import Firebase, {FirebaseContext} from './firebase';
 import * as serviceWorker from './serviceWorker';
-
 
 fetch('/__/firebase/init.json').then(async response => {
   const config = await response.json();
