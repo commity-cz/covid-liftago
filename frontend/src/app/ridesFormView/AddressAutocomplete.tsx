@@ -79,7 +79,7 @@ const AddressAutocomplete: React.FC<Props> = ({ onSelect }) => {
         renderInput={(props: any) => (
           <TextField
             inputProps={props}
-            label="Adresa"
+            label="Vyhledat adresu"
             style={{marginBottom: 3}}
             fullWidth
           />

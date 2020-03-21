@@ -95,7 +95,7 @@ const RidesForm: React.FC<Props> = ({ onSubmit, ...others }) => {
           ))}
 
           <Grid item xs={12} className={classes.row}>
-            <Button type="submit" variant="contained" color="primary">Odeslat</Button>
+            <Button type="submit" size="large" variant="contained" color="primary">Odeslat</Button>
           </Grid>
 
           <Grid item xs={12} className={classes.conditions}>
