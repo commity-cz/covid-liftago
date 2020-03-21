@@ -1,27 +1,37 @@
 import React, {useContext} from 'react';
-import {Link, Route} from "react-router-dom";
+import {Redirect, Route} from "react-router-dom";
 import UserContext from "../../user/context";
-
+import {Box, CircularProgress} from "@material-ui/core";
 
 type Props = {
   path: string;
 };
 
-const PrivateRoute: React.FC<Props> = ({ children, ...rest }) => {
+const PrivateRoute: React.FC<Props> = ({children, ...rest}) => {
   const user = useContext(UserContext);
+
+  if (user === null) {
+    return (
+      <Redirect to="/login"/>
+    )
+  }
 
   return (
     <Route
       {...rest}
-      render={({ location }) =>
-        user ? (
-          children
+      render={() =>
+        user === undefined ? (
+          <Box display="flex">
+            <Box m="auto">
+              <CircularProgress/>
+            </Box>
+          </Box>
         ) : (
-          <div>Prosím <Link to="/login">přihlaste se</Link></div>
+          children
         )
       }
     />
   );
-}
+};
 
 export default PrivateRoute;

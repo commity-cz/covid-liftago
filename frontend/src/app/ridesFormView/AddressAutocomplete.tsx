@@ -1,9 +1,9 @@
-import { Grid, Paper, TextField, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import {Grid, Paper, TextField, Typography} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
 import parse from "autosuggest-highlight/parse";
 import React from 'react';
 // @ts-ignore
-import GooglePlacesAutocomplete, {} from 'react-google-places-autocomplete';
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 // If you want to use the provided css
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
@@ -75,9 +75,11 @@ const AddressAutocomplete: React.FC<Props> = ({ onSelect }) => {
 
     <div className={classes.root}>
       <GooglePlacesAutocomplete
+        placeholder=""
         renderInput={(props: any) => (
           <TextField
             inputProps={props}
+            label="Adresa"
             fullWidth
           />
         )}
