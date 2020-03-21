@@ -2,32 +2,50 @@ import React, {useContext, useState} from 'react';
 import {FirebaseContext} from "../../firebase";
 import RidesForm from "./RidesForm";
 import {Alert} from "@material-ui/lab";
+import {v4 as uuidv4} from 'uuid';
 
 function RidesFormView() {
   const firebase = useContext(FirebaseContext);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const onFormSubmit = (data: Object) => {
-    // TODO: add ids to data and all stops, in case of duplicity, submit again
-    firebase?.addDeliveryRide(data)
+    // TODO: in case of duplicity, submit again
+    firebase?.addDeliveryRide(createDeliveryRidesBody(data))
       .then(_ => {
-        if (_.data.code) {
-          setErrorMessage(_.data.code); // TODO: localize error message
-        }
         // TODO: on success clear form
       })
-      .catch(_ => console.log(_));
+      .catch(_ => {
+        setErrorMessage("Chyba při odesílání: " + _);
+      });
   };
 
   return (
     <>
       {
         errorMessage &&
-          <Alert style={{marginBottom: 16}} severity="error">{errorMessage}</Alert>
+        <Alert style={{marginBottom: 16}} severity="error">{errorMessage}</Alert>
       }
-      <RidesForm onSubmit={onFormSubmit} />
+      <RidesForm onSubmit={onFormSubmit}/>
     </>
   );
+}
+
+function createDeliveryRidesBody(data: Object) {
+  // @ts-ignore
+  const stops = data.stops.map(stop => ({
+    ...stop,
+    stopId: uuidv4(),
+    location: {
+      ...stop.location,
+      address: {
+        ...stop.location.address,
+        country: 'Czech republic'
+      },
+    }
+  }));
+  stops[0].kind = 'PICKUP';
+  stops[1].kind = 'DESTINATION';
+  return {...data, id: uuidv4(), stops};
 }
 
 export default RidesFormView;
