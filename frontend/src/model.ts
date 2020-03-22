@@ -13,7 +13,7 @@ export type Address = {
   "description": string
 }
 
-interface Stop {
+export interface Stop {
   stopId: string,
   contact: Contact,
   locations: {
