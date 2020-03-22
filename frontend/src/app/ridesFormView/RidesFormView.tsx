@@ -56,10 +56,12 @@ function RidesFormView() {
 const fixContactPhoneNumber = over(lensPath(['contact', 'phoneNumber']), phoneNumber => phoneNumber.replace(/\s/g, ''))
 const setNoteForDriver = over(lensPath(['noteForDriver']), note => note || 'COVID 19 cz');
 const fixKind = over(lensPath(['kind']), kind => kind || StopKind.DESTINATION);
+const fixStopId = over(lensPath(['stopId']), stopId => stopId || uuidv4());
 
 const processStopData = pipe(
   fixContactPhoneNumber,
   fixKind,
+  fixStopId,
   setNoteForDriver
 );
 
