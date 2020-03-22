@@ -1,4 +1,4 @@
-import { all, hasPath, lensPath, over } from "ramda";
+import { all, hasPath, lensPath, over, pipe } from "ramda";
 import React, {useContext, useState} from 'react';
 import {FirebaseContext} from "../../firebase";
 import { Rides } from "../../model";
@@ -54,9 +54,15 @@ function RidesFormView() {
 }
 
 const fixContactPhoneNumber = over(lensPath(['contact', 'phoneNumber']), phoneNumber => phoneNumber.replace(/\s/g, ''))
+const setNoteForDriver = over(lensPath(['noteForDriver']), note => note || 'COVID 19 cz');
+
+const processStopData = pipe(
+  fixContactPhoneNumber,
+  setNoteForDriver
+);
 
 function createDeliveryRidesBody(data: Rides) {
-  const stops = data.stops.map(fixContactPhoneNumber);
+  const stops = data.stops.map(processStopData);
 
   return {id: uuidv4(), stops};
 }
