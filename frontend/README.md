@@ -1,5 +1,13 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Used libraries/technologies
+
+- https://firebase.google.com/
+- https://reactjs.org/
+- https://material-ui.com/
+- https://react-hook-form.com/
+- https://ramdajs.com/
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -11,6 +19,10 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
+
+### `yarn storybook`
+Launches storybook for interactive ui development.<br />
+See [https://storybook.js.org/](https://storybook.js.org/) for more information.
 
 ### `yarn test`
 
