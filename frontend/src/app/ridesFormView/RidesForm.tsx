@@ -5,16 +5,11 @@ import * as R from 'ramda';
 import React from 'react';
 import { FormContext, useFieldArray, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from 'uuid';
+import { StopKind } from "../../model";
 import StopFormContainer from "./StopFormContainer";
 
 const MIN_STOPS = 2;
 const MAX_STOPS = 5;
-
-enum StopKind {
-  PICKUP = "PICKUP",
-  DESTINATION = "DESTINATION",
-  FALLBACK_DESTINATION = "FALLBACK_DESTINATION",
-}
 
 function createNewStop() {
   return {

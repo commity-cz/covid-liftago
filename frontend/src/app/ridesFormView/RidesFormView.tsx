@@ -1,7 +1,7 @@
 import { all, hasPath, lensPath, over, pipe } from "ramda";
 import React, {useContext, useState} from 'react';
 import {FirebaseContext} from "../../firebase";
-import { Rides } from "../../model";
+import { Rides, StopKind } from "../../model";
 import RidesForm from "./RidesForm";
 import {Alert} from "@material-ui/lab";
 import {v4 as uuidv4} from 'uuid';
@@ -55,9 +55,11 @@ function RidesFormView() {
 
 const fixContactPhoneNumber = over(lensPath(['contact', 'phoneNumber']), phoneNumber => phoneNumber.replace(/\s/g, ''))
 const setNoteForDriver = over(lensPath(['noteForDriver']), note => note || 'COVID 19 cz');
+const fixKind = over(lensPath(['kind']), kind => kind || StopKind.DESTINATION);
 
 const processStopData = pipe(
   fixContactPhoneNumber,
+  fixKind,
   setNoteForDriver
 );
 
