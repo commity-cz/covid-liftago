@@ -53,7 +53,7 @@ const StopFormContainer: React.FC<Props> = ({ kind, baseName = '', errorPath = [
         <Controller as={TextField}
                     name={names.noteForDriver}
                     error={hasError(errors, names.noteForDriver)}
-                    label={kind ===StopKind.PICKUP ? "Instrukce na miste vyzvednuti (nepovinne)" : "Instrukce na miste doruceni (nepovinne)"}
+                    label={kind ===StopKind.PICKUP ? "Instrukce na místě vyzvednutí (nepovinné)" : "Instrukce na místě doručení (nepovinné)"}
                     control={control}
                     rules={{ maxLength: { value: 80, message: "Poznámka může obsahovat maximálně 80 znaků" } }}
                     defaultValue=""

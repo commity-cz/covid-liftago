@@ -1,7 +1,7 @@
-import { all, hasPath, lensPath, over, pipe } from "ramda";
+import { all, dissocPath, hasPath, lensPath, over, pipe } from "ramda";
 import React, {useContext, useState} from 'react';
 import {FirebaseContext} from "../../firebase";
-import { Rides, StopKind } from "../../model";
+import { Rides, Stop, StopKind } from "../../model";
 import RidesForm from "./RidesForm";
 import {Alert} from "@material-ui/lab";
 import {v4 as uuidv4} from 'uuid';
@@ -57,11 +57,13 @@ const fixContactPhoneNumber = over(lensPath(['contact', 'phoneNumber']), phoneNu
 const setNoteForDriver = over(lensPath(['noteForDriver']), note => note || 'COVID 19 cz');
 const fixKind = over(lensPath(['kind']), kind => kind || StopKind.DESTINATION);
 const fixStopId = over(lensPath(['stopId']), stopId => stopId || uuidv4());
+const removeAddressVisibility = dissocPath<Stop>(['location', 'address', 'formVisible']);
 
 const processStopData = pipe(
   fixContactPhoneNumber,
   fixKind,
   fixStopId,
+  removeAddressVisibility,
   setNoteForDriver
 );
 
