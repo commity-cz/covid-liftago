@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import React, { useMemo } from 'react';
 import { Controller, ErrorMessage, useFormContext } from "react-hook-form";
 import { getFullName, hasError } from "../../formFunctions";
+import { StopKind } from "../../model";
 import AddressFormContainer from "./AddressFormContainer";
 import ContactFormContainer from "./ContactFormContainer";
 
@@ -17,10 +18,11 @@ const useStyles = makeStyles(() => ({
 
 type Props = StandardProps & {
   errorPath: (string | number)[]
+  kind: StopKind
   baseName?: string
 };
 
-const StopFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], ...others }) => {
+const StopFormContainer: React.FC<Props> = ({ kind, baseName = '', errorPath = [], ...others }) => {
   const classes = useStyles();
   const { control, register, errors } = useFormContext();
 
@@ -41,7 +43,7 @@ const StopFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], ...
       <input type="hidden" name={names.kind} ref={register}/>
 
       <Grid item xs={12} md={6}>
-        <ContactFormContainer baseName={names.contact} errorPath={[...errorPath, 'contact']}/>
+        <ContactFormContainer baseName={names.contact} errorPath={[...errorPath, 'contact']} />
       </Grid>
       <Grid item xs={12} md={6}>
         <AddressFormContainer baseName={names.locationAddress} errorPath={[...errorPath, 'location', 'address']}/>
@@ -51,7 +53,7 @@ const StopFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], ...
         <Controller as={TextField}
                     name={names.noteForDriver}
                     error={hasError(errors, names.noteForDriver)}
-                    label="Poznámka pro řidiče / instrukce na místě (nepovinné)"
+                    label={kind ===StopKind.PICKUP ? "Instrukce na miste vyzvednuti (nepovinne)" : "Instrukce na miste doruceni (nepovinne)"}
                     control={control}
                     rules={{ maxLength: { value: 80, message: "Poznámka může obsahovat maximálně 80 znaků" } }}
                     defaultValue=""
