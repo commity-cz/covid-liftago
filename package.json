@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/commity-cz/covid-liftago/issues"
   },
-  "homepage": "https://github.com/commity-cz/covid-liftago#readme"
+  "homepage": "https://github.com/commity-cz/covid-liftago#readme",
+  "devDependencies": {
+    "firebase-tools": "^7.15.1"
+  }
 }
