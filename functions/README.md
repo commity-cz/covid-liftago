@@ -46,6 +46,6 @@ Available variables
 Setting environment variable 
 
 ```shell script
-firebase firebase functions:config:set <VARIABLE_NAME>="<VARIABLE_VALUE>"
+firebase functions:config:set <VARIABLE_NAME>="<VARIABLE_VALUE>"
 
 ```
