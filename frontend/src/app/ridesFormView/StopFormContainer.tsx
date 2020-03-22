@@ -5,7 +5,7 @@ import React, {useMemo} from 'react';
 import {Controller, ErrorMessage, useFormContext} from "react-hook-form";
 import {getCurrentErrors, getFullName} from "../../formFunctions";
 import AddressFormContainer from "./AddressFormContainer";
-import ContactFormContainer, {Contact} from "./ContactFormContainer";
+import ContactFormContainer from "./ContactFormContainer";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -14,12 +14,6 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'column'
   }
 }));
-
-type Stop = {
-  noteForDriver: string,
-  location: any,
-  contact: Contact
-}
 
 type Props = StandardProps & {
   errorPath: (string | number)[]
