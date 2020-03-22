@@ -152,7 +152,7 @@ const RidesForm: React.FC<Props> = ({ onSubmit, isSubmittingData, ...others }) =
                     </Button>
                   )}
                 </div>
-                <StopFormContainer baseName={`stops[${index}]`} errorPath={['stops', index]}/>
+                <StopFormContainer baseName={`stops[${index}]`} errorPath={['stops', index]} kind={stop.kind}/>
               </Paper>
             </Grid>
           ))}

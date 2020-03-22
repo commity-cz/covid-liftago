@@ -1,6 +1,7 @@
-import {action} from '@storybook/addon-actions';
+import { action } from '@storybook/addon-actions';
 import React from 'react';
-import {FormContext, useForm} from "react-hook-form";
+import { FormContext, useForm } from "react-hook-form";
+import { StopKind } from "../../model";
 import AddressAutocomplete from "./AddressAutocomplete";
 import ContactFormContainer from "./ContactFormContainer";
 import RidesForm from "./RidesForm";
@@ -16,12 +17,11 @@ export const StopFormContainerStory = () => {
     <FormContext {...methods} >
       <form onSubmit={methods.handleSubmit(action('onSubmit'))}>
 
-        <StopFormContainer errorPath={[]}/>
+        <StopFormContainer errorPath={[]} kind={StopKind.PICKUP}/>
 
         <button type="submit">story test button</button>
       </form>
     </FormContext>
-
   )
 }
 
