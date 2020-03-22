@@ -7,6 +7,8 @@ jobs:
     executor:
       name: node/default
       tag: '10'
+    environment:
+      REACT_APP_BRANCH: $CIRCLE_BRANCH
     steps:
       - checkout
       - node/with-cache:
@@ -15,7 +17,7 @@ jobs:
           steps:
             - run: cd frontend && yarn install
             - run: cd frontend && yarn test
-            - run: cd frontend && REACT_APP_BRANCH=$CIRCLE_BRANCH yarn build
+            - run: cd frontend && yarn build
       - persist_to_workspace:
           root: frontend
           paths:
