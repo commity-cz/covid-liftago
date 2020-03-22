@@ -95,7 +95,7 @@ const RidesForm: React.FC<Props> = ({ onSubmit, isSubmittingData, ...others }) =
       }
     }
   );
-  const { control, handleSubmit, setValue } = formMethods;
+  const { control, handleSubmit, setValue, watch } = formMethods;
 
   const { fields, append, remove } = useFieldArray(
     {
@@ -106,21 +106,28 @@ const RidesForm: React.FC<Props> = ({ onSubmit, isSubmittingData, ...others }) =
   );
 
   /**
-   *   ugly hack for re-rendering values
+   *   ugly hack for re-rendering values after remove
    *
    *   There is some problem with react-hook-form and material UI combination
-   *   After re-render, value are not displayed.
+   *   After remove, value are not displayed.
+   *
+   *   update from 5.1.1 to 5.1.3 solve append, but remove is still need this workaround
    *
    *   TODO investigate this problem later
    */
-  function fixValuesWithTimeout(omitIndex? : number) {
-    const values = omitIndex ? R.remove(omitIndex, 1, fields) : fields;
+  function customRemove(omitIndex: number) {
+    const origValues = watch('stops');
+    const values = R.remove(omitIndex, 1, origValues);
 
     setTimeout(() => {
-      values.forEach((stop, index) => {
-        setValue(`stops[${index}]`, stop)
-      })
+      setValue(`stops`, values)
     }, 10)
+
+    setTimeout(() => {
+      setValue(`stops`, values)
+    }, 15)
+
+    remove(omitIndex)
   }
 
   return (
@@ -143,8 +150,7 @@ const RidesForm: React.FC<Props> = ({ onSubmit, isSubmittingData, ...others }) =
                       aria-label="delete"
                       size="large"
                       onClick={() => {
-                        remove(index);
-                        fixValuesWithTimeout(index);
+                        customRemove(index);
                       }}
                       startIcon={<Delete/>}>
                       Odebrat
@@ -161,10 +167,7 @@ const RidesForm: React.FC<Props> = ({ onSubmit, isSubmittingData, ...others }) =
               <Button type="button" size="large"
                       className={classes.marginRight}
                       fullWidth
-                      onClick={() => {
-                        append(createNewStop());
-                        fixValuesWithTimeout();
-                      }}
+                      onClick={() => append(createNewStop())}
                       startIcon={<Add/>}>
                 Přidat další místo
               </Button>

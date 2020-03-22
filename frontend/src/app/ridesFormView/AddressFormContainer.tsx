@@ -31,8 +31,7 @@ type Props = StandardProps & {
 
 const AddressFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], ...others }) => {
   const classes = useStyles();
-  const { register, formState, control, errors, setValue } = useFormContext();
-  const [showAddressForm, setShowAddressForm] = useState(false);
+  const { register, formState, control, errors, setValue, watch } = useFormContext();
 
   const names = useMemo(() => ({
     street: getFullName(baseName, 'street'),
@@ -41,7 +40,14 @@ const AddressFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], 
     zipCode: getFullName(baseName, 'zipCode'),
     country: getFullName(baseName, 'country'),
     description: getFullName(baseName, 'description'),
+    formVisible: getFullName(baseName, 'formVisible'),
   }), [baseName]);
+
+  const metaFormVisible = watch(names.formVisible);
+  const [showAddressForm, setShowAddressForm] = useState(metaFormVisible);
+
+  // TODO consider custom input registration for stable data model, instead of hidden input flag
+  const formVisible = metaFormVisible || showAddressForm;
 
   const handleSelect = (googleAddress: any) => {
     const address = {
@@ -50,6 +56,7 @@ const AddressFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], 
       houseNumber: googleAddress.street_number || googleAddress.town_square || googleAddress.premise || '',
       zipCode: googleAddress.postal_code || '',
       country: "Czech republic",
+      formVisible: "true"
     };
 
     setShowAddressForm(true);
@@ -64,15 +71,15 @@ const AddressFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], 
     <div {...others}
          className={classNames(classes.root, others.className)}>
 
-      {!showAddressForm && (
+      {!formVisible && (
         <>
           <AddressAutocomplete onSelect={handleSelect}
-                               error={formState.isSubmitted && !showAddressForm}/>
+                               error={formState.isSubmitted && !formVisible}/>
           <Button onClick={() => setShowAddressForm(true)}>Zadat adresu ručně</Button>
         </>
       )}
 
-      {showAddressForm && (
+      {formVisible && (
         <>
           <div className={classes.row}>
             <Controller as={TextField}
@@ -129,11 +136,12 @@ const AddressFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], 
 
           </div>
           <input type="hidden" name={names.country} ref={register}/>
-
         </>
       )}
 
       <div className={classes.filler}/>
+
+      <input type="hidden" name={names.formVisible} ref={register}/>
 
       <Controller as={TextField}
                   name={names.description}
