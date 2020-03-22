@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/commity-cz/covid-liftago.svg?style=shield)](https://circleci.com/gh/commity-cz/covid-liftago)
+
 ## Local setup
 Ask someone to add you to the `covid-liftago` Firebase project.
 
@@ -26,14 +28,9 @@ See [Cloud functions readme](functions/README.md).
 
 See [Frontend readme](frontend/README.md).
 
-## Deploy staging
+## Deploy 
 
-```shell script
-npm run deploy:staging
-```
+Master branch is automatically deployed to the staging environment.
 
-## Deploy production
-
-```shell script
-npm run deploy:production
-```
+Production branch is deployed to the production environment. Direct push to the production branch is forbidden.
+Release to production is only possible via pull request.
