@@ -1,12 +1,7 @@
 {
   "name": "covid-liftago",
   "version": "1.0.0",
-  "scripts": {
-    "predeploy:staging": "cd frontend && yarn install && yarn build",
-    "predeploy:production": "cd frontend && yarn install && yarn build",
-    "deploy:staging": "firebase deploy -P default",
-    "deploy:production": "firebase deploy -P production"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/commity-cz/covid-liftago.git"
