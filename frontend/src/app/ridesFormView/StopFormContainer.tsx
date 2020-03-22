@@ -1,11 +1,11 @@
-import {Grid, TextField} from '@material-ui/core';
-import {makeStyles} from '@material-ui/styles';
+import { Grid, TextField } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
 import classNames from 'classnames';
-import React, {useMemo} from 'react';
-import {Controller, ErrorMessage, useFormContext} from "react-hook-form";
-import {getCurrentErrors, getFullName} from "../../formFunctions";
+import React, { useMemo } from 'react';
+import { Controller, ErrorMessage, useFormContext } from "react-hook-form";
+import { getFullName, hasError } from "../../formFunctions";
 import AddressFormContainer from "./AddressFormContainer";
-import ContactFormContainer, {Contact} from "./ContactFormContainer";
+import ContactFormContainer from "./ContactFormContainer";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -14,12 +14,6 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'column'
   }
 }));
-
-type Stop = {
-  noteForDriver: string,
-  location: any,
-  contact: Contact
-}
 
 type Props = StandardProps & {
   errorPath: (string | number)[]
@@ -37,8 +31,6 @@ const StopFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], ...
     stopId: getFullName(baseName, 'stopId'),
     kind: getFullName(baseName, 'kind'),
   }), [baseName]);
-
-  const currentErrors = useMemo(() => getCurrentErrors(errorPath, errors) as Stop, [errorPath, errors]);
 
   return (
 
@@ -58,15 +50,14 @@ const StopFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], ...
       <Grid item xs={12} className={classes.row}>
         <Controller as={TextField}
                     name={names.noteForDriver}
-                    error={Boolean(currentErrors.noteForDriver)}
+                    error={hasError(errors, names.noteForDriver)}
                     label="Poznámka pro řidiče / instrukce na místě (nepovinné)"
                     control={control}
-                    rules={{maxLength: {value: 80, message: "Poznámka může obsahovat maximálně 80 znaků"}}}
+                    rules={{ maxLength: { value: 80, message: "Poznámka může obsahovat maximálně 80 znaků" } }}
                     defaultValue=""
-                    helperText={<ErrorMessage errors={currentErrors} name={names.noteForDriver}/>}
+                    helperText={<ErrorMessage errors={errors} name={names.noteForDriver}/>}
         />
       </Grid>
-
 
     </Grid>
   )

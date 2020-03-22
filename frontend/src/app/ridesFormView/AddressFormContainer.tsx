@@ -2,7 +2,7 @@ import { Button, makeStyles, TextField, Theme } from "@material-ui/core";
 import classNames from 'classnames';
 import React, { useMemo, useState } from 'react';
 import { Controller, ErrorMessage, useFormContext } from "react-hook-form";
-import { getCurrentErrors, getFullName } from "../../formFunctions";
+import { getFullName, hasError } from "../../formFunctions";
 import AddressAutocomplete from "./AddressAutocomplete";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -24,15 +24,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-export type Contact = {
-  "street": string,
-  "houseNumber": string
-  "city": string
-  "zipCode": string
-  "country": string
-  "description": string
-}
-
 type Props = StandardProps & {
   errorPath: (string | number)[]
   baseName?: string
@@ -52,11 +43,9 @@ const AddressFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], 
     description: getFullName(baseName, 'description'),
   }), [baseName]);
 
-  const currentErrors = useMemo(() => getCurrentErrors(errorPath, errors) as Contact, [errorPath, errors]);
-
   const handleSelect = (googleAddress: any) => {
     const address = {
-      city: googleAddress.locality || googleAddress.political  || googleAddress.administrative_area_level_2 || '',
+      city: googleAddress.locality || googleAddress.political || googleAddress.administrative_area_level_2 || '',
       street: googleAddress.route || googleAddress.locality || '',
       houseNumber: googleAddress.street_number || googleAddress.town_square || googleAddress.premise || '',
       zipCode: googleAddress.postal_code || '',
@@ -88,10 +77,10 @@ const AddressFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], 
           <div className={classes.row}>
             <Controller as={TextField}
                         name={names.street}
-                        error={Boolean(currentErrors.street)}
+                        error={hasError(errors, names.street)}
                         label="Ulice"
                         rules={{ required: "Vyplňte název ulice" }}
-                        helperText={<ErrorMessage errors={currentErrors} name={names.street}/>}
+                        helperText={<ErrorMessage errors={errors} name={names.street}/>}
                         control={control}
                         defaultValue=""
                         fullWidth
@@ -100,10 +89,10 @@ const AddressFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], 
 
             <Controller as={TextField}
                         name={names.houseNumber}
-                        error={Boolean(currentErrors.houseNumber)}
+                        error={hasError(errors, names.houseNumber)}
                         label="Číslo domu"
                         rules={{ required: "Vyplňte číslo domu" }}
-                        helperText={<ErrorMessage errors={currentErrors} name={names.houseNumber}/>}
+                        helperText={<ErrorMessage errors={errors} name={names.houseNumber}/>}
                         control={control}
                         defaultValue=""
                         fullWidth
@@ -113,10 +102,10 @@ const AddressFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], 
           <div className={classes.row}>
             <Controller as={TextField}
                         name={names.city}
-                        error={Boolean(currentErrors.city)}
+                        error={hasError(errors, names.city)}
                         label="Město"
                         rules={{ required: "Vyplňte název města" }}
-                        helperText={<ErrorMessage errors={currentErrors} name={names.city}/>}
+                        helperText={<ErrorMessage errors={errors} name={names.city}/>}
                         control={control}
                         defaultValue=""
                         fullWidth
@@ -126,14 +115,18 @@ const AddressFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], 
 
             <Controller as={TextField}
                         name={names.zipCode}
-                        error={Boolean(currentErrors.zipCode)}
+                        error={hasError(errors, names.zipCode)}
                         label="PSČ"
-                        rules={{ required: "Vyplňte PSČ" }}
-                        helperText={<ErrorMessage errors={currentErrors} name={names.zipCode}/>}
+                        rules={{
+                          required: "Vyplňte PSČ",
+                          pattern: { value: /\d\d\d ?\d\d/, message: 'Vyplňte PSČ ve formátu 123 45' }
+                        }}
+                        helperText={<ErrorMessage errors={errors} name={names.zipCode}/>}
                         control={control}
                         defaultValue=""
                         fullWidth
             />
+
           </div>
           <input type="hidden" name={names.country} ref={register}/>
 

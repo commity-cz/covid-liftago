@@ -1,9 +1,17 @@
+import { all, hasPath, lensPath, over } from "ramda";
 import React, {useContext, useState} from 'react';
 import {FirebaseContext} from "../../firebase";
+import { Rides } from "../../model";
 import RidesForm from "./RidesForm";
 import {Alert} from "@material-ui/lab";
 import {v4 as uuidv4} from 'uuid';
 import {useHistory} from "react-router-dom";
+
+const hasFilledAddress = hasPath(['location', 'address', 'city']);
+
+function allStopsHaveAddress(data: Rides) {
+  return all(hasFilledAddress, data.stops)
+}
 
 function RidesFormView() {
   const firebase = useContext(FirebaseContext);
@@ -11,13 +19,20 @@ function RidesFormView() {
   const [isSubmittingData, setIsSubmittingData] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const onFormSubmit = (data: Object) => {
+  const onFormSubmit = (data: Rides) => {
     // TODO: in case of duplicity, submit again
+
     if (isSubmittingData) {
       return;
     }
+
+    const dataToSend = createDeliveryRidesBody(data);
+    if(!allStopsHaveAddress(dataToSend)) {
+      return;
+    }
+
     setIsSubmittingData(true);
-    firebase?.addDeliveryRide(createDeliveryRidesBody(data))
+    firebase?.addDeliveryRide(dataToSend)
       .then(_ => {
         history.push('/detail')
       })
@@ -38,8 +53,12 @@ function RidesFormView() {
   );
 }
 
-function createDeliveryRidesBody(data: Object) {
-  return {...data, id: uuidv4()};
+const fixContactPhoneNumber = over(lensPath(['contact', 'phoneNumber']), phoneNumber => phoneNumber.replace(/\s/g, ''))
+
+function createDeliveryRidesBody(data: Rides) {
+  const stops = data.stops.map(fixContactPhoneNumber);
+
+  return {id: uuidv4(), stops};
 }
 
 export default RidesFormView;

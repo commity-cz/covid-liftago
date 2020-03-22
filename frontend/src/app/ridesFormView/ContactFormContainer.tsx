@@ -1,9 +1,11 @@
-import {TextField} from '@material-ui/core';
-import {makeStyles} from '@material-ui/styles';
+import { TextField } from '@material-ui/core';
+import { TextFieldProps } from "@material-ui/core/TextField/TextField";
+import { makeStyles } from '@material-ui/styles';
 import classNames from 'classnames';
-import React, {useMemo} from 'react';
-import {Controller, ErrorMessage, useFormContext} from "react-hook-form";
-import {getCurrentErrors, getFullName} from "../../formFunctions";
+import React, { useMemo } from 'react';
+import { Controller, ErrorMessage, useFormContext } from "react-hook-form";
+import InputMask, { Props as InputMaskProps } from 'react-input-mask';
+import { getFullName, hasError } from "../../formFunctions";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -11,13 +13,6 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'column'
   },
 }));
-
-export type Contact = {
-  name: string,
-  email: string
-  company: string
-  phoneNumber: string
-}
 
 type Props = StandardProps & {
   errorPath: (string | number)[]
@@ -34,31 +29,39 @@ const ContactFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], 
     company: getFullName(baseName, 'company'),
   }), [baseName]);
 
-  const currentErrors = useMemo(() => getCurrentErrors(errorPath, errors) as Contact, [errorPath, errors]);
-
   return (
     <div {...others}
          className={classNames(classes.root, others.className)}>
       <Controller as={TextField}
                   name={names.name}
-                  error={Boolean(currentErrors.name)}
+                  error={hasError(errors, names.name)}
                   rules={{ required: "Vyplňte celé jméno" }}
                   label="Jméno a příjmení / Firma / Místo"
                   control={control}
                   defaultValue=""
-                  helperText={<ErrorMessage errors={currentErrors} name={names.name}/>}
+                  helperText={<ErrorMessage errors={errors} name={names.name}/>}
       />
 
-      <Controller as={TextField}
+      <Controller as={InputMask as React.ComponentType<InputMaskProps & TextFieldProps>}
+                  mask="+999 999 999 999"
                   name={names.phoneNumber}
-                  error={Boolean(currentErrors.phoneNumber)}
                   label="Telefonní číslo"
-                  rules={{ required: "Vyplňte telefonní číslo ve formátu +420 777 123 456" }}
-                  helperText={errors.phoneNumber ? <ErrorMessage errors={currentErrors}
-                                                                 name={names.phoneNumber}/> : "Telefonní číslo zadejte ve formátu +420 777 123 456"}
-                  type="tel"
+                  error={hasError(errors, names.phoneNumber)}
+                  rules={{
+                    required: "Vyplňte telefonní číslo ve formátu +420 777 123 456",
+                    pattern: {
+                      value: /\+\d\d\d \d\d\d \d\d\d \d\d\d/,
+                      message: "Telefonní číslo zadejte ve formátu +420 777 123 456"
+                    }
+                  }}
                   control={control}
-                  defaultValue=""
+                  defaultValue="+420"
+                  children={(props: any) => {
+                    return <TextField {...props}
+                                      type="tel"
+                                      helperText={<ErrorMessage errors={errors} name={names.phoneNumber}/>}
+                    />
+                  }}
       />
 
       <Controller as={TextField}
@@ -69,6 +72,7 @@ const ContactFormContainer: React.FC<Props> = ({ baseName = '', errorPath = [], 
       />
     </div>
   )
+
 };
 
 export default ContactFormContainer;
