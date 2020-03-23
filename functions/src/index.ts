@@ -3,6 +3,8 @@ import fetch from "node-fetch";
 import * as admin from "firebase-admin";
 import {CallableContext} from "firebase-functions/lib/providers/https";
 
+admin.initializeApp();
+
 exports.deliveryRides = functions
   .region('europe-west1')
   .https.onCall((data, context) => {
