@@ -29,7 +29,7 @@ export function createDeliveryRide(data: any, context: CallableContext) {
         console.info('deliveryRides response', JSON.stringify(json));
         admin.firestore().collection('deliveryRides').add({
           id: json.id,
-          created: new Date().toISOString(),
+          created: new Date(),
           userId: context.auth?.uid
         }).catch(e => console.error('Failed to write deliveryRide to Firestore', e));
       } else {
