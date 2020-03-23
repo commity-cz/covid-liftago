@@ -20,14 +20,11 @@ function RidesFormView() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    const checkAvailability = async() => {
-      const data = await firebase?.getDeliveryRidesAvailability();
-      if (!data?.rideAvailable) {
+    firebase.getDeliveryRidesAvailability().then(data => {
+      if (!data.rideAvailable) {
         history.push('/ride-unavailable')
       }
-    };
-
-    checkAvailability();
+    });
   }, [firebase, history]);
 
   const onFormSubmit = (data: Rides) => {
