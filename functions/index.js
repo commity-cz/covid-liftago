@@ -7,7 +7,7 @@ exports.deliveryRides = functions
   .region('europe-west1')
   .https.onCall((data, context) => {
     checkAuthentication(context);
-    console.log('deliveryRides request', data);
+    console.info('deliveryRides request', JSON.stringify(data));
     return fetch(`${functions.config().liftago.url}/deliveryRides`, {
         method: 'post',
         body: JSON.stringify(data),
