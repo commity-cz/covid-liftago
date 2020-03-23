@@ -3,10 +3,28 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import {CallableContext} from "firebase-functions/lib/providers/https";
 
-export function deliveryRidesAvailability(data: any, context: CallableContext) {
+export async function deliveryRidesAvailability(data: any, context: CallableContext) {
   checkAuthentication(context);
+
+  const organizationId = context.auth?.token?.organization;
+  console.info(`Checking rides availability for organization: ${organizationId}`);
+
+  if (!organizationId) {
+    return {
+      rideAvailable: false
+    };
+  }
+
+  const organizationRef = await admin.firestore().collection('organizations').doc(organizationId).get();
+  const organization = organizationRef.data() as Organization ;
+
+  const dailyRidesLimit = organization.dailyRidesLimit || 0;
+  const ridesToday = organization.ridesToday || 0;
+
+  console.info(`Organization ${organization.name} limit: ${ridesToday}/${dailyRidesLimit}`);
+
   return {
-    rideAvailable: true
+    rideAvailable: ridesToday < dailyRidesLimit
   };
 }
 

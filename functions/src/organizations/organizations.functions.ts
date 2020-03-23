@@ -9,8 +9,8 @@ export function onOrganizationWrite(change: Change<DocumentSnapshot>, context: E
   const newUsers = change.after.data()?.users as string[] || [];
 
   console.info(`Organization write: ${organizationId}`);
-  console.debug(`Users before: ${oldUsers}`);
-  console.debug(`Users after: ${newUsers}`);
+  console.info(`Users before: ${oldUsers}`);
+  console.info(`Users after: ${newUsers}`);
 
   const removedUsers = R.difference(oldUsers, newUsers);
   const addedUsers = R.difference(newUsers, oldUsers);
@@ -18,22 +18,26 @@ export function onOrganizationWrite(change: Change<DocumentSnapshot>, context: E
   console.info(`Removed users: ${removedUsers}`);
   console.info(`Added users: ${addedUsers}`);
 
-  removeUsersFromOrganization(removedUsers);
-  addUsersToOrganization(organizationId, addedUsers);
-
-  return 0;
+  return Promise.all([
+    removeUsersFromOrganization(removedUsers),
+    addUsersToOrganization(organizationId, addedUsers)
+  ]);
 }
 
 function removeUsersFromOrganization(usersToRemove: string[]) {
-  usersToRemove.forEach(user => {
-    admin.auth().setCustomUserClaims(user, {organization: null})
-      .catch(e => console.error(`Failed to remove organization from user claim, userId ${user}`, e));
-  });
+  return Promise.all(
+    usersToRemove.map(user => {
+      admin.auth().setCustomUserClaims(user, {organization: null})
+        .catch(e => console.error(`Failed to remove organization from user claim, userId ${user}`, e));
+    })
+  );
 }
 
 function addUsersToOrganization(organizationId: string, usersToAdd: string[]) {
-  usersToAdd.forEach(user => {
-    admin.auth().setCustomUserClaims(user, {organization: organizationId})
-      .catch(e => console.error(`Failed to add organization to user claim, userId ${user}`, e));
-  });
+  return Promise.all(
+    usersToAdd.map(user => {
+      admin.auth().setCustomUserClaims(user, {organization: organizationId})
+        .catch(e => console.error(`Failed to add organization to user claim, userId ${user}`, e));
+    })
+  );
 }
