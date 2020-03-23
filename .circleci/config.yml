@@ -8,16 +8,16 @@ jobs:
       name: node/default
       tag: '10'
     environment:
-      REACT_APP_BRANCH: ${CIRCLE_BRANCH}
     steps:
+      - run: echo "export REACT_APP_BRANCH=$CIRCLE_BRANCH" >> $BASH_ENV
       - checkout
       - node/with-cache:
           dir: ~/project/frontend/node_modules
           cache-key: ~/project/frontend/package.json
           steps:
             - run: cd frontend && yarn install
-            - run: cd frontend && yarn test
-            - run: cd frontend && yarn build
+      - run: cd frontend && yarn test
+      - run: cd frontend && yarn build
       - persist_to_workspace:
           root: frontend
           paths:
