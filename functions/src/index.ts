@@ -1,7 +1,7 @@
-const functions = require('firebase-functions');
-const fetch = require('node-fetch');
-const admin = require('firebase-admin');
-admin.initializeApp();
+import * as functions from 'firebase-functions';
+import fetch from "node-fetch";
+import * as admin from "firebase-admin";
+import {CallableContext} from "firebase-functions/lib/providers/https";
 
 exports.deliveryRides = functions
   .region('europe-west1')
@@ -19,13 +19,13 @@ exports.deliveryRides = functions
     )
       .then(checkStatus)
       .then(res => res.json())
-      .then(json => {
+      .then((json: CreateDeliveryRideResponse) => {
         if (json.id) {
           console.info('deliveryRides response', JSON.stringify(json));
           admin.firestore().collection('deliveryRides').add({
             id: json.id,
             created: new Date().toISOString(),
-            userId: context.auth.uid
+            userId: context.auth?.uid
           });
         } else {
           console.error('Missing ID in deliveryRides response', JSON.stringify(json));
@@ -34,17 +34,17 @@ exports.deliveryRides = functions
       });
   });
 
-function checkAuthentication(context) {
+function checkAuthentication(context: CallableContext) {
   if (!context.auth) {
     throw new functions.https.HttpsError('unauthenticated', 'Unauthenticated');
   }
 }
 
-function checkStatus(res) {
+function checkStatus(res: any): Response | Promise<never> {
   if (res.ok) {
     return res;
   } else {
-    return res.json().then(json => {
+    return res.json().then((json: LiftagoApiError) => {
       console.warn('deliveryRides error response', json);
       throw new functions.https.HttpsError('invalid-argument', json.message);
     });
