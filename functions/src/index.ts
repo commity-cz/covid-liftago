@@ -5,8 +5,17 @@ import {CallableContext} from "firebase-functions/lib/providers/https";
 
 admin.initializeApp();
 
-exports.deliveryRides = functions
-  .region('europe-west1')
+const europeFunctions = functions.region('europe-west1');
+
+export const deliveryRidesAvailability = europeFunctions
+  .https.onCall((data, context) => {
+    checkAuthentication(context);
+    return {
+      rideAvailable: true
+    };
+  });
+
+export const deliveryRides = europeFunctions
   .https.onCall((data, context) => {
     checkAuthentication(context);
     console.info('deliveryRides request', JSON.stringify(data));
