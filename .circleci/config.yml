@@ -13,7 +13,7 @@ jobs:
       - checkout
       - node/with-cache:
           dir: ~/project/frontend/node_modules
-          cache-key: ~/project/frontend/yarn.lock
+          cache-key: ~/project/frontend/package.json
           steps:
             - run: cd frontend && yarn install
             - run: cd frontend && yarn test
@@ -30,12 +30,12 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: functions-{{ checksum "~/project/functions/package-lock.json" }}
+          key: functions-{{ checksum "~/project/functions/package.json" }}
       - run: cd functions && npm install
       - run: cd functions && npm run lint
       - run: cd functions && npm run build
       - save_cache:
-          key: functions-{{ checksum "~/project/functions/package-lock.json" }}
+          key: functions-{{ checksum "~/project/functions/package.json" }}
           paths:
             - ~/project/functions/node_modules
 
@@ -48,7 +48,7 @@ jobs:
       - attach_workspace:
           at: frontend
       - restore_cache:
-          key: functions-{{ checksum "~/project/functions/package-lock.json" }}
+          key: functions-{{ checksum "~/project/functions/package.json" }}
       - node/with-cache:
           steps:
             - run: npm install
@@ -64,7 +64,7 @@ jobs:
       - attach_workspace:
           at: frontend
       - restore_cache:
-          key: functions-{{ checksum "~/project/functions/package-lock.json" }}
+          key: functions-{{ checksum "~/project/functions/package.json" }}
       - node/with-cache:
           steps:
             - run: npm install
