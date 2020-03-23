@@ -26,7 +26,7 @@ exports.deliveryRides = functions
             id: json.id,
             created: new Date().toISOString(),
             userId: context.auth?.uid
-          });
+          }).catch(e => console.error('Failed to write deliveryRide to Firestore', e));
         } else {
           console.error('Missing ID in deliveryRides response', JSON.stringify(json));
         }
