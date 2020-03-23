@@ -16,8 +16,10 @@ jobs:
           cache-key: ~/project/frontend/package.json
           steps:
             - run: cd frontend && yarn install
-            - run: cd frontend && yarn test
-            - run: cd frontend && yarn build
+      - run: echo CIRCLE_BRANCH - ${CIRCLE_BRANCH}
+      - run: echo REACT_APP_BRANCH - ${REACT_APP_BRANCH}
+      - run: cd frontend && yarn test
+      - run: cd frontend && yarn build
       - persist_to_workspace:
           root: frontend
           paths:
