@@ -3,6 +3,6 @@ interface CreateDeliveryRideResponse {
 }
 
 interface LiftagoApiError {
-  code: string
+  code: string,
   message: string
 }
