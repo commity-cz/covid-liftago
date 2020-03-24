@@ -13,6 +13,10 @@ export async function resetDailyCredits() {
     console.info(`Reset ${organization.name} credits to ${organization.dailyCredits}`);
     return organizationDoc.ref.update('currentCredits', organization.dailyCredits);
   }));
+
+  console.info('Resetting global daily limit');
+  const dailyLimitsDoc = admin.firestore().collection('limits').doc('daily');
+  await dailyLimitsDoc.update('ridesToday', 0);
 }
 
 export async function deliveryRidesAvailability(data: any, context: CallableContext) {
@@ -26,11 +30,16 @@ export async function deliveryRidesAvailability(data: any, context: CallableCont
   }
 
   const currentCredits = organization.currentCredits || 0;
-
   console.info(`Organization ${organization.name} credits: ${currentCredits}`);
 
+  const dailyLimitsRef = await admin.firestore().collection('limits').doc('daily').get();
+  const dailyLimits = dailyLimitsRef.data() as DailyLimits;
+  const maxRidesPerDay = dailyLimits.maxRidesPerDay;
+  const ridesToday = dailyLimits.ridesToday;
+  console.info(`Daily limit ${ridesToday}/${maxRidesPerDay}`);
+
   return {
-    rideAvailable: currentCredits > 0
+    rideAvailable: currentCredits > 0 && ridesToday < maxRidesPerDay
   };
 }
 
@@ -40,7 +49,7 @@ export async function createDeliveryRide(data: any, context: CallableContext) {
 
   const ridesAvailability = await deliveryRidesAvailability(null, context);
   if (!ridesAvailability.rideAvailable) {
-    throw new functions.https.HttpsError('resource-exhausted', 'Váš denní limit jízd byl vyčerpán.');
+    throw new functions.https.HttpsError('resource-exhausted', 'Denní limit jízd byl vyčerpán.');
   }
 
   const response: CreateDeliveryRideResponse = await postDeliveryRide(data);
@@ -70,15 +79,19 @@ async function getOrganizationFromContext(context: CallableContext): Promise<Org
 async function saveRide(response: CreateDeliveryRideResponse, context: CallableContext) {
   try {
     const organizationId = context.auth?.token?.organization;
-    await admin.firestore().collection('deliveryRides').add({
+    const deliveryRide: DeliveryRide = {
       id: response.id,
       created: new Date(),
-      userId: context.auth?.uid,
+      userId: context.auth?.uid || '',
       organizationId: organizationId
-    });
+    };
+    await admin.firestore().collection('deliveryRides').add(deliveryRide);
 
     const organizationDoc = admin.firestore().collection('organizations').doc(organizationId);
     await organizationDoc.update("currentCredits", FieldValue.increment(-1));
+
+    const dailyLimitsDoc = admin.firestore().collection('limits').doc('daily');
+    await dailyLimitsDoc.update("ridesToday", FieldValue.increment(1));
 
   } catch (e) {
     console.error('Failed to write deliveryRide to Firestore', e);
