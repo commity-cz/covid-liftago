@@ -1,63 +1,18 @@
 import * as functions from 'firebase-functions';
-import fetch from "node-fetch";
 import * as admin from "firebase-admin";
-import {CallableContext} from "firebase-functions/lib/providers/https";
+import * as ridesFunctions from "./rides/rides.functions";
+import * as organizationsFunctions from "./organizations/organizations.functions";
 
 admin.initializeApp();
 
 const europeFunctions = functions.region('europe-west1');
 
-export const deliveryRidesAvailability = europeFunctions
-  .https.onCall((data, context) => {
-    checkAuthentication(context);
-    return {
-      rideAvailable: true
-    };
-  });
+export const deliveryRidesAvailability = europeFunctions.https.onCall(ridesFunctions.deliveryRidesAvailability);
+export const createDeliveryRide = europeFunctions.https.onCall(ridesFunctions.createDeliveryRide);
 
-export const deliveryRides = europeFunctions
-  .https.onCall((data, context) => {
-    checkAuthentication(context);
-    console.info('deliveryRides request', JSON.stringify(data));
-    return fetch(`${functions.config().liftago.url}/deliveryRides`, {
-        method: 'post',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${functions.config().liftago.token}`
-        },
-      }
-    )
-      .then(checkStatus)
-      .then(res => res.json())
-      .then((json: CreateDeliveryRideResponse) => {
-        if (json.id) {
-          console.info('deliveryRides response', JSON.stringify(json));
-          admin.firestore().collection('deliveryRides').add({
-            id: json.id,
-            created: new Date().toISOString(),
-            userId: context.auth?.uid
-          }).catch(e => console.error('Failed to write deliveryRide to Firestore', e));
-        } else {
-          console.error('Missing ID in deliveryRides response', JSON.stringify(json));
-        }
-        return json;
-      });
-  });
+export const resetDailyCredits = europeFunctions.pubsub.schedule('0 0 * * *').timeZone('Europe/Prague').onRun(ridesFunctions.resetDailyCredits);
 
-function checkAuthentication(context: CallableContext) {
-  if (!context.auth) {
-    throw new functions.https.HttpsError('unauthenticated', 'Unauthenticated');
-  }
-}
+const organizationsDocument = europeFunctions.firestore.document('organizations/{organizationId}');
+export const onOrganizationWrite = organizationsDocument.onWrite(organizationsFunctions.onOrganizationWrite);
 
-function checkStatus(res: any): Response | Promise<never> {
-  if (res.ok) {
-    return res;
-  } else {
-    return res.json().then((json: LiftagoApiError) => {
-      console.warn('deliveryRides error response', json);
-      throw new functions.https.HttpsError('invalid-argument', json.message);
-    });
-  }
-}
+

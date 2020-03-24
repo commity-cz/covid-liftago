@@ -2,21 +2,23 @@ import firebase from "firebase";
 import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/functions';
+import {DeliveryRidesAvailability} from "./model";
 
 class Firebase {
     private auth: firebase.auth.Auth;
     // private appVerifier: firebase.auth.RecaptchaVerifier;
-    private functions: firebase.functions.Functions;
-    private deliveryRides: firebase.functions.HttpsCallable;
+    private readonly createDeliveryRideCallable: firebase.functions.HttpsCallable;
+    private readonly deliveryRidesAvailabilityCallable: firebase.functions.HttpsCallable;
 
     constructor(config: Object) {
         const application = app.initializeApp(config);
 
         this.auth = application.auth();
         this.auth.languageCode = 'cs';
-        this.functions = application.functions('europe-west1');
+        const functions = application.functions('europe-west1');
         // this.appVerifier = new auth.RecaptchaVerifier('recaptcha-container');
-        this.deliveryRides = this.functions.httpsCallable('deliveryRides');
+        this.createDeliveryRideCallable = functions.httpsCallable('createDeliveryRide');
+        this.deliveryRidesAvailabilityCallable = functions.httpsCallable('deliveryRidesAvailability');
     }
 
     doSignOut = () => this.auth.signOut();
@@ -25,7 +27,7 @@ class Firebase {
     };
 
     addDeliveryRide = (data: Object) => {
-        return this.deliveryRides(data)
+        return this.createDeliveryRideCallable(data)
           .then(data => {
             if (data.data.code !== undefined) {
               throw data.data.code;
@@ -35,12 +37,13 @@ class Firebase {
           })
     };
 
-    addAuthObserver = (callback: (user: firebase.User | null) => void) => {
-      this.auth.onAuthStateChanged(callback)
+    getDeliveryRidesAvailability = async () => {
+      const result = await this.deliveryRidesAvailabilityCallable();
+      return result.data as DeliveryRidesAvailability;
     };
 
-    getUser = () => {
-      return this.auth.currentUser;
+    addAuthObserver = (callback: (user: firebase.User | null) => void) => {
+      this.auth.onAuthStateChanged(callback)
     };
 }
 export default Firebase;

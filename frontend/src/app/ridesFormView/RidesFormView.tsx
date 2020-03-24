@@ -1,7 +1,7 @@
-import { all, assocPath, dissocPath, hasPath, lensPath, over, pipe } from "ramda";
-import React, {useContext, useState} from 'react';
+import {all, assocPath, dissocPath, hasPath, lensPath, over, pipe} from "ramda";
+import React, {useContext, useEffect, useState} from 'react';
 import {FirebaseContext} from "../../firebase";
-import { Rides, Stop, StopKind } from "../../model";
+import {Rides, Stop, StopKind} from "../../model";
 import RidesForm from "./RidesForm";
 import {Alert} from "@material-ui/lab";
 import {v4 as uuidv4} from 'uuid';
@@ -18,6 +18,14 @@ function RidesFormView() {
   const history = useHistory();
   const [isSubmittingData, setIsSubmittingData] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    firebase?.getDeliveryRidesAvailability().then(data => {
+      if (!data.rideAvailable) {
+        history.push('/ride-unavailable')
+      }
+    });
+  }, [firebase, history]);
 
   const onFormSubmit = (data: Rides) => {
     // TODO: in case of duplicity, submit again
