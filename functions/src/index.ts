@@ -10,5 +10,9 @@ const europeFunctions = functions.region('europe-west1');
 export const deliveryRidesAvailability = europeFunctions.https.onCall(ridesFunctions.deliveryRidesAvailability);
 export const deliveryRides = europeFunctions.https.onCall(ridesFunctions.createDeliveryRide);
 
+export const resetDailyCredits = europeFunctions.pubsub.schedule('0 0 * * *').timeZone('Europe/Prague').onRun(ridesFunctions.resetDailyCredits);
+
 const organizationsDocument = europeFunctions.firestore.document('organizations/{organizationId}');
 export const onOrganizationWrite = organizationsDocument.onWrite(organizationsFunctions.onOrganizationWrite);
+
+

@@ -6,6 +6,17 @@ import FieldValue = admin.firestore.FieldValue;
 
 const firestore = admin.firestore();
 
+export async function resetDailyCredits() {
+  console.info('Resetting daily credits');
+  const organizations = await firestore.collection('organizations').get();
+
+  await Promise.all(organizations.docs.map(organizationDoc => {
+    const organization = organizationDoc.data() as Organization;
+    organizationDoc.ref.update('currentCredits', organization.dailyCredits);
+    console.info(`Reset ${organization.name} credits to ${organization.dailyCredits}`);
+  }));
+}
+
 export async function deliveryRidesAvailability(data: any, context: CallableContext) {
   checkAuthentication(context);
 
