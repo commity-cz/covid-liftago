@@ -4,16 +4,14 @@ import {CallableContext, HttpsError} from "firebase-functions/lib/providers/http
 import {postDeliveryRide} from "./liftago.api";
 import FieldValue = admin.firestore.FieldValue;
 
-const firestore = admin.firestore();
-
 export async function resetDailyCredits() {
   console.info('Resetting daily credits');
-  const organizations = await firestore.collection('organizations').get();
+  const organizations = await admin.firestore().collection('organizations').get();
 
   await Promise.all(organizations.docs.map(organizationDoc => {
     const organization = organizationDoc.data() as Organization;
-    organizationDoc.ref.update('currentCredits', organization.dailyCredits);
     console.info(`Reset ${organization.name} credits to ${organization.dailyCredits}`);
+    return organizationDoc.ref.update('currentCredits', organization.dailyCredits);
   }));
 }
 
@@ -65,21 +63,21 @@ async function getOrganizationFromContext(context: CallableContext): Promise<Org
     return null;
   }
 
-  const organizationRef = await firestore.collection('organizations').doc(organizationId).get();
+  const organizationRef = await admin.firestore().collection('organizations').doc(organizationId).get();
   return organizationRef.data() as Organization;
 }
 
 async function saveRide(response: CreateDeliveryRideResponse, context: CallableContext) {
   try {
     const organizationId = context.auth?.token?.organization;
-    await firestore.collection('deliveryRides').add({
+    await admin.firestore().collection('deliveryRides').add({
       id: response.id,
       created: new Date(),
       userId: context.auth?.uid,
       organizationId: organizationId
     });
 
-    const organizationDoc = firestore.collection('organizations').doc(organizationId);
+    const organizationDoc = admin.firestore().collection('organizations').doc(organizationId);
     await organizationDoc.update("currentCredits", FieldValue.increment(-1));
 
   } catch (e) {
