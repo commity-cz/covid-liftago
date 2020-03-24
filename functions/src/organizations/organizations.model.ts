@@ -1,6 +1,6 @@
 interface Organization {
   name: string,
-  dailyRidesLimit: number,
-  ridesToday: number,
+  dailyCredits: number,
+  currentCredits: number,
   users: string[]
 }

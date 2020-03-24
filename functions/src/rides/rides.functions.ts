@@ -16,13 +16,12 @@ export async function deliveryRidesAvailability(data: any, context: CallableCont
     };
   }
 
-  const dailyRidesLimit = organization.dailyRidesLimit || 0;
-  const ridesToday = organization.ridesToday || 0;
+  const currentCredits = organization.currentCredits || 0;
 
-  console.info(`Organization ${organization.name} limit: ${ridesToday}/${dailyRidesLimit}`);
+  console.info(`Organization ${organization.name} credits: ${currentCredits}`);
 
   return {
-    rideAvailable: ridesToday < dailyRidesLimit
+    rideAvailable: currentCredits > 0
   };
 }
 
@@ -70,7 +69,7 @@ async function saveRide(response: CreateDeliveryRideResponse, context: CallableC
     });
 
     const organizationDoc = firestore.collection('organizations').doc(organizationId);
-    await organizationDoc.update("ridesToday", FieldValue.increment(1));
+    await organizationDoc.update("currentCredits", FieldValue.increment(-1));
 
   } catch (e) {
     console.error('Failed to write deliveryRide to Firestore', e);
