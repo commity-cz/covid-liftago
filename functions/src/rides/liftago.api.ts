@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
 import * as functions from "firebase-functions";
+import {HttpsError} from "firebase-functions/lib/providers/https";
 
 export async function postDeliveryRide(data: any): Promise<CreateDeliveryRideResponse> {
   const response = await fetch(`${functions.config().liftago.url}/deliveryRides`, {
@@ -22,6 +23,6 @@ async function checkStatus(res: any): Promise<Response> {
   } else {
     const json: LiftagoApiError = await res.json();
     console.warn('deliveryRides error response', json);
-    throw new functions.https.HttpsError('invalid-argument', json.message);
+    throw new HttpsError('invalid-argument', json.message);
   }
 }

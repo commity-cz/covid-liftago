@@ -1,7 +1,10 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import {CallableContext} from "firebase-functions/lib/providers/https";
+import {CallableContext, HttpsError} from "firebase-functions/lib/providers/https";
 import {postDeliveryRide} from "./liftago.api";
+import FieldValue = admin.firestore.FieldValue;
+
+const firestore = admin.firestore();
 
 export async function deliveryRidesAvailability(data: any, context: CallableContext) {
   checkAuthentication(context);
@@ -27,6 +30,11 @@ export async function createDeliveryRide(data: any, context: CallableContext) {
   checkAuthentication(context);
   console.info('deliveryRides request', JSON.stringify(data));
 
+  const ridesAvailability = await deliveryRidesAvailability(null, context);
+  if (!ridesAvailability.rideAvailable) {
+    throw new functions.https.HttpsError('resource-exhausted', 'Váš denní limit jízd byl vyčerpán.');
+  }
+
   const response: CreateDeliveryRideResponse = await postDeliveryRide(data);
 
   if (response.id) {
@@ -47,17 +55,23 @@ async function getOrganizationFromContext(context: CallableContext): Promise<Org
     return null;
   }
 
-  const organizationRef = await admin.firestore().collection('organizations').doc(organizationId).get();
+  const organizationRef = await firestore.collection('organizations').doc(organizationId).get();
   return organizationRef.data() as Organization;
 }
 
 async function saveRide(response: CreateDeliveryRideResponse, context: CallableContext) {
   try {
-    await admin.firestore().collection('deliveryRides').add({
+    const organizationId = context.auth?.token?.organization;
+    await firestore.collection('deliveryRides').add({
       id: response.id,
       created: new Date(),
-      userId: context.auth?.uid
-    })
+      userId: context.auth?.uid,
+      organizationId: organizationId
+    });
+
+    const organizationDoc = firestore.collection('organizations').doc(organizationId);
+    await organizationDoc.update("ridesToday", FieldValue.increment(1));
+
   } catch (e) {
     console.error('Failed to write deliveryRide to Firestore', e);
   }
@@ -65,7 +79,7 @@ async function saveRide(response: CreateDeliveryRideResponse, context: CallableC
 
 function checkAuthentication(context: CallableContext) {
   if (!context.auth) {
-    throw new functions.https.HttpsError('unauthenticated', 'Unauthenticated');
+    throw new HttpsError('unauthenticated', 'Unauthenticated');
   }
 }
 
