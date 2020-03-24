@@ -7,7 +7,7 @@ import {DeliveryRidesAvailability} from "./model";
 class Firebase {
     private auth: firebase.auth.Auth;
     // private appVerifier: firebase.auth.RecaptchaVerifier;
-    private readonly deliveryRidesCallable: firebase.functions.HttpsCallable;
+    private readonly createDeliveryRideCallable: firebase.functions.HttpsCallable;
     private readonly deliveryRidesAvailabilityCallable: firebase.functions.HttpsCallable;
 
     constructor(config: Object) {
@@ -17,7 +17,7 @@ class Firebase {
         this.auth.languageCode = 'cs';
         const functions = application.functions('europe-west1');
         // this.appVerifier = new auth.RecaptchaVerifier('recaptcha-container');
-        this.deliveryRidesCallable = functions.httpsCallable('deliveryRides');
+        this.createDeliveryRideCallable = functions.httpsCallable('createDeliveryRide');
         this.deliveryRidesAvailabilityCallable = functions.httpsCallable('deliveryRidesAvailability');
     }
 
@@ -27,7 +27,7 @@ class Firebase {
     };
 
     addDeliveryRide = (data: Object) => {
-        return this.deliveryRidesCallable(data)
+        return this.createDeliveryRideCallable(data)
           .then(data => {
             if (data.data.code !== undefined) {
               throw data.data.code;
