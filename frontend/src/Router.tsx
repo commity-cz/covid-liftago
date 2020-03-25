@@ -10,11 +10,15 @@ import Footer from "./app/common/Footer";
 import RideUnavailableView from "./app/rideUnavailableView/RideUnavailableView";
 
 const useStyles = makeStyles(({palette}: Theme) => ({
+  '@global': {
+    body: {
+      background: palette.grey["200"]
+    }
+  },
   layout: {
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    background: palette.grey["200"]
   },
   content: {
     flex: '1 0 auto',
