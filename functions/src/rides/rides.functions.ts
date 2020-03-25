@@ -3,6 +3,7 @@ import * as admin from "firebase-admin";
 import {CallableContext, HttpsError} from "firebase-functions/lib/providers/https";
 import {postDeliveryRide} from "./liftago.api";
 import FieldValue = admin.firestore.FieldValue;
+import {getWebhookUrl} from "./ridesWebhooks.functions";
 
 export async function deliveryRidesAvailability(data: any, context: CallableContext) {
   checkAuthentication(context);
@@ -37,15 +38,29 @@ export async function createDeliveryRide(data: any, context: CallableContext) {
     throw new functions.https.HttpsError('resource-exhausted', 'Denní limit jízd byl vyčerpán.');
   }
 
-  const response: CreateDeliveryRideResponse = await postDeliveryRide(data);
+  const deliveryRideDoc = admin.firestore().collection('deliveryRides').doc();
+
+  const dataWithWebhook = addWebhookUrl(data, deliveryRideDoc.id);
+  const response: CreateDeliveryRideResponse = await postDeliveryRide(dataWithWebhook);
 
   if (response.id) {
     console.info('deliveryRides response', JSON.stringify(response));
-    await saveRide(response, context);
+    await saveRide(deliveryRideDoc, response, context);
   } else {
     console.error('Missing ID in deliveryRides response', JSON.stringify(response));
   }
   return response;
+}
+
+function addWebhookUrl(data: any, rideDocumentId: string) {
+  const webhookUrl = getWebhookUrl(rideDocumentId);
+  console.info(`Setting webhook: ${webhookUrl}`);
+  return {
+    ...data,
+    webhook: {
+      url: webhookUrl
+    }
+  };
 }
 
 async function getOrganizationFromContext(context: CallableContext): Promise<Organization | null> {
@@ -61,7 +76,7 @@ async function getOrganizationFromContext(context: CallableContext): Promise<Org
   return organizationRef.data() as Organization;
 }
 
-async function saveRide(response: CreateDeliveryRideResponse, context: CallableContext) {
+async function saveRide(documentReference: admin.firestore.DocumentReference, response: CreateDeliveryRideResponse, context: CallableContext) {
   try {
     const organizationId = context.auth?.token?.organization;
     const deliveryRide: DeliveryRide = {
@@ -71,7 +86,7 @@ async function saveRide(response: CreateDeliveryRideResponse, context: CallableC
       organizationId: organizationId,
       rideStatus: 'PROCESSING'
     };
-    await admin.firestore().collection('deliveryRides').add(deliveryRide);
+    await documentReference.set(deliveryRide);
 
     const organizationDoc = admin.firestore().collection('organizations').doc(organizationId);
     await organizationDoc.update("currentCredits", FieldValue.increment(-1));

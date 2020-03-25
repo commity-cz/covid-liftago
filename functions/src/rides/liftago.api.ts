@@ -1,21 +1,11 @@
 import fetch from "node-fetch";
 import * as functions from "firebase-functions";
 import {HttpsError} from "firebase-functions/lib/providers/https";
-import {getWebhookUrl} from "./ridesWebhooks.functions";
 
 export async function postDeliveryRide(data: any): Promise<CreateDeliveryRideResponse> {
-  const webhookUrl = getWebhookUrl(data.id);
-  console.info(`Setting webhook: ${webhookUrl}`);
-  const dataToSend = {
-    ...data,
-    webhook: {
-      url: webhookUrl
-    }
-  };
-
   const response = await fetch(`${functions.config().liftago.url}/deliveryRides`, {
       method: 'post',
-      body: JSON.stringify(dataToSend),
+      body: JSON.stringify(data),
       headers: createHeaders(),
     }
   );

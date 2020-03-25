@@ -5,11 +5,13 @@ import {parseIsoDate} from "../utils/date.utils";
 import {FUNCTIONS_REGION} from "../constants";
 
 export async function deliveryRideWebhook(req: functions.Request, resp: functions.Response) {
-  const rideId = req.query.rideId;
-  console.info(`Ride updated: ${rideId}`);
+  const rideDocumentId = req.query.rideDocumentId;
+  console.info(`Ride updated: ${rideDocumentId}`);
 
+  const deliveryRideDoc = admin.firestore().collection('deliveryRides').doc(rideDocumentId);
+
+  const rideId = (await deliveryRideDoc.get()).data()?.id;
   const ride = await getDeliveryRide(rideId);
-  console.log(ride);
 
   const deliveryRideUpdate: Partial<DeliveryRide> = {
     rideStatus: ride.rideStatus,
@@ -20,12 +22,12 @@ export async function deliveryRideWebhook(req: functions.Request, resp: function
     positionLink: ride.links.position
   };
 
-  console.info(`Updating ride ${rideId}`, JSON.stringify(deliveryRideUpdate));
-  await admin.firestore().collection('deliveryRides').doc(rideId).update(deliveryRideUpdate);
+  console.info(`Updating ride ${rideDocumentId}`, JSON.stringify(deliveryRideUpdate));
+  await deliveryRideDoc.update(deliveryRideUpdate);
 
   resp.send();
 }
 
-export function getWebhookUrl(rideId: string) {
-  return `https://${FUNCTIONS_REGION}-${process.env.GCLOUD_PROJECT}.cloudfunctions.net/deliveryRideWebhook?rideId=${rideId}`;
+export function getWebhookUrl(rideDocumentId: string) {
+  return `https://${FUNCTIONS_REGION}-${process.env.GCLOUD_PROJECT}.cloudfunctions.net/deliveryRideWebhook?rideId=${rideDocumentId}`;
 }
