@@ -1,7 +1,9 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {FirebaseContext} from "./firebase";
+import React, { useContext, useEffect, useState } from 'react';
+import { FirebaseContext } from "./firebase";
+import { theme } from "./theme";
 import UserContext from "./user/context";
 import Router from "./Router";
+import { ThemeProvider } from '@material-ui/core';
 
 function App() {
   const firebase = useContext(FirebaseContext);
@@ -14,9 +16,11 @@ function App() {
   }, [firebase]);
 
   return (
-    <UserContext.Provider value={user}>
-      <Router/>
-    </UserContext.Provider>
+    <ThemeProvider theme={theme}>
+      <UserContext.Provider value={user}>
+        <Router/>
+      </UserContext.Provider>
+    </ThemeProvider>
   );
 }
 

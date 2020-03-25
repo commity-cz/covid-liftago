@@ -10,7 +10,12 @@ import Footer from "./app/common/Footer";
 import RideUnavailableView from "./app/rideUnavailableView/RideUnavailableView";
 import RidesListView from "./app/ridesListView/RidesListView";
 
-const useStyles = makeStyles(({spacing}: Theme) => ({
+const useStyles = makeStyles(({palette}: Theme) => ({
+  '@global': {
+    body: {
+      background: palette.grey["200"]
+    }
+  },
   layout: {
     display: 'flex',
     flexDirection: 'column',
