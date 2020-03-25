@@ -9,11 +9,12 @@ import RidesDetailView from "./app/ridesDetailView/RidesDetailView";
 import Footer from "./app/common/Footer";
 import RideUnavailableView from "./app/rideUnavailableView/RideUnavailableView";
 
-const useStyles = makeStyles(({spacing}: Theme) => ({
+const useStyles = makeStyles(({palette}: Theme) => ({
   layout: {
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
+    background: palette.grey["200"]
   },
   content: {
     flex: '1 0 auto',
