@@ -68,7 +68,8 @@ async function saveRide(response: CreateDeliveryRideResponse, context: CallableC
       id: response.id,
       created: new Date(),
       userId: context.auth?.uid || '',
-      organizationId: organizationId
+      organizationId: organizationId,
+      rideStatus: 'PROCESSING'
     };
     await admin.firestore().collection('deliveryRides').add(deliveryRide);
 

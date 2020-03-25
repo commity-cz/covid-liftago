@@ -3,18 +3,21 @@ import * as admin from "firebase-admin";
 import * as ridesFunctions from "./rides/rides.functions";
 import * as organizationsFunctions from "./organizations/organizations.functions";
 import * as creditsFunctions from "./credits/credits.functions";
+import * as ridesWebhooks from "./rides/ridesWebhooks.functions";
+import {FUNCTIONS_REGION, TIMEZONE} from "./constants";
 
 admin.initializeApp();
 
-const europeFunctions = functions.region('europe-west1');
+const regionFunctions = functions.region(FUNCTIONS_REGION);
 
-export const deliveryRidesAvailability = europeFunctions.https.onCall(ridesFunctions.deliveryRidesAvailability);
-export const createDeliveryRide = europeFunctions.https.onCall(ridesFunctions.createDeliveryRide);
+export const deliveryRidesAvailability = regionFunctions.https.onCall(ridesFunctions.deliveryRidesAvailability);
+export const createDeliveryRide = regionFunctions.https.onCall(ridesFunctions.createDeliveryRide);
 
-export const resetDailyCredits = europeFunctions.pubsub.schedule('0 0 * * *').timeZone('Europe/Prague')
+export const deliveryRideWebhook = regionFunctions.https.onRequest(ridesWebhooks.deliveryRideWebhook);
+
+export const resetDailyCredits = regionFunctions.pubsub.schedule('0 0 * * *').timeZone(TIMEZONE)
   .onRun(creditsFunctions.resetDailyCredits);
 
-const organizationsDocument = europeFunctions.firestore.document('organizations/{organizationId}');
+const organizationsDocument = regionFunctions.firestore.document('organizations/{organizationId}');
 export const onOrganizationWrite = organizationsDocument.onWrite(organizationsFunctions.onOrganizationWrite);
-
 

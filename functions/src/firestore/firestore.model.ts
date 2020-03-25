@@ -9,7 +9,13 @@ interface DeliveryRide {
   id: string,
   organizationId: string,
   userId: string,
-  created: Date
+  created: Date,
+  rideStatus: string,
+  pickupArrivalEstimateAt?: Date | null,
+  destinationArrivalEstimateAt?: Date | null,
+  completedAt?: Date | null,
+  positionLink?: string,
+  cancelLink?: string
 }
 
 interface DailyLimits {
