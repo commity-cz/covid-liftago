@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {Redirect, Route} from "react-router-dom";
 import UserContext from "../../user/context";
-import {Box, CircularProgress} from "@material-ui/core";
+import CenteredCircularProgress from "./CenteredCircularProgress";
 
 type Props = {
   path: string;
@@ -21,11 +21,7 @@ const PrivateRoute: React.FC<Props> = ({children, ...rest}) => {
       {...rest}
       render={() =>
         user === undefined ? (
-          <Box display="flex">
-            <Box m="auto">
-              <CircularProgress/>
-            </Box>
-          </Box>
+          <CenteredCircularProgress/>
         ) : (
           children
         )
