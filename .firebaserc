@@ -13,6 +13,16 @@
           "covid-liftago-staging"
         ]
       }
+    },
+    "covid-liftago": {
+      "hosting": {
+        "frontend": [
+          "covid-liftago"
+        ],
+        "web": [
+          "dobrovoz"
+        ]
+      }
     }
   }
 }
