@@ -29,5 +29,5 @@ export async function deliveryRideWebhook(req: functions.Request, resp: function
 }
 
 export function getWebhookUrl(rideDocumentId: string) {
-  return `https://${FUNCTIONS_REGION}-${process.env.GCLOUD_PROJECT}.cloudfunctions.net/deliveryRideWebhook?rideId=${rideDocumentId}`;
+  return `https://${FUNCTIONS_REGION}-${process.env.GCLOUD_PROJECT}.cloudfunctions.net/deliveryRideWebhook?rideDocumentId=${rideDocumentId}`;
 }
