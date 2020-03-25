@@ -33,8 +33,13 @@ const Header: React.FC<StandardProps> = ({ className, ...others }) => {
     <AppBar position="static" {...others} color={"transparent"} className={classNames(className, classes.root)}>
       <Toolbar>
         <img src="logo.svg" className={classes.logo} alt="Logo Dobrovoz"/>
-        <Link to="/"><IconButton color="primary"><Add /></IconButton></Link>
-        <Link to="/list" className={classes.link}><Button>Seznam</Button></Link>
+        {
+          user &&
+            <>
+              <Link to="/"><IconButton color="primary"><Add /></IconButton></Link>
+              <Link to="/list" className={classes.link}><Button>Seznam</Button></Link>
+            </>
+        }
         <div className={classes.filler}/>
         <IconButton href="https://docs.google.com/document/d/1uzV6UMqLd-VrlBVdAopFtxVz9sHHRz3KkMuWPnBxFiI/"
                     target="_blank" color="inherit">
