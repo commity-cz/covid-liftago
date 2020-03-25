@@ -4,21 +4,6 @@ import {CallableContext, HttpsError} from "firebase-functions/lib/providers/http
 import {postDeliveryRide} from "./liftago.api";
 import FieldValue = admin.firestore.FieldValue;
 
-export async function resetDailyCredits() {
-  console.info('Resetting daily credits');
-  const organizations = await admin.firestore().collection('organizations').get();
-
-  await Promise.all(organizations.docs.map(organizationDoc => {
-    const organization = organizationDoc.data() as Organization;
-    console.info(`Reset ${organization.name} credits to ${organization.dailyCredits}`);
-    return organizationDoc.ref.update('currentCredits', organization.dailyCredits);
-  }));
-
-  console.info('Resetting global daily limit');
-  const dailyLimitsDoc = admin.firestore().collection('limits').doc('daily');
-  await dailyLimitsDoc.update('ridesToday', 0);
-}
-
 export async function deliveryRidesAvailability(data: any, context: CallableContext) {
   checkAuthentication(context);
 
