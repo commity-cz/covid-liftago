@@ -2,5 +2,17 @@
   "projects": {
     "default": "covid-liftago-staging",
     "production": "covid-liftago"
+  },
+  "targets": {
+    "covid-liftago-staging": {
+      "hosting": {
+        "web": [
+          "dobrovoz-staging"
+        ],
+        "frontend": [
+          "covid-liftago-staging"
+        ]
+      }
+    }
   }
 }
