@@ -50,7 +50,10 @@ class Firebase {
   getDeliveryRides = async () => {
     const token = await this.auth.currentUser?.getIdTokenResult();
     const organization = token?.claims.organization;
-    return await this.firestore.collection('deliveryRides').where('organizationId', '==', organization).get()
+    return await this.firestore.collection('deliveryRides')
+      .where('organizationId', '==', organization)
+      .orderBy('created', 'desc')
+      .get();
   }
 }
 

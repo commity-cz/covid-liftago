@@ -1,21 +1,30 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {FirebaseContext} from "../../firebase";
+import {DeliveryRide} from "../../firebase/model";
+import CenteredCircularProgress from "../common/CenteredCircularProgress";
+import RidesTable from "./RidesTable";
 
 const RidesListView: React.FC = () => {
   const firebase = useContext(FirebaseContext);
-  const [data, setData] = useState();
+  const [data, setData] = useState<DeliveryRide[] | undefined>();
 
   useEffect(() => {
     firebase?.getDeliveryRides().then(data => {
-      setData(data.docs);
+      const items = data.docs.map(item => {
+        return item.data() as DeliveryRide
+      });
+      setData(items);
     })
   }, [firebase]);
 
-  console.log(data);
-
   return (
     <>
-      xx
+      {
+        data !== undefined ?
+          <RidesTable items={data}/>
+          :
+          <CenteredCircularProgress/>
+      }
     </>
   );
 };
