@@ -1,11 +1,12 @@
-import { Grid, TextField } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import classNames from 'classnames';
-import { update } from "ramda";
+import { TextField } from "mui-rff";
 import React from 'react';
+import * as yup from "yup";
 import { StopKind } from "../../../model";
-import AddressFormContainer from "./AddressFormContainer";
-import ContactFormContainer from "./ContactFormContainer";
+import AddressFormContainer, { addressSchema } from "./AddressFormContainer";
+import ContactFormContainer, { contactSchema } from "./ContactFormContainer";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -15,6 +16,16 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
+export const stopSchema = yup.object().shape({
+  stopId: yup.string().required(),
+  contact: contactSchema,
+  location: yup.object().shape({
+    address: addressSchema
+  }),
+  noteForDriver: yup.string(),
+  kind: yup.string().oneOf(["PICKUP", "DESTINATION", "FALLBACK_DESTINATION"]),
+});
+
 type Props = StandardProps & {
   kind: StopKind
   name: string
@@ -23,7 +34,7 @@ type Props = StandardProps & {
 
 const StopFormContainer: React.FC<Props> = ({ kind, name, updateValues, ...others }) => {
   const classes = useStyles();
-  const addressName = `${name}.location.address`
+  const addressName = `${name}.location.address`;
 
   return (
 
@@ -42,7 +53,6 @@ const StopFormContainer: React.FC<Props> = ({ kind, name, updateValues, ...other
         <TextField
           label={kind === StopKind.PICKUP ? "Instrukce na místě vyzvednutí (nepovinné)" : "Instrukce na místě doručení (nepovinné)"}
           name={`${name}.noteForDriver`}
-          // TODO required={true}
         />
 
       </Grid>

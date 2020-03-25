@@ -1,7 +1,8 @@
 import { Button, makeStyles, Theme } from "@material-ui/core";
 import classNames from 'classnames';
-import { TextField } from "mui-rff";
+import { makeRequired, TextField } from "mui-rff";
 import React from 'react';
+import * as yup from "yup";
 import AddressAutocomplete from "./AddressAutocomplete";
 import { When } from "./Condition";
 
@@ -23,6 +24,20 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginRight: theme.spacing(1)
   }
 }));
+
+export const addressSchema = yup.object().shape({
+  street: yup.string().required('Vyplňte název ulice'),
+  houseNumber: yup.string().required('Vyplňte číslo domu'),
+  city: yup.string().required('Vyplňte název města'),
+  zipCode: yup.string().required('Vyplňte PSČ')
+    .matches(/\d\d\d ?\d\d/, 'Vyplňte PSČ ve formátu 123 45'),
+  country: yup.string().required(),
+  description: yup.string(),
+});
+
+export type Address = yup.InferType<typeof addressSchema>
+
+const required = makeRequired(addressSchema)
 
 type Props = StandardProps & {
   name: string
@@ -73,7 +88,7 @@ const AddressFormContainer: React.FC<Props> = ({ name, updateAddress, ...others 
           <TextField
             label="Ulice"
             name={`${name}.street`}
-            // TODO required={true}
+            required={required.street}
             className={classes.marginRight}
             fullWidth
           />
@@ -81,7 +96,7 @@ const AddressFormContainer: React.FC<Props> = ({ name, updateAddress, ...others 
           <TextField
             label="Číslo domu"
             name={`${name}.houseNumber`}
-            // TODO required={true}
+            required={required.houseNumber}
             fullWidth
           />
         </div>
@@ -91,7 +106,7 @@ const AddressFormContainer: React.FC<Props> = ({ name, updateAddress, ...others 
           <TextField
             label="Město"
             name={`${name}.city`}
-            // TODO required={true}
+            required={required.city}
             className={classes.marginRight}
             fullWidth
           />
@@ -99,7 +114,7 @@ const AddressFormContainer: React.FC<Props> = ({ name, updateAddress, ...others 
           <TextField
             label="PSČ"
             name={`${name}.zipCode`}
-            // TODO required={true}
+            required={required.zipCode}
             fullWidth
             className={classes.marginRight}
           />
@@ -113,6 +128,7 @@ const AddressFormContainer: React.FC<Props> = ({ name, updateAddress, ...others 
       <TextField
         label="Doplňující popis (nepovinné)"
         name={`${name}.description`}
+        required={required.description}
         multiline
       />
 

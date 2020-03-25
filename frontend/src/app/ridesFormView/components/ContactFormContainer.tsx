@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/styles';
 import classNames from 'classnames';
 import { TextField } from "mui-rff";
 import React from 'react';
+import * as yup from "yup";
 import { PhoneField } from "./PhoneField";
 
 const useStyles = makeStyles(() => ({
@@ -10,6 +11,18 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'column'
   },
 }));
+
+export const contactSchema = yup.object().shape({
+  name: yup.string().required('Vyplňte celé jméno'),
+  phoneNumber: yup.string()
+    .required("Vyplňte telefonní číslo ve formátu +420 777 123 456")
+    .matches(/\+\d\d\d \d\d\d \d\d\d \d\d\d/, "Telefonní číslo zadejte ve formátu +420 777 123 456"),
+  company: yup.string(),
+});
+
+export type Contact = yup.InferType<typeof contactSchema>
+
+const required = {} as any
 
 type Props = StandardProps & {
   name: string
@@ -25,18 +38,19 @@ const ContactFormContainer: React.FC<Props> = ({ name, ...others }) => {
       <TextField
         label="Jméno a příjmení / Firma / Místo"
         name={`${name}.name`}
-        // TODO required={true}
+        required={required.name}
       />
 
       <PhoneField
         label="Telefonní číslo"
         name={`${name}.phoneNumber`}
-        // TODO required={true} ￿￿
+        required={required.phoneNumber}
       />
 
       <TextField
         label="Společnost (nepovinné)"
         name={`${name}.company`}
+        required={required.company}
       />
 
     </div>

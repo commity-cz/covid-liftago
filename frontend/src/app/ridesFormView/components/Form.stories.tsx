@@ -1,23 +1,47 @@
+import { Button } from '@material-ui/core';
 import { action } from '@storybook/addon-actions';
-import { Debug } from "mui-rff";
+import { Debug, makeValidate } from "mui-rff";
 import { assocPath, split } from "ramda";
 import React, { useState } from 'react';
 import { Form } from 'react-final-form'
+import * as yup from "yup";
 import { StopKind } from "../../../model";
 import AddressFormContainer from "./AddressFormContainer";
-import ContactFormContainer from "./ContactFormContainer";
+import ContactFormContainer, { contactSchema } from "./ContactFormContainer";
+import RidesForm from "./RidesForm";
 import StopFormContainer from "./StopFormContainer";
 
 export default {
   title: 'Final Form components',
 };
 
+let contactStorySchema = yup.object().shape({
+  contact: contactSchema
+})
+
+const spy = (name: string, f: any) => (...args: any[]) => {
+  console.log(name, ' ￿call with', args);
+  const r = f(...args)
+  console.log(name, ' ￿return', r);
+
+  return r;
+}
+
+const contactValidate = spy('contactValidate', makeValidate(contactStorySchema))
+
+
 export const ContactFormContainerStory = () => {
+
   return (
+
+
     <Form onSubmit={action('onSubmit')}
+          validate={contactValidate}
           initialValues={{
             contact: {
-              phoneNumber: '+420'
+              name: '',
+              phoneNumber: '+420',
+              company: ''
             }
           }}>
       {(props: any) => {
@@ -27,6 +51,7 @@ export const ContactFormContainerStory = () => {
             <ContactFormContainer name="contact"/>
 
             <Debug/>
+            <Button type={"submit"}>Send</Button>
           </form>
         )
       }
@@ -48,6 +73,7 @@ export const AddressFormContainerStory = () => {
             <AddressFormContainer name="address" updateAddress={(address) => setData({ address })}/>
 
             <Debug/>
+            <Button>Send</Button>
           </form>
         )
       }}
@@ -75,9 +101,17 @@ export const StopFormContainerStory = () => {
             <StopFormContainer name="stop" kind={StopKind.PICKUP} updateValues={updateData}/>
 
             <Debug/>
+            <Button>Send</Button>
           </form>
         )
       }}
     </Form>
+  )
+}
+
+
+export const RidesFormStory = () => {
+  return (
+    <RidesForm onSubmit={action('onSubmit')} isSubmittingData={false}/>
   )
 }
