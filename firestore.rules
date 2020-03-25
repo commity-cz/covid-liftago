@@ -6,7 +6,7 @@ service cloud.firestore {
     }
 
     match /deliveryRides/{document=**} {
-    	allow read: if request.auth.token.organizationId == resource.data.organizationId;
+    	allow list: if request.auth.token.organization == resource.data.organizationId;
     }
   }
 }
