@@ -6,6 +6,7 @@ import RidesForm from "./RidesForm";
 import {Alert} from "@material-ui/lab";
 import {v4 as uuidv4} from 'uuid';
 import {useHistory} from "react-router-dom";
+import CenteredCircularProgress from "../common/CenteredCircularProgress";
 
 const hasFilledAddress = hasPath(['location', 'address', 'city']);
 
@@ -18,14 +19,19 @@ function RidesFormView() {
   const history = useHistory();
   const [isSubmittingData, setIsSubmittingData] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [rideAvailable, setRideAvailable] = useState<boolean | null>(null);
 
   useEffect(() => {
     firebase?.getDeliveryRidesAvailability().then(data => {
-      if (!data.rideAvailable) {
-        history.push('/ride-unavailable')
-      }
+      setRideAvailable(data.rideAvailable);
     });
-  }, [firebase, history]);
+  }, [firebase]);
+
+  useEffect(() => {
+    if (rideAvailable === false) {
+      history.push('/ride-unavailable')
+    }
+  }, [rideAvailable, history]);
 
   const onFormSubmit = (data: Rides) => {
     // TODO: in case of duplicity, submit again
@@ -56,7 +62,13 @@ function RidesFormView() {
         errorMessage &&
         <Alert style={{marginBottom: 16}} severity="error">{errorMessage}</Alert>
       }
-      <RidesForm onSubmit={onFormSubmit} isSubmittingData={isSubmittingData}/>
+      {
+        rideAvailable === true ?
+          <RidesForm onSubmit={onFormSubmit} isSubmittingData={isSubmittingData}/>
+          :
+          <CenteredCircularProgress/>
+      }
+
     </>
   );
 }
