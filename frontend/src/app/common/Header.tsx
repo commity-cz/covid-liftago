@@ -23,7 +23,7 @@ const Header: React.FC<StandardProps> = ({ className, ...others }) => {
   return (
     <AppBar position="static" {...others} color={"transparent"} className={classNames(className, classes.root)}>
       <Toolbar>
-        <img src="logo.svg" height={48} alt="Logo dobrovoz.cz"/>
+        <img src="logo.svg" height={48} alt="Logo Dobrovoz"/>
         <div className={classes.filler}/>
         <IconButton href="https://docs.google.com/document/d/1uzV6UMqLd-VrlBVdAopFtxVz9sHHRz3KkMuWPnBxFiI/"
                     target="_blank" color="inherit">
