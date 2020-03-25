@@ -8,6 +8,7 @@ import PrivateRoute from "./app/common/ProtectedRoute";
 import RidesDetailView from "./app/ridesDetailView/RidesDetailView";
 import Footer from "./app/common/Footer";
 import RideUnavailableView from "./app/rideUnavailableView/RideUnavailableView";
+import RidesListView from "./app/ridesListView/RidesListView";
 
 const useStyles = makeStyles(({palette}: Theme) => ({
   '@global': {
@@ -45,6 +46,9 @@ function Router() {
             </PrivateRoute>
             <PrivateRoute path="/ride-unavailable">
               <RideUnavailableView/>
+            </PrivateRoute>
+            <PrivateRoute path="/list">
+              <RidesListView/>
             </PrivateRoute>
             <PrivateRoute path="/">
               <RidesFormView/>

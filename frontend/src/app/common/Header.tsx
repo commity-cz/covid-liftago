@@ -1,9 +1,10 @@
-import { AppBar, IconButton, makeStyles, Theme, Toolbar } from "@material-ui/core";
-import { ExitToApp, HelpOutline } from '@material-ui/icons';
+import {AppBar, Button, IconButton, makeStyles, Theme, Toolbar} from "@material-ui/core";
+import {Add, ExitToApp, HelpOutline} from '@material-ui/icons';
 import classNames from "classnames";
-import React, { useContext } from 'react';
-import { FirebaseContext } from "../../firebase";
+import React, {useContext} from 'react';
+import {FirebaseContext} from "../../firebase";
 import UserContext from "../../user/context";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   root: {
@@ -13,6 +14,14 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   filler: {
     flexGrow: 1,
   },
+  logo: {
+    marginRight: spacing(2),
+    maxWidth: 170,
+    width: '15%',
+  },
+  link: {
+    textDecoration: 'none',
+  }
 }));
 
 const Header: React.FC<StandardProps> = ({ className, ...others }) => {
@@ -23,7 +32,9 @@ const Header: React.FC<StandardProps> = ({ className, ...others }) => {
   return (
     <AppBar position="static" {...others} color={"transparent"} className={classNames(className, classes.root)}>
       <Toolbar>
-        <img src="logo.svg" height={48} alt="Logo Dobrovoz"/>
+        <img src="logo.svg" className={classes.logo} alt="Logo Dobrovoz"/>
+        <Link to="/"><IconButton color="primary"><Add /></IconButton></Link>
+        <Link to="/list" className={classes.link}><Button>Seznam</Button></Link>
         <div className={classes.filler}/>
         <IconButton href="https://docs.google.com/document/d/1uzV6UMqLd-VrlBVdAopFtxVz9sHHRz3KkMuWPnBxFiI/"
                     target="_blank" color="inherit">
