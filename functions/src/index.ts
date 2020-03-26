@@ -14,6 +14,7 @@ export const deliveryRidesAvailability = regionFunctions.https.onCall(ridesFunct
 export const createDeliveryRide = regionFunctions.https.onCall(ridesFunctions.createDeliveryRide);
 
 export const deliveryRideWebhook = regionFunctions.https.onRequest(ridesWebhooks.deliveryRideWebhook);
+export const updateAllDeliveryRides = regionFunctions.https.onRequest(ridesWebhooks.updateAllDeliveryRides);
 
 export const resetDailyCredits = regionFunctions.pubsub.schedule('0 0 * * *').timeZone(TIMEZONE)
   .onRun(creditsFunctions.resetDailyCredits);
