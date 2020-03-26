@@ -21,7 +21,9 @@ export const stopSchema = yup.object().shape({
   location: yup.object().shape({
     address: addressSchema
   }).required(),
-  noteForDriver: yup.string(),
+  noteForDriver: yup.string()
+    // eslint-disable-next-line no-template-curly-in-string
+    .max(80, 'Poznámka může obsahovat maximálně ${max} znaků'),
   kind: yup.string().oneOf(["PICKUP", "DESTINATION", "FALLBACK_DESTINATION"]),
 });
 
