@@ -92,7 +92,7 @@ const RidesTableRow: React.FC<Props> = ({data, handleCancel}) => {
           </Link>
         }
         {
-          data.userId == user?.uid && cancelableStatuses.includes(data.rideStatus) &&
+          data.userId === user?.uid && cancelableStatuses.includes(data.rideStatus) &&
           <IconButton size="small" onClick={() => handleCancel(data.documentId)}><Cancel/></IconButton>
         }
       </TableCell>
