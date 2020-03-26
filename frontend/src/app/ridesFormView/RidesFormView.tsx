@@ -5,7 +5,6 @@ import { FirebaseContext } from "../../firebase";
 import RidesForm, { Stops } from "./components/RidesForm";
 import { createDeliveryRidesBody } from "./functions";
 
-
 function RidesFormView() {
   const firebase = useContext(FirebaseContext);
   const history = useHistory();

@@ -70,7 +70,6 @@ export const formSchema = yup.object().shape({
   stops: yup.array()
     .of(stopSchema)
     .min(MIN_STOPS)
-    .max(MAX_STOPS),
 });
 
 const originalValidate = makeValidate(formSchema);
