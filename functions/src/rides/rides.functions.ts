@@ -57,8 +57,14 @@ function addWebhookUrl(data: any, rideDocumentId: string) {
   console.info(`Setting webhook: ${webhookUrl}`);
   return {
     ...data,
-    webhook: {
-      url: webhookUrl
+    webHook: {
+      url: webhookUrl,
+      headers: [
+        {
+          name: 'Cache-Control',
+          value: 'no-cache'
+        }
+      ]
     }
   };
 }
