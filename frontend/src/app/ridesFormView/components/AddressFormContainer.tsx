@@ -73,7 +73,6 @@ const AddressFormContainer: React.FC<Props> = ({ name, updateAddress, ...others 
     updateAddress(address);
   };
 
-
   return (
     <div {...others}
          className={classNames(classes.root, others.className)}>
