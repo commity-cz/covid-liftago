@@ -59,6 +59,7 @@ const StopFormContainer: React.FC<Props> = ({ kind, name, updateValues, ...other
           label={kind === StopKind.PICKUP ? "Instrukce na místě vyzvednutí (nepovinné)" : "Instrukce na místě doručení (nepovinné)"}
           name={`${name}.noteForDriver`}
           required={required.noteForDriver}
+          multiline
         />
 
       </Grid>

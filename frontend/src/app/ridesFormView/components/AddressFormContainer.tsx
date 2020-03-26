@@ -18,9 +18,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   row: {
     display: 'flex',
   },
-  filler: {
-    flex: 1,
-  },
   marginRight: {
     marginRight: theme.spacing(1)
   }
@@ -32,8 +29,7 @@ export const addressSchema = yup.object().shape({
   city: yup.string().required('Vyplňte název města'),
   zipCode: yup.string().required('Vyplňte PSČ')
     .matches(/\d\d\d ?\d\d/, 'Vyplňte PSČ ve formátu 123 45'),
-  country: yup.string().required(),
-  description: yup.string(),
+  country: yup.string().required()
 });
 
 export type Address = yup.InferType<typeof addressSchema>
@@ -106,21 +102,11 @@ const AddressFormContainer: React.FC<Props> = ({ name, updateAddress, ...others 
             name={`${name}.zipCode`}
             required={required.zipCode}
             fullWidth
-            className={classes.marginRight}
           />
 
         </div>
 
       </When>
-
-      <div className={classes.filler}/>
-
-      <TextField
-        label="Doplňující popis (nepovinné)"
-        name={`${name}.description`}
-        required={required.description}
-        multiline
-      />
 
     </div>
   )

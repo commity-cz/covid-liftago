@@ -17,7 +17,6 @@ export const contactSchema = yup.object().shape({
   phoneNumber: yup.string()
     .required("Vyplňte telefonní číslo ve formátu +420 777 123 456")
     .matches(/\+\d\d\d \d\d\d \d\d\d \d\d\d/, "Telefonní číslo zadejte ve formátu +420 777 123 456"),
-  company: yup.string(),
 });
 
 export type Contact = yup.InferType<typeof contactSchema>
@@ -45,12 +44,6 @@ const ContactFormContainer: React.FC<Props> = ({ name, ...others }) => {
         label="Telefonní číslo"
         name={`${name}.phoneNumber`}
         required={required.phoneNumber}
-      />
-
-      <TextField
-        label="Společnost (nepovinné)"
-        name={`${name}.company`}
-        required={required.company}
       />
 
     </div>
