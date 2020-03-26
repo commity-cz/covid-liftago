@@ -9,6 +9,7 @@ interface DeliveryRide {
   id: string,
   organizationId: string,
   userId: string,
+  userEmail: string,
   created: Date,
   rideStatus: string,
   pickupArrivalEstimateAt?: Date | null,

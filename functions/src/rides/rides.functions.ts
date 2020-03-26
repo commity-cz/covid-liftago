@@ -83,6 +83,7 @@ async function saveRide(documentReference: admin.firestore.DocumentReference, re
       id: response.id,
       created: new Date(),
       userId: context.auth?.uid || '',
+      userEmail: context.auth?.token.email,
       organizationId: organizationId,
       rideStatus: 'PROCESSING'
     };
