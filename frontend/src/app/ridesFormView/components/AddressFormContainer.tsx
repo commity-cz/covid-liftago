@@ -53,18 +53,6 @@ const AddressFormContainer: React.FC<Props> = ({ name, updateAddress, ...others 
   const {errors, submitFailed} = useFormState({subscription: {errors: true, submitFailed: true}});
   const hasError = submitFailed && Boolean(errors[`${name}.country`]);
 
-  const handleSelect = (googleAddress: any) => {
-    const address = {
-      city: googleAddress.locality || googleAddress.political || googleAddress.administrative_area_level_2 || '',
-      street: googleAddress.route || googleAddress.locality || '',
-      houseNumber: googleAddress.street_number || googleAddress.town_square || googleAddress.premise || '',
-      zipCode: googleAddress.postal_code || '',
-      country: "Czech republic",
-    };
-
-    updateAddress(address);
-  };
-
   const handleManualSelection = () => {
     const address = {
       country: "Czech republic",
@@ -79,7 +67,7 @@ const AddressFormContainer: React.FC<Props> = ({ name, updateAddress, ...others 
 
       <When fieldName={`${name}.country`} condition={falsy}>
         <>
-          <AddressAutocomplete onSelect={handleSelect} error={hasError}/>
+          <AddressAutocomplete onSelect={updateAddress} error={hasError}/>
           <Button onClick={() => handleManualSelection()}>Zadat adresu ručně</Button>
         </>
       </When>

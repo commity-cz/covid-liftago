@@ -1,4 +1,5 @@
-import { removeSpacesFromPhoneNubmer, setHardcodedCountry, setNoteForDriverDefault } from "./functions";
+import { StopKind } from "../../model";
+import { createDeliveryRidesBody, removeSpacesFromPhoneNubmer, setNoteForDriverDefault } from "./functions";
 
 describe('createDeliveryRidesBody - functions', function () {
 
@@ -25,14 +26,143 @@ describe('createDeliveryRidesBody - functions', function () {
       .toEqual({ noteForDriver: 'my note' });
   });
 
-  test('setHardcodedCountry should always set value for CR', function () {
-    expect(setHardcodedCountry({ location: { address: { country: 'CZ' } } }))
-      .toEqual({ location: { address: { country: 'Czech republic' } } });
+});
 
-    expect(setHardcodedCountry({ location: { address: {} } }))
-      .toEqual({ location: { address: { country: 'Czech republic' } } });
-
-    expect(setHardcodedCountry({}))
-      .toEqual({ location: { address: { country: 'Czech republic' } } });
+test('createDeliveryRidesBody', function () {
+  const body = createDeliveryRidesBody({
+    stops: [
+      {
+        stopId: '1',
+        contact: {
+          name: 'test',
+          company: '',
+          phoneNumber: '+420 123 123 123'
+        },
+        location: {
+          address: {
+            city: 'Cerhenice',
+            street: 'Cerhenice',
+            houseNumber: '1',
+            zipCode: '281 02',
+            country: 'Czech republic',
+            description: 'description 1'
+          }
+        },
+        noteForDriver: 'noteForDriver 1',
+        kind: StopKind.PICKUP
+      },
+      {
+        stopId: '2',
+        contact: {
+          name: 'test',
+          company: '',
+          phoneNumber: '+420 123 123 123'
+        },
+        location: {
+          address: {
+            city: 'Cerhenice',
+            street: 'Cerhenice',
+            houseNumber: '2',
+            zipCode: '281 02',
+            country: 'Czech republic',
+            description: ''
+          }
+        },
+        noteForDriver: '',
+        kind: StopKind.DESTINATION
+      },
+      {
+        stopId: '3',
+        contact: {
+          name: 'test',
+          company: '',
+          phoneNumber: '+420 123 123 123'
+        },
+        location: {
+          address: {
+            city: 'Cerhenice',
+            street: 'Cerhenice',
+            houseNumber: '3',
+            zipCode: '281 02',
+            country: 'Czech republic',
+            description: ''
+          }
+        },
+        noteForDriver: '',
+        kind: StopKind.DESTINATION
+      }
+    ]
   });
+
+  expect(body).toHaveProperty('id');
+
+  expect({
+    stops: body.stops
+  })
+    .toEqual({
+        stops: [
+          {
+            stopId: '1',
+            contact: {
+              name: 'test',
+              company: '',
+              phoneNumber: '+420123123123'
+            },
+            location: {
+              address: {
+                city: 'Cerhenice',
+                street: 'Cerhenice',
+                houseNumber: '1',
+                zipCode: '281 02',
+                country: 'Czech republic',
+                description: 'description 1'
+              }
+            },
+            noteForDriver: 'noteForDriver 1',
+            kind: StopKind.PICKUP
+          },
+          {
+            stopId: '2',
+            contact: {
+              name: 'test',
+              company: '',
+              phoneNumber: '+420123123123'
+            },
+            location: {
+              address: {
+                city: 'Cerhenice',
+                street: 'Cerhenice',
+                houseNumber: '2',
+                zipCode: '281 02',
+                country: 'Czech republic',
+                description: ''
+              }
+            },
+            noteForDriver: 'COVID 19 cz',
+            kind: 'DESTINATION'
+          },
+          {
+            stopId: '3',
+            contact: {
+              name: 'test',
+              company: '',
+              phoneNumber: '+420123123123'
+            },
+            location: {
+              address: {
+                city: 'Cerhenice',
+                street: 'Cerhenice',
+                houseNumber: '3',
+                zipCode: '281 02',
+                country: 'Czech republic',
+                description: ''
+              }
+            },
+            noteForDriver: 'COVID 19 cz',
+            kind: 'DESTINATION'
+          }
+        ]
+      }
+    );
+
 });

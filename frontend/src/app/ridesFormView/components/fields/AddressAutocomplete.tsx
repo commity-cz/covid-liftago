@@ -15,7 +15,7 @@ import classNames from "classnames";
 import React from 'react';
 // @ts-ignore
 import GooglePlacesAutocomplete, { geocodeByPlaceId } from 'react-google-places-autocomplete';
-import { convert } from "../../addressConversion";
+import { convert, PrefilledAddress } from "../../addressConversion";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 type Props = StandardProps & {
-  onSelect: (address: any) => void,
+  onSelect: (address: PrefilledAddress) => void,
   error?: boolean
 };
 
