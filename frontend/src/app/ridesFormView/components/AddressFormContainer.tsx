@@ -2,9 +2,10 @@ import { Button, makeStyles, Theme } from "@material-ui/core";
 import classNames from 'classnames';
 import { makeRequired, TextField } from "mui-rff";
 import React from 'react';
+import { useFormState } from "react-final-form";
 import * as yup from "yup";
-import AddressAutocomplete from "./AddressAutocomplete";
 import { When } from "./Condition";
+import AddressAutocomplete from "./fields/AddressAutocomplete";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -37,7 +38,7 @@ export const addressSchema = yup.object().shape({
 
 export type Address = yup.InferType<typeof addressSchema>
 
-const required = makeRequired(addressSchema)
+const required = makeRequired(addressSchema);
 
 type Props = StandardProps & {
   name: string
@@ -49,6 +50,8 @@ const falsy = (v: any) => !Boolean(v);
 
 const AddressFormContainer: React.FC<Props> = ({ name, updateAddress, ...others }) => {
   const classes = useStyles();
+  const {errors, submitFailed} = useFormState({subscription: {errors: true, submitFailed: true}});
+  const hasError = submitFailed && errors[`${name}.country`];
 
   const handleSelect = (googleAddress: any) => {
     const address = {
@@ -77,7 +80,7 @@ const AddressFormContainer: React.FC<Props> = ({ name, updateAddress, ...others 
 
       <When fieldName={`${name}.country`} condition={falsy}>
         <>
-          <AddressAutocomplete onSelect={handleSelect}/>
+          <AddressAutocomplete onSelect={handleSelect} error={hasError}/>
           <Button onClick={() => handleManualSelection()}>Zadat adresu ručně</Button>
         </>
       </When>

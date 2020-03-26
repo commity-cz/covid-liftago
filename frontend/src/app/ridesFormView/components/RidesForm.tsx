@@ -1,21 +1,25 @@
-import { Button, CircularProgress, Grid, Link, makeStyles, Theme, Typography } from "@material-ui/core";
+import { Backdrop, Button, CircularProgress, Grid, Link, makeStyles, Theme, Typography } from "@material-ui/core";
 import { Add, Send } from '@material-ui/icons'
 import classNames from 'classnames';
+// @ts-ignore
+import dotize from "dotize";
 import arrayMutators from 'final-form-arrays'
-import { Debug, makeValidate } from "mui-rff";
+import { makeValidate } from "mui-rff";
 import React from 'react';
 import { Form } from "react-final-form";
 import { FieldArray } from 'react-final-form-arrays'
 import { v4 as uuidv4 } from 'uuid';
 import * as yup from 'yup';
-import { Address, Contact, StopKind } from "../../../model";
+import { StopKind } from "../../../model";
+import { Address } from "./AddressFormContainer";
+import { Contact } from "./ContactFormContainer";
 import StopFieldset from "./StopFieldset";
 import { stopSchema } from "./StopFormContainer";
 
 const MIN_STOPS = 2;
 const MAX_STOPS = 5;
 
-const useStyles = makeStyles(({ spacing }: Theme) => {
+const useStyles = makeStyles(({ spacing, zIndex }: Theme) => {
 
   return {
     root: {},
@@ -38,6 +42,9 @@ const useStyles = makeStyles(({ spacing }: Theme) => {
     },
     marginRight: {
       marginRight: spacing(1)
+    },
+    backdrop: {
+      zIndex: zIndex.drawer + 1,
     },
     buttonProgress: {
       position: 'absolute',
@@ -66,45 +73,39 @@ export const formSchema = yup.object().shape({
     .max(MAX_STOPS),
 });
 
-const validate = makeValidate(formSchema);
+const originalValidate = makeValidate(formSchema);
+
+const validate = async (values: any) => {
+  return originalValidate(values)
+    .then(nestedErrors => dotize.convert(nestedErrors));
+};
 
 export type Stops = yup.InferType<typeof formSchema>
 export type IncompleteStops = NestedPartial<Stops>
 
-function createNewStop() {
+function createNewStop(kind = StopKind.DESTINATION) {
   return {
     stopId: uuidv4(),
-    kind: StopKind.DESTINATION
+    contact: {
+      phoneNumber: '+420'
+    },
+    kind
   }
 }
 
-type Props = StandardProps & {
-  onSubmit: (event: any) => void;
-  isSubmittingData: boolean;
-};
-
 const defaultValues: IncompleteStops = {
   stops: [
-    {
-      stopId: uuidv4(),
-      contact: {
-        phoneNumber: '+420'
-      },
-      kind: "PICKUP",
-    },
-    {
-      stopId: uuidv4(),
-      kind: "DESTINATION",
-      contact: {
-        phoneNumber: '+420'
-      },
-    }
+    createNewStop(StopKind.PICKUP),
+    createNewStop(StopKind.DESTINATION),
   ]
 };
-
 const subscription = { submitting: true, pristine: true };
 
-const RidesForm: React.FC<Props> = ({ onSubmit, isSubmittingData, ...others }) => {
+type Props = StandardProps & {
+  onSubmit: (data: Stops) => Promise<void>;
+};
+
+const RidesForm: React.FC<Props> = ({ onSubmit, ...others }) => {
   const classes = useStyles();
 
   return (
@@ -123,6 +124,7 @@ const RidesForm: React.FC<Props> = ({ onSubmit, isSubmittingData, ...others }) =
         }}
         render={({
                    handleSubmit,
+                   submitting,
                    form: {
                      mutators: { push, remove, setValue }
                    },
@@ -169,10 +171,15 @@ const RidesForm: React.FC<Props> = ({ onSubmit, isSubmittingData, ...others }) =
 
                         <Button type="submit" size="large" variant="contained" color="primary"
                                 fullWidth
-                                disabled={isSubmittingData}
+                                disabled={submitting}
                                 endIcon={<Send/>}>
-                          Odeslat </Button>
-                        {isSubmittingData && <CircularProgress size={24} className={classes.buttonProgress}/>}
+                          Odeslat
+                        </Button>
+                        {submitting && (
+                          <Backdrop className={classes.backdrop} open={true}>
+                            <CircularProgress  size={36} color="inherit" />
+                          </Backdrop>
+                        )}
                       </div>
 
                     </>
@@ -180,12 +187,6 @@ const RidesForm: React.FC<Props> = ({ onSubmit, isSubmittingData, ...others }) =
                 }}
 
               </FieldArray>
-
-              <Grid item xs={12}>
-                <pre>
-                  <Debug/>
-                </pre>
-              </Grid>
 
               <Grid item xs={12} className={classes.conditions}>
                 <Typography variant={"body2"}>

@@ -10,6 +10,8 @@ function componentToPair(acc, component) {
   return append(entry, acc)
 }
 
+// TODO test
+// TODO convert to TS
 export const convert = pipe(
   pathOr([], [0,'address_components']),
   reduce(componentToPair, []),

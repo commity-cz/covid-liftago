@@ -1,7 +1,6 @@
-import { Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+import { Grid, makeStyles } from '@material-ui/core';
 import classNames from 'classnames';
-import { TextField } from "mui-rff";
+import { makeRequired, TextField } from "mui-rff";
 import React from 'react';
 import * as yup from "yup";
 import { StopKind } from "../../../model";
@@ -21,10 +20,14 @@ export const stopSchema = yup.object().shape({
   contact: contactSchema,
   location: yup.object().shape({
     address: addressSchema
-  }),
+  }).required(),
   noteForDriver: yup.string(),
   kind: yup.string().oneOf(["PICKUP", "DESTINATION", "FALLBACK_DESTINATION"]),
 });
+
+export type Stop = yup.InferType<typeof stopSchema>
+
+const required = makeRequired(stopSchema);
 
 type Props = StandardProps & {
   kind: StopKind
@@ -53,6 +56,7 @@ const StopFormContainer: React.FC<Props> = ({ kind, name, updateValues, ...other
         <TextField
           label={kind === StopKind.PICKUP ? "Instrukce na místě vyzvednutí (nepovinné)" : "Instrukce na místě doručení (nepovinné)"}
           name={`${name}.noteForDriver`}
+          required={required.noteForDriver}
         />
 
       </Grid>

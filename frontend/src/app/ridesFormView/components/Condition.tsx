@@ -1,7 +1,5 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import { Field } from "react-final-form";
-import { bool } from "yup";
-
 
 type Props = StandardProps & {
   fieldName: string,

@@ -1,6 +1,5 @@
-import { Button, Paper, Theme, Typography } from '@material-ui/core';
+import { Button, makeStyles, Paper, Theme, Typography } from '@material-ui/core';
 import { Delete } from "@material-ui/icons";
-import { makeStyles } from '@material-ui/styles';
 import React from 'react';
 import { StopKind } from "../../../model";
 import StopFormContainer from "./StopFormContainer";

@@ -12546,6 +12546,11 @@ string_decoder@~1.1.1:
   dependencies:
     safe-buffer "~5.1.0"
 
+stringify-object-keys@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/stringify-object-keys/-/stringify-object-keys-1.4.0.tgz#29d0a71b80c230c96f15cd7442de8d46eb61db42"
+  integrity sha512-4hFk5gIiz7WpeLtjNsZ8wHhgf4GoCp068w4AxC5JgYUtpDVkWqZcfSWT4dmYMi8pcSpWBz7m0xLKegN82FhKVw==
+
 stringify-object@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/stringify-object/-/stringify-object-3.3.0.tgz#703065aefca19300d3ce88af4f5b3956d7556629"

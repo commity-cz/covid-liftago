@@ -1,11 +1,21 @@
-import { Grid, LinearProgress, Paper, TextField, Typography } from "@material-ui/core";
+import {
+  LinearProgress,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Paper,
+  TextField,
+  Typography
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import parse from "autosuggest-highlight/parse";
+import classNames from "classnames";
 import React from 'react';
 // @ts-ignore
 import GooglePlacesAutocomplete, { geocodeByPlaceId } from 'react-google-places-autocomplete';
-import { convert } from "./addressConversion";
+import { convert } from "../../addressConversion";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,14 +29,13 @@ const useStyles = makeStyles(theme => ({
   suggestions: {
     position: 'absolute',
     zIndex: 101,
-    padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
-    minWidth: 300
+    minWidth: 300,
   },
-  suggestion: {
-    cursor: 'pointer'
+  suggestionsLoading: {
+    padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
+
   }
 }));
-
 
 type Props = StandardProps & {
   onSelect: (address: any) => void,
@@ -50,34 +59,25 @@ const AddressAutocomplete: React.FC<Props> = ({ error, onSelect }) => {
     );
 
     return (
-      <Grid key={option.id}
-            container
-            alignItems="center"
-            className={classes.suggestion}
-            onClick={() => onSelectSuggestion(option)}>
-        <Grid item>
-          <LocationOnIcon className={classes.icon}/>
-        </Grid>
-        <Grid item xs>
-          <Typography>
-            {parts.map((part, index) => (
-              <span key={index} style={{ fontWeight: part.highlight ? 700 : 400 }}>
+      <ListItem button
+                key={option.id}
+                onClick={() => onSelectSuggestion(option)}>
+        <ListItemIcon>
+          <LocationOnIcon/>
+        </ListItemIcon>
+        <ListItemText
+          primary={parts.map((part, index) => (
+            <span key={index} style={{ fontWeight: part.highlight ? 700 : 400 }}>
               {part.text}
             </span>
-            ))}
-          </Typography>
-
-          <Typography variant="body2" color="textSecondary">
-            {option.structured_formatting.secondary_text}
-          </Typography>
-        </Grid>
-      </Grid>
+          ))}
+          secondary={option.structured_formatting.secondary_text}
+        />
+      </ListItem>
     );
-  }
-
+  };
 
   return (
-
     <div className={classes.root}>
       <GooglePlacesAutocomplete
         placeholder=""
@@ -98,23 +98,27 @@ const AddressAutocomplete: React.FC<Props> = ({ error, onSelect }) => {
         }}
 
         loader={
-          <Paper className={classes.suggestions}>
+          <Paper className={classNames(classes.suggestions, classes.suggestionsLoading)}>
             <LinearProgress variant="indeterminate"/>
             <Typography>Loading...</Typography>
           </Paper>
         }
 
-        renderSuggestions={(active: any, suggestions: any, onSelectSuggestion: any) => (
-          <Paper className={classes.suggestions}>
-            {
-              suggestions.map((suggestion: any) => renderItem(suggestion, onSelectSuggestion))
-            }
-          </Paper>
-        )}
+        renderSuggestions={(active: any, suggestions: any, onSelectSuggestion: any) => {
+          return (
+            <Paper className={classes.suggestions}>
+              <List component="nav" aria-label="address suggestion" dense>
+                {
+                  suggestions.map((suggestion: any) => renderItem(suggestion, onSelectSuggestion))
+                }
+              </List>
+            </Paper>
+          )
+        }}
 
       />
     </div>
   );
-}
+};
 
 export default AddressAutocomplete;

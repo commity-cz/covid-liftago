@@ -1,9 +1,9 @@
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core';
 import classNames from 'classnames';
-import { TextField } from "mui-rff";
+import { makeRequired, TextField } from "mui-rff";
 import React from 'react';
 import * as yup from "yup";
-import { PhoneField } from "./PhoneField";
+import { PhoneField } from "./fields/PhoneField";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -22,7 +22,7 @@ export const contactSchema = yup.object().shape({
 
 export type Contact = yup.InferType<typeof contactSchema>
 
-const required = {} as any
+const required = makeRequired(contactSchema);
 
 type Props = StandardProps & {
   name: string

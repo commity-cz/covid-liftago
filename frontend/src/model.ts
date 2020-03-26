@@ -1,17 +1,5 @@
-export type Contact = {
-  name: string,
-  company: string
-  phoneNumber: string
-}
-
-export type Address = {
-  "street": string,
-  "houseNumber": string
-  "city": string
-  "zipCode": string
-  "country": string
-  "description": string
-}
+import { Address } from "./app/ridesFormView/components/AddressFormContainer";
+import { Contact } from "./app/ridesFormView/components/ContactFormContainer";
 
 export interface Stop {
   stopId: string,

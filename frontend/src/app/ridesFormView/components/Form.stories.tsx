@@ -101,7 +101,6 @@ export const StopFormContainerStory = () => {
             <StopFormContainer name="stop" kind={StopKind.PICKUP} updateValues={updateData}/>
 
             <Debug/>
-            <Button>Send</Button>
           </form>
         )
       }}
@@ -112,6 +111,6 @@ export const StopFormContainerStory = () => {
 
 export const RidesFormStory = () => {
   return (
-    <RidesForm onSubmit={action('onSubmit')} isSubmittingData={false}/>
+    <RidesForm onSubmit={action('onSubmit') as (data: any) => Promise<void>} />
   )
 }
