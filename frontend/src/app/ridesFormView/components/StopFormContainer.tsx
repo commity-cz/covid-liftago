@@ -24,10 +24,8 @@ export const stopSchema = yup.object().shape({
   noteForDriver: yup.string()
     // eslint-disable-next-line no-template-curly-in-string
     .max(80, 'Poznámka může obsahovat maximálně ${max} znaků'),
-  kind: yup.string().oneOf(["PICKUP", "DESTINATION", "FALLBACK_DESTINATION"]),
+  kind: yup.string().oneOf(Object.keys(StopKind)),
 });
-
-export type Stop = yup.InferType<typeof stopSchema>
 
 const required = makeRequired(stopSchema);
 
