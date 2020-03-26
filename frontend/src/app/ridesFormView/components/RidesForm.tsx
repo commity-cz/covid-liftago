@@ -10,9 +10,7 @@ import { Form } from "react-final-form";
 import { FieldArray } from 'react-final-form-arrays'
 import { v4 as uuidv4 } from 'uuid';
 import * as yup from 'yup';
-import { StopKind } from "../../../model";
-import { Address } from "./AddressFormContainer";
-import { Contact } from "./ContactFormContainer";
+import { Stop, StopKind } from "../../../model";
 import StopFieldset from "./StopFieldset";
 import { stopSchema } from "./StopFormContainer";
 
@@ -55,16 +53,6 @@ const useStyles = makeStyles(({ spacing, zIndex }: Theme) => {
     },
   }
 });
-
-export interface Stop {
-  stopId: string,
-  contact: Contact,
-  locations: {
-    address: Address
-  },
-  noteForDriver: string
-  kind: StopKind
-}
 
 export const formSchema = yup.object().shape({
   stops: yup.array()

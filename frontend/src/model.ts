@@ -4,7 +4,7 @@ import { Contact } from "./app/ridesFormView/components/ContactFormContainer";
 export interface Stop {
   stopId: string,
   contact: Contact,
-  locations: {
+  location: {
     address: Address
   },
   noteForDriver: string

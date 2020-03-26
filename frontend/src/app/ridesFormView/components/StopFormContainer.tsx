@@ -29,6 +29,8 @@ export const stopSchema = yup.object().shape({
 
 const required = makeRequired(stopSchema);
 
+export type Stop = yup.InferType<typeof stopSchema>
+
 type Props = StandardProps & {
   kind: StopKind
   name: string
