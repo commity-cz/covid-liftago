@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {cancelableStatuses, DeliveryRide, RideStatus} from "../../firebase/model";
-import {IconButton, Link, makeStyles, TableCell, TableRow,} from "@material-ui/core";
+import {Button, IconButton, Link, makeStyles, TableCell, TableRow,} from "@material-ui/core";
 import {format} from 'date-fns'
 import {amber, green, lightBlue, red} from '@material-ui/core/colors';
 import RideStatusBlock from "./RideStatusBlock";
@@ -93,7 +93,14 @@ const RidesTableRow: React.FC<Props> = ({data, handleCancel}) => {
         }
         {
           data.userId === user?.uid && cancelableStatuses.includes(data.rideStatus) &&
-          <IconButton size="small" onClick={() => handleCancel(data.documentId)}><Cancel/></IconButton>
+          <Button
+            color="secondary"
+            size="small"
+            onClick={() => handleCancel(data.documentId)}
+            startIcon={<Cancel/>}
+          >
+            Zrušit
+          </Button>
         }
       </TableCell>
     </TableRow>
