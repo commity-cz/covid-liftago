@@ -1,15 +1,20 @@
 import { StopKind } from "../../model";
-import { createDeliveryRidesBody, removeSpacesFromPhoneNubmer, setNoteForDriverDefault } from "./functions";
+import {
+  createDeliveryRidesBody,
+  removeSpacesFromPhoneNumber,
+  setMultipleDestinationsToStops,
+  setNoteForDriverDefault
+} from "./functions";
 
 describe('createDeliveryRidesBody - functions', function () {
 
   test('removeSpacesFromPhoneNubmer should remove spaces from contact form', function () {
-    expect(removeSpacesFromPhoneNubmer({ contact: { phoneNumber: '+420 123 123 123' } }))
+    expect(removeSpacesFromPhoneNumber({ contact: { phoneNumber: '+420 123 123 123' } }))
       .toEqual({ contact: { phoneNumber: '+420123123123' } });
   });
 
   test('removeSpacesFromPhoneNubmer should preserver number without spaces', function () {
-    expect(removeSpacesFromPhoneNubmer({ contact: { phoneNumber: '+420123123123' } }))
+    expect(removeSpacesFromPhoneNumber({ contact: { phoneNumber: '+420123123123' } }))
       .toEqual({ contact: { phoneNumber: '+420123123123' } });
   });
 
@@ -26,9 +31,116 @@ describe('createDeliveryRidesBody - functions', function () {
       .toEqual({ noteForDriver: 'my note' });
   });
 
+  test('setMultiplePlaceNote ', function () {
+    expect(setMultipleDestinationsToStops([{ noteForDriver: '' }]))
+      .toEqual([{ noteForDriver: 'Doručení na více míst.' }]);
+
+    expect(setMultipleDestinationsToStops([{ noteForDriver: 'My note' }]))
+      .toEqual([{ noteForDriver: 'Doručení na více míst. My note' }]);
+  })
+
 });
 
-test('createDeliveryRidesBody', function () {
+test('createDeliveryRidesBody - 2 stops', function () {
+  const body = createDeliveryRidesBody({
+    stops: [
+      {
+        stopId: '1',
+        contact: {
+          name: 'test',
+          company: '',
+          phoneNumber: '+420 123 123 123'
+        },
+        location: {
+          address: {
+            city: 'Cerhenice',
+            street: 'Cerhenice',
+            houseNumber: '1',
+            zipCode: '281 02',
+            country: 'Czech republic',
+            description: 'description 1'
+          }
+        },
+        noteForDriver: 'noteForDriver 1',
+        kind: StopKind.PICKUP
+      },
+      {
+        stopId: '2',
+        contact: {
+          name: 'test',
+          company: '',
+          phoneNumber: '+420 123 123 123'
+        },
+        location: {
+          address: {
+            city: 'Cerhenice',
+            street: 'Cerhenice',
+            houseNumber: '2',
+            zipCode: '281 02',
+            country: 'Czech republic',
+            description: ''
+          }
+        },
+        noteForDriver: '',
+        kind: StopKind.DESTINATION
+      }
+    ]
+  });
+
+  expect(body).toHaveProperty('id');
+
+  expect({
+    stops: body.stops
+  })
+    .toEqual({
+        stops: [
+          {
+            stopId: '1',
+            contact: {
+              name: 'test',
+              company: '',
+              phoneNumber: '+420123123123'
+            },
+            location: {
+              address: {
+                city: 'Cerhenice',
+                street: 'Cerhenice',
+                houseNumber: '1',
+                zipCode: '281 02',
+                country: 'Czech republic',
+                description: 'description 1'
+              }
+            },
+            noteForDriver: 'noteForDriver 1',
+            kind: StopKind.PICKUP
+          },
+          {
+            stopId: '2',
+            contact: {
+              name: 'test',
+              company: '',
+              phoneNumber: '+420123123123'
+            },
+            location: {
+              address: {
+                city: 'Cerhenice',
+                street: 'Cerhenice',
+                houseNumber: '2',
+                zipCode: '281 02',
+                country: 'Czech republic',
+                description: ''
+              }
+            },
+            noteForDriver: 'COVID 19 cz',
+            kind: 'DESTINATION'
+          }
+        ]
+      }
+    );
+
+});
+
+test('createDeliveryRidesBody - 3 stops', function () {
   const body = createDeliveryRidesBody({
     stops: [
       {
@@ -118,7 +230,7 @@ test('createDeliveryRidesBody', function () {
                 description: 'description 1'
               }
             },
-            noteForDriver: 'noteForDriver 1',
+            noteForDriver: 'Doručení na více míst. noteForDriver 1',
             kind: StopKind.PICKUP
           },
           {
@@ -166,3 +278,5 @@ test('createDeliveryRidesBody', function () {
     );
 
 });
+
+

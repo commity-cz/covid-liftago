@@ -23,7 +23,7 @@ export const stopSchema = yup.object().shape({
   }).required(),
   noteForDriver: yup.string()
     // eslint-disable-next-line no-template-curly-in-string
-    .max(80, 'Poznámka může obsahovat maximálně ${max} znaků'),
+    .max(70, 'Poznámka může obsahovat maximálně ${max} znaků'),
   kind: yup.string().oneOf(Object.keys(StopKind)),
 });
 
