@@ -56,14 +56,17 @@ export async function cancelDeliveryRide(data: CancelDeliveryRideRequest, contex
   checkAuthentication(context);
   console.info(`Cancel deliveryRide ${data.rideDocumentId}`);
 
-  const deliveryRideSnapshot = await admin.firestore().collection('deliveryRides').doc(data.rideDocumentId).get();
+  const deliveryRideRef = admin.firestore().collection('deliveryRides').doc(data.rideDocumentId);
+  const deliveryRideSnapshot = await deliveryRideRef.get();
   const deliveryRide = deliveryRideSnapshot.data() as DeliveryRide;
 
   if (deliveryRide.userId !== context.auth?.uid) {
     throw new HttpsError('permission-denied', 'Můžete zrušit pouze rozvozy, které jste vytvořil/a.');
   }
 
-  return await liftagoApi.cancelDeliveryRide(deliveryRide.id);
+  await liftagoApi.cancelDeliveryRide(deliveryRide.id);
+  await deliveryRideRef.update('rideStatus', 'CANCELLED');
+  return 0;
 }
 
 function addWebhookUrl(data: any, rideDocumentId: string) {
