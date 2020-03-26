@@ -1,41 +1,70 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {DeliveryRide} from "../../firebase/model";
 import {makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,} from "@material-ui/core";
 import RidesTableTitle from "./RidesTableTitle";
 import RidesTableRow from "./RidesTableRow";
 import CancelDialog from "./CancelDialog";
+import {FirebaseContext} from "../../firebase";
+import {Alert, Color} from "@material-ui/lab";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(({spacing}) => ({
   table: {
     minWidth: 650,
   },
+  spaceBottom: {
+    marginBottom: spacing(2),
+  }
 }));
 
 type Props = {
   items: DeliveryRide[]
 }
 
-const useCancelWindow = () => {
-  const [open, setOpenState] = useState(false);
-  const [link, setLink] = useState(null);
+type AlertData = {
+  severity: Color;
+  message: string;
+}
 
-  const setOpen = () => setOpenState(true);
+const useCancel = () => {
+  const [open, setOpenState] = useState(false);
+  const [rideId, setRideId] = useState<string | null>(null);
+  const [alert, setAlert] = useState<AlertData | null>(null);
+  const firebase = useContext(FirebaseContext);
+
+  const setOpen = (rideId: string) => {
+    setOpenState(true);
+    setRideId(rideId);
+  };
   const setClose = () => setOpenState(false);
+  const cancelRide = () => {
+    if (rideId) {
+      firebase?.cancelDeliveryRide(rideId)
+        .then(() => setAlert({severity: 'success', message: 'Rozvoz úspěšně zrušen.'}))
+        .catch(error => setAlert({severity: 'error', message: error.message}));
+    }
+    setOpenState(false);
+  };
 
   return {
+    alert,
     open,
     setOpen,
     setClose,
+    cancelRide
   }
 };
 
 const RidesTable: React.FC<Props> = ({items}) => {
   const classes = useStyles();
-  const {open, setOpen, setClose} = useCancelWindow();
+  const {alert, open, setOpen, setClose, cancelRide} = useCancel();
 
   return (
     <>
       <RidesTableTitle/>
+      {
+        alert &&
+          <Alert severity={alert.severity} className={classes.spaceBottom}>{alert.message}</Alert>
+      }
       <TableContainer component={Paper}>
         <Table className={classes.table} size="small">
           <TableHead>
@@ -50,11 +79,11 @@ const RidesTable: React.FC<Props> = ({items}) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {items.map(item => <RidesTableRow data={item} handleCancel={setOpen} />)}
+            {items.map(item => <RidesTableRow data={item} key={item.id} handleCancel={setOpen} />)}
           </TableBody>
         </Table>
       </TableContainer>
-      <CancelDialog open={open} handleClose={setClose} />
+      <CancelDialog open={open} handleClose={setClose} handleCancel={cancelRide} />
     </>
   );
 };

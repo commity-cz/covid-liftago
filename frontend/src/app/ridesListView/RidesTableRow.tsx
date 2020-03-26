@@ -1,10 +1,11 @@
-import React from 'react';
-import {DeliveryRide, RideStatus} from "../../firebase/model";
+import React, {useContext} from 'react';
+import {cancelableStatuses, DeliveryRide, RideStatus} from "../../firebase/model";
 import {IconButton, Link, makeStyles, TableCell, TableRow,} from "@material-ui/core";
 import {format} from 'date-fns'
 import {amber, green, lightBlue, red} from '@material-ui/core/colors';
 import RideStatusBlock from "./RideStatusBlock";
 import {Cancel, PlaceOutlined} from "@material-ui/icons";
+import UserContext from "../../user/context";
 
 const useStyles = makeStyles(({spacing}) => ({
   status: {
@@ -14,8 +15,10 @@ const useStyles = makeStyles(({spacing}) => ({
   icon: {
     marginRight: spacing(1),
   },
-  right: {
-    textAlign: 'right'
+  actions: {
+    textAlign: 'right',
+    paddingTop: 0,
+    paddingBottom: 0,
   },
   [RideStatus.PROCESSING]: {
     borderLeft: `5px solid ${amber[800]}`,
@@ -42,7 +45,7 @@ const useStyles = makeStyles(({spacing}) => ({
 
 type Props = {
   data: DeliveryRide,
-  handleCancel: () => void
+  handleCancel: (rideId: string) => void
 }
 
 const dateFormat = 'd. M. Y H:mm';
@@ -50,18 +53,12 @@ const shortDateFormat = 'H:mm';
 
 const RidesTableRow: React.FC<Props> = ({data, handleCancel}) => {
   const classes = useStyles();
+  const user = useContext(UserContext);
 
-  let attributes: any = {};
-  if (data.rideStatus) {
-    attributes.className = classes[data.rideStatus]
-  }
   return (
-    <TableRow {...attributes} key={data.id}>
+    <TableRow className={classes[data.rideStatus]} key={data.id}>
       <TableCell>
-        {
-          data.rideStatus &&
-          <RideStatusBlock status={data.rideStatus}/>
-        }
+        <RideStatusBlock status={data.rideStatus}/>
       </TableCell>
       <TableCell>
         {data.userEmail}
@@ -87,7 +84,7 @@ const RidesTableRow: React.FC<Props> = ({data, handleCancel}) => {
           format(new Date(data.completedAt.seconds * 1000), shortDateFormat)
         }
       </TableCell>
-      <TableCell className={classes.right}>
+      <TableCell className={classes.actions}>
         {
           data.positionLink &&
           <Link href={data.positionLink} target="_blank">
@@ -95,8 +92,8 @@ const RidesTableRow: React.FC<Props> = ({data, handleCancel}) => {
           </Link>
         }
         {
-          data.cancelLink &&
-          <IconButton size="small" onClick={handleCancel}><Cancel/></IconButton>
+          data.userId == user?.uid && cancelableStatuses.includes(data.rideStatus) &&
+          <IconButton size="small" onClick={() => handleCancel(data.documentId)}><Cancel/></IconButton>
         }
       </TableCell>
     </TableRow>

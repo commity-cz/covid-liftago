@@ -3,16 +3,15 @@ import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogT
 
 type Props = {
   open: boolean,
-  handleClose: () => void
+  handleClose: () => void,
+  handleCancel: () => void,
 };
 
-const CancelDialog: React.FC<Props> = ({open, handleClose}) => {
+const CancelDialog: React.FC<Props> = ({open, handleClose, handleCancel}) => {
   return (
     <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">Zrušení přepravy</DialogTitle>
       <DialogContent>
@@ -24,7 +23,7 @@ const CancelDialog: React.FC<Props> = ({open, handleClose}) => {
         <Button onClick={handleClose} color="primary">
           Ne
         </Button>
-        <Button onClick={handleClose} color="primary">
+        <Button onClick={handleCancel} color="primary">
           Ano
         </Button>
       </DialogActions>

@@ -11,7 +11,9 @@ const RidesListView: React.FC = () => {
   useEffect(() => {
     firebase?.getDeliveryRides((rides: any) => {
       const items = rides.docs.map((item: any) => {
-        return item.data() as DeliveryRide
+        const data = item.data();
+        data.documentId = item.id;
+        return data as DeliveryRide;
       });
       setData(items);
     })

@@ -27,16 +27,18 @@ export const statusName = {
   [RideStatus.REJECTED]: 'Zrušeno - nenalezen řidič',
 };
 
+export const cancelableStatuses = [RideStatus.PROCESSING, RideStatus.ACCEPTED, RideStatus.WAITING];
+
 export interface DeliveryRide {
+  documentId: string;
   id: string;
   organizationId: string;
   userId: string;
   created: FirestoreDate;
+  rideStatus: RideStatus;
   pickupArrivalEstimateAt?: FirestoreDate;
   destinationArrivalEstimateAt?: FirestoreDate;
   completedAt?: FirestoreDate;
-  rideStatus?: RideStatus;
-  cancelLink?: string;
   positionLink?: string;
   userEmail?: string;
 }

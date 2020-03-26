@@ -9,6 +9,7 @@ class Firebase {
   private auth: firebase.auth.Auth;
   private readonly createDeliveryRideCallable: firebase.functions.HttpsCallable;
   private readonly deliveryRidesAvailabilityCallable: firebase.functions.HttpsCallable;
+  private readonly cancelDeliveryRideCallable: firebase.functions.HttpsCallable;
   private firestore: firebase.firestore.Firestore;
 
   constructor(config: Object) {
@@ -20,6 +21,8 @@ class Firebase {
     const functions = application.functions('europe-west1');
     this.createDeliveryRideCallable = functions.httpsCallable('createDeliveryRide');
     this.deliveryRidesAvailabilityCallable = functions.httpsCallable('deliveryRidesAvailability');
+    this.deliveryRidesAvailabilityCallable = functions.httpsCallable('deliveryRidesAvailability');
+    this.cancelDeliveryRideCallable = functions.httpsCallable('cancelDeliveryRide');
   }
 
   doSignOut = () => this.auth.signOut();
@@ -54,7 +57,11 @@ class Firebase {
       .where('organizationId', '==', organization)
       .orderBy('created', 'desc')
       .onSnapshot(callback)
-  }
+  };
+
+  cancelDeliveryRide = (rideDocumentId: string) => {
+    return this.cancelDeliveryRideCallable({rideDocumentId});
+  };
 }
 
 export default Firebase;
