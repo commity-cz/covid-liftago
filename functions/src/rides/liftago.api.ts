@@ -28,8 +28,7 @@ export async function cancelDeliveryRide(rideId: string) {
     method: 'post',
     headers: createHeaders()
   });
-  await checkStatus(response);
-  return response.json();
+  return await checkStatus(response);
 }
 
 async function checkStatus(res: any): Promise<Response> {
