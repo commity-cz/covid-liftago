@@ -8,7 +8,7 @@ type FirestoreDate = {
 }
 
 export const statusName = {
-  'PROCESSING': 'Zpracovává se',
+  'PROCESSING': 'Čeká na řidiče',
   'ACCEPTED': 'Přijato',
   'WAITING': 'Čeká na vyzvednutí',
   'ON_BOARD': 'Na cestě',
