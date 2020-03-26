@@ -1,9 +1,9 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import {CallableContext, HttpsError} from "firebase-functions/lib/providers/https";
-import {postDeliveryRide} from "./liftago.api";
-import FieldValue = admin.firestore.FieldValue;
+import * as liftagoApi from "./liftago.api";
 import {getWebhookUrl} from "./ridesWebhooks.functions";
+import FieldValue = admin.firestore.FieldValue;
 
 export async function deliveryRidesAvailability(data: any, context: CallableContext) {
   checkAuthentication(context);
@@ -41,7 +41,7 @@ export async function createDeliveryRide(data: any, context: CallableContext) {
   const deliveryRideDoc = admin.firestore().collection('deliveryRides').doc();
 
   const dataWithWebhook = addWebhookUrl(data, deliveryRideDoc.id);
-  const response: CreateDeliveryRideResponse = await postDeliveryRide(dataWithWebhook);
+  const response: CreateDeliveryRideResponse = await liftagoApi.postDeliveryRide(dataWithWebhook);
 
   if (response.id) {
     console.info('deliveryRides response', JSON.stringify(response));
@@ -50,6 +50,24 @@ export async function createDeliveryRide(data: any, context: CallableContext) {
     console.error('Missing ID in deliveryRides response', JSON.stringify(response));
   }
   return response;
+}
+
+export async function cancelDeliveryRide(data: CancelDeliveryRideRequest, context: CallableContext) {
+  checkAuthentication(context);
+  console.info(`Cancel deliveryRide ${data.rideDocumentId}`);
+
+  const deliveryRideSnapshot = await admin.firestore().collection('deliveryRides').doc(data.rideDocumentId).get();
+  const deliveryRide = deliveryRideSnapshot.data() as DeliveryRide;
+
+  if (deliveryRide.userId !== context.auth?.uid) {
+    throw new HttpsError('permission-denied', 'Můžete zrušit pouze rozvozy, které jste vytvořil/a.');
+  }
+
+  if (deliveryRide.cancelLink) {
+    return await liftagoApi.cancelDeliveryRide(deliveryRide.cancelLink);
+  } else {
+    throw new HttpsError('unavailable', 'Nenalezen link pro zrušení jízdy');
+  }
 }
 
 function addWebhookUrl(data: any, rideDocumentId: string) {

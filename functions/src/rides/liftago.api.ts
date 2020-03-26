@@ -22,6 +22,14 @@ export async function getDeliveryRide(rideId: string): Promise<GetDeliveryRideRe
   return response.json();
 }
 
+export async function cancelDeliveryRide(cancelLink: string) {
+  const response = await fetch(cancelLink, {
+    headers: createHeaders()
+  });
+  await checkStatus(response);
+  return response.json();
+}
+
 async function checkStatus(res: any): Promise<Response> {
   if (res.ok) {
     return res;
