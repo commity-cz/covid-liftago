@@ -51,7 +51,7 @@ const falsy = (v: any) => !Boolean(v);
 const AddressFormContainer: React.FC<Props> = ({ name, updateAddress, ...others }) => {
   const classes = useStyles();
   const {errors, submitFailed} = useFormState({subscription: {errors: true, submitFailed: true}});
-  const hasError = submitFailed && errors[`${name}.country`];
+  const hasError = submitFailed && Boolean(errors[`${name}.country`]);
 
   const handleSelect = (googleAddress: any) => {
     const address = {
