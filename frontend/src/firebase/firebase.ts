@@ -47,13 +47,13 @@ class Firebase {
     this.auth.onAuthStateChanged(callback)
   };
 
-  getDeliveryRides = async () => {
+  getDeliveryRides = async (callback: any) => {
     const token = await this.auth.currentUser?.getIdTokenResult();
     const organization = token?.claims.organization;
-    return await this.firestore.collection('deliveryRides')
+    this.firestore.collection('deliveryRides')
       .where('organizationId', '==', organization)
       .orderBy('created', 'desc')
-      .get();
+      .onSnapshot(callback)
   }
 }
 

@@ -7,14 +7,24 @@ type FirestoreDate = {
   nanoseconds: number
 }
 
+export enum RideStatus {
+  PROCESSING = 'PROCESSING',
+  ACCEPTED = 'ACCEPTED',
+  WAITING = 'WAITING',
+  ON_BOARD = 'ON_BOARD',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED',
+  REJECTED = 'REJECTED',
+}
+
 export const statusName = {
-  'PROCESSING': 'Čeká na řidiče',
-  'ACCEPTED': 'Přijato',
-  'WAITING': 'Čeká na vyzvednutí',
-  'ON_BOARD': 'Na cestě',
-  'COMPLETED': 'Doručeno',
-  'CANCELLED': 'Zrušeno',
-  'REJECTED': 'Zamítnuto',
+  [RideStatus.PROCESSING]: 'Čeká na řidiče',
+  [RideStatus.ACCEPTED]: 'Přijato řidičem',
+  [RideStatus.WAITING]: 'Na místě vyzvednutí',
+  [RideStatus.ON_BOARD]: 'Na cestě',
+  [RideStatus.COMPLETED]: 'Doručeno',
+  [RideStatus.CANCELLED]: 'Zrušeno',
+  [RideStatus.REJECTED]: 'Zrušeno - nenalezen řidič',
 };
 
 export interface DeliveryRide {
@@ -25,7 +35,8 @@ export interface DeliveryRide {
   pickupArrivalEstimateAt?: FirestoreDate;
   destinationArrivalEstimateAt?: FirestoreDate;
   completedAt?: FirestoreDate;
-  rideStatus?: 'PROCESSING' | 'ACCEPTED' | 'WAITING' | 'ON_BOARD' | 'COMPLETED' | 'CANCELLED' | 'REJECTED';
+  rideStatus?: RideStatus;
   cancelLink?: string;
   positionLink?: string;
+  userEmail?: string;
 }
