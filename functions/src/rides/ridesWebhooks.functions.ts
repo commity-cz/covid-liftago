@@ -30,7 +30,6 @@ async function updateDeliveryRide(deliveryRideDoc: FirebaseFirestore.DocumentRef
     pickupArrivalEstimateAt: parseIsoDate(ride.pickupArrivalEstimateAt),
     destinationArrivalEstimateAt: parseIsoDate(ride.destinationArrivalEstimateAt),
     completedAt: parseIsoDate(ride.completedAt),
-    cancelLink: ride.links.cancel,
     positionLink: ride.links.position
   };
 

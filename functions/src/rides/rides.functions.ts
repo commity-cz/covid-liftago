@@ -63,11 +63,7 @@ export async function cancelDeliveryRide(data: CancelDeliveryRideRequest, contex
     throw new HttpsError('permission-denied', 'Můžete zrušit pouze rozvozy, které jste vytvořil/a.');
   }
 
-  if (deliveryRide.cancelLink) {
-    return await liftagoApi.cancelDeliveryRide(deliveryRide.cancelLink);
-  } else {
-    throw new HttpsError('unavailable', 'Nenalezen link pro zrušení jízdy');
-  }
+  return await liftagoApi.cancelDeliveryRide(deliveryRide.id);
 }
 
 function addWebhookUrl(data: any, rideDocumentId: string) {

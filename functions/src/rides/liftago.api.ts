@@ -22,8 +22,9 @@ export async function getDeliveryRide(rideId: string): Promise<GetDeliveryRideRe
   return response.json();
 }
 
-export async function cancelDeliveryRide(cancelLink: string) {
-  const response = await fetch(cancelLink, {
+export async function cancelDeliveryRide(rideId: string) {
+  const response = await fetch(`${functions.config().liftago.url}/deliveryRides/${rideId}/cancel`, {
+    method: 'post',
     headers: createHeaders()
   });
   await checkStatus(response);
