@@ -1,25 +1,18 @@
-import React from 'react';
-import {DeliveryRide, statusName} from "../../firebase/model";
-import {
-  Link,
-  makeStyles,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography
-} from "@material-ui/core";
-import {format} from 'date-fns'
+import React, {useContext, useState} from 'react';
+import {DeliveryRide} from "../../firebase/model";
+import {makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,} from "@material-ui/core";
+import RidesTableTitle from "./RidesTableTitle";
+import RidesTableRow from "./RidesTableRow";
+import CancelDialog from "./CancelDialog";
+import {FirebaseContext} from "../../firebase";
+import {Alert, Color} from "@material-ui/lab";
 
 const useStyles = makeStyles(({spacing}) => ({
   table: {
     minWidth: 650,
   },
-  title: {
-    marginBottom: spacing(2)
+  spaceBottom: {
+    marginBottom: spacing(2),
   }
 }));
 
@@ -27,19 +20,57 @@ type Props = {
   items: DeliveryRide[]
 }
 
-const dateFormat = 'd. M. Y H:mm:ss';
+type AlertData = {
+  severity: Color;
+  message: string;
+}
+
+const useCancel = () => {
+  const [open, setOpenState] = useState(false);
+  const [rideId, setRideId] = useState<string | null>(null);
+  const [alert, setAlert] = useState<AlertData | null>(null);
+  const firebase = useContext(FirebaseContext);
+
+  const setOpen = (rideId: string) => {
+    setOpenState(true);
+    setRideId(rideId);
+  };
+  const setClose = () => setOpenState(false);
+  const cancelRide = () => {
+    if (rideId) {
+      firebase?.cancelDeliveryRide(rideId)
+        .then(() => setAlert({severity: 'success', message: 'Rozvoz úspěšně zrušen.'}))
+        .catch(error => setAlert({severity: 'error', message: error.message}));
+    }
+    setOpenState(false);
+  };
+
+  return {
+    alert,
+    open,
+    setOpen,
+    setClose,
+    cancelRide
+  }
+};
 
 const RidesTable: React.FC<Props> = ({items}) => {
   const classes = useStyles();
+  const {alert, open, setOpen, setClose, cancelRide} = useCancel();
 
   return (
     <>
-      <Typography variant="h4" className={classes.title}>Seznam rozvozů</Typography>
+      <RidesTableTitle/>
+      {
+        alert &&
+          <Alert severity={alert.severity} className={classes.spaceBottom}>{alert.message}</Alert>
+      }
       <TableContainer component={Paper}>
         <Table className={classes.table} size="small">
           <TableHead>
             <TableRow>
               <TableCell>Stav</TableCell>
+              <TableCell>Uživatel</TableCell>
               <TableCell>Vytvořeno</TableCell>
               <TableCell>Očekávané vyzvednutí</TableCell>
               <TableCell>Očekávané doručení</TableCell>
@@ -48,46 +79,11 @@ const RidesTable: React.FC<Props> = ({items}) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {items.map(item => (
-              <TableRow key={item.id}>
-                <TableCell>
-                  {
-                    item.rideStatus &&
-                    statusName[item.rideStatus]
-                  }
-                </TableCell>
-                <TableCell>
-                  {format(new Date(item.created.seconds * 1000), dateFormat)}
-                </TableCell>
-                <TableCell>
-                  {
-                    item.pickupArrivalEstimateAt &&
-                    format(new Date(item.pickupArrivalEstimateAt.seconds * 1000), dateFormat)
-                  }
-                </TableCell>
-                <TableCell>
-                  {
-                    item.destinationArrivalEstimateAt &&
-                    format(new Date(item.destinationArrivalEstimateAt.seconds * 1000), dateFormat)
-                  }
-                </TableCell>
-                <TableCell>
-                  {
-                    item.completedAt &&
-                    format(new Date(item.completedAt.seconds * 1000), dateFormat)
-                  }
-                </TableCell>
-                <TableCell>
-                  {
-                    item.positionLink &&
-                    <Link href={item.positionLink} target="_blank">Mapa</Link>
-                  }
-                </TableCell>
-              </TableRow>
-            ))}
+            {items.map(item => <RidesTableRow data={item} key={item.id} handleCancel={setOpen} />)}
           </TableBody>
         </Table>
       </TableContainer>
+      <CancelDialog open={open} handleClose={setClose} handleCancel={cancelRide} />
     </>
   );
 };
