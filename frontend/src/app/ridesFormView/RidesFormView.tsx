@@ -92,6 +92,10 @@ const processStopData = pipe(
 function createDeliveryRidesBody(data: Rides) {
   const stops = data.stops.map(processStopData);
 
+  if (data.stops.length > 2) {
+    stops[0] = over(lensPath(['noteForDriver']), note => `Doručení na více míst. ${note}`, stops[0]);
+  }
+
   return {id: uuidv4(), stops};
 }
 

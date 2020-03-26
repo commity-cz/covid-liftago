@@ -1,10 +1,10 @@
-import { Grid, TextField } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+import {Grid, TextField} from '@material-ui/core';
+import {makeStyles} from '@material-ui/styles';
 import classNames from 'classnames';
-import React, { useMemo } from 'react';
-import { Controller, ErrorMessage, useFormContext } from "react-hook-form";
-import { getFullName, hasError } from "../../formFunctions";
-import { StopKind } from "../../model";
+import React, {useMemo} from 'react';
+import {Controller, ErrorMessage, useFormContext} from "react-hook-form";
+import {getFullName, hasError} from "../../formFunctions";
+import {StopKind} from "../../model";
 import AddressFormContainer from "./AddressFormContainer";
 import ContactFormContainer from "./ContactFormContainer";
 
@@ -55,7 +55,7 @@ const StopFormContainer: React.FC<Props> = ({ kind, baseName = '', errorPath = [
                     error={hasError(errors, names.noteForDriver)}
                     label={kind ===StopKind.PICKUP ? "Instrukce na místě vyzvednutí (nepovinné)" : "Instrukce na místě doručení (nepovinné)"}
                     control={control}
-                    rules={{ maxLength: { value: 80, message: "Poznámka může obsahovat maximálně 80 znaků" } }}
+                    rules={{ maxLength: { value: 70, message: "Poznámka může obsahovat maximálně 70 znaků" } }}
                     defaultValue=""
                     helperText={<ErrorMessage errors={errors} name={names.noteForDriver}/>}
         />
