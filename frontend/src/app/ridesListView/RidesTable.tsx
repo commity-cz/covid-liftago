@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {DeliveryRide} from "../../firebase/model";
 import {makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,} from "@material-ui/core";
 import RidesTableTitle from "./RidesTableTitle";
@@ -6,6 +6,8 @@ import RidesTableRow from "./RidesTableRow";
 import CancelDialog from "./CancelDialog";
 import {FirebaseContext} from "../../firebase";
 import {Alert, Color} from "@material-ui/lab";
+import {useParams} from "react-router-dom";
+import {pathOr} from "ramda";
 
 const useStyles = makeStyles(({spacing}) => ({
   table: {
@@ -29,6 +31,7 @@ const useCancel = () => {
   const [open, setOpenState] = useState(false);
   const [rideId, setRideId] = useState<string | null>(null);
   const [alert, setAlert] = useState<AlertData | null>(null);
+  const [processing, setProcessing] = useState(false);
   const firebase = useContext(FirebaseContext);
 
   const setOpen = (rideId: string) => {
@@ -38,11 +41,21 @@ const useCancel = () => {
   const setClose = () => setOpenState(false);
   const cancelRide = () => {
     if (rideId) {
+      setProcessing(true);
       firebase?.cancelDeliveryRide(rideId)
-        .then(() => setAlert({severity: 'success', message: 'Rozvoz úspěšně zrušen.'}))
-        .catch(error => setAlert({severity: 'error', message: error.message}));
+        .then(() => {
+          setAlert({severity: 'success', message: 'Rozvoz úspěšně zrušen.'})
+
+          setTimeout(() => {
+            setAlert(null)
+          }, 5000);
+        })
+        .catch(error => setAlert({severity: 'error', message: error.message}))
+        .finally(() => {
+          setOpenState(false);
+          setProcessing(false);
+        })
     }
-    setOpenState(false);
   };
 
   return {
@@ -50,16 +63,37 @@ const useCancel = () => {
     open,
     setOpen,
     setClose,
-    cancelRide
+    cancelRide,
+    processing
   }
+};
+
+const messageTexts = {
+  'added': 'Úspěšně odesláno'
 };
 
 const RidesTable: React.FC<Props> = ({items}) => {
   const classes = useStyles();
-  const {alert, open, setOpen, setClose, cancelRide} = useCancel();
+  const {message} = useParams();
+  const [messageText, setMessageText] = useState();
+  const {alert, open, setOpen, setClose, cancelRide, processing} = useCancel();
+
+  useEffect(() => {
+    if (message) {
+      setMessageText(pathOr(null, [message], messageTexts));
+
+      setTimeout(() => {
+        setMessageText(null)
+      }, 5000);
+    }
+  }, [message]);
 
   return (
     <>
+      {
+        messageText &&
+        <Alert severity="success" className={classes.spaceBottom}>{messageText}</Alert>
+      }
       <RidesTableTitle/>
       {
         alert &&
@@ -83,7 +117,7 @@ const RidesTable: React.FC<Props> = ({items}) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <CancelDialog open={open} handleClose={setClose} handleCancel={cancelRide} />
+      <CancelDialog open={open} handleClose={setClose} handleCancel={cancelRide} processing={processing} />
     </>
   );
 };
