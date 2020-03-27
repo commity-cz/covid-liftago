@@ -89,7 +89,6 @@ const RidesTableRow: React.FC<Props> = ({data, handleCancel}) => {
             <Button
               color="primary"
               size="small"
-              onClick={() => handleCancel(data.documentId)}
               startIcon={<PlaceOutlined/>}
             >
               Mapa
