@@ -5,7 +5,6 @@ import {Container, makeStyles, Theme} from "@material-ui/core";
 import RidesFormView from "./app/ridesFormView/RidesFormView";
 import Header from "./app/common/Header";
 import PrivateRoute from "./app/common/ProtectedRoute";
-import RidesDetailView from "./app/ridesDetailView/RidesDetailView";
 import Footer from "./app/common/Footer";
 import RideUnavailableView from "./app/rideUnavailableView/RideUnavailableView";
 import RidesListView from "./app/ridesListView/RidesListView";
@@ -41,13 +40,10 @@ function Router() {
             <Route path="/login">
               <LoginView/>
             </Route>
-            <PrivateRoute path="/detail">
-              <RidesDetailView/>
-            </PrivateRoute>
             <PrivateRoute path="/ride-unavailable">
               <RideUnavailableView/>
             </PrivateRoute>
-            <PrivateRoute path="/list">
+            <PrivateRoute path="/list/:message?">
               <RidesListView/>
             </PrivateRoute>
             <PrivateRoute path="/">

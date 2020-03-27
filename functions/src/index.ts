@@ -12,6 +12,7 @@ const regionFunctions = functions.region(FUNCTIONS_REGION);
 
 export const deliveryRidesAvailability = regionFunctions.https.onCall(ridesFunctions.deliveryRidesAvailability);
 export const createDeliveryRide = regionFunctions.https.onCall(ridesFunctions.createDeliveryRide);
+export const cancelDeliveryRide = regionFunctions.https.onCall(ridesFunctions.cancelDeliveryRide);
 
 export const deliveryRideWebhook = regionFunctions.https.onRequest(ridesWebhooks.deliveryRideWebhook);
 export const updateAllDeliveryRides = regionFunctions.https.onRequest(ridesWebhooks.updateAllDeliveryRides);

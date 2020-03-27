@@ -15,9 +15,10 @@ export function getWebhookUrl(rideDocumentId: string) {
   return `https://${FUNCTIONS_REGION}-${process.env.GCLOUD_PROJECT}.cloudfunctions.net/deliveryRideWebhook?rideDocumentId=${rideDocumentId}`;
 }
 
-export async function updateAllDeliveryRides() {
+export async function updateAllDeliveryRides(req: functions.Request, resp: functions.Response) {
   const allDeliveryRidesDocuments = await admin.firestore().collection('deliveryRides').listDocuments();
   await Promise.all(allDeliveryRidesDocuments.map(doc => updateDeliveryRide(doc)));
+  resp.send();
 }
 
 async function updateDeliveryRide(deliveryRideDoc: FirebaseFirestore.DocumentReference) {
@@ -29,7 +30,6 @@ async function updateDeliveryRide(deliveryRideDoc: FirebaseFirestore.DocumentRef
     pickupArrivalEstimateAt: parseIsoDate(ride.pickupArrivalEstimateAt),
     destinationArrivalEstimateAt: parseIsoDate(ride.destinationArrivalEstimateAt),
     completedAt: parseIsoDate(ride.completedAt),
-    cancelLink: ride.links.cancel,
     positionLink: ride.links.position
   };
 

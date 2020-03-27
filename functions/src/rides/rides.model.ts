@@ -1,0 +1,3 @@
+interface CancelDeliveryRideRequest {
+  rideDocumentId: string
+}
