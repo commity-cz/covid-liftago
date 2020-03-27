@@ -1,9 +1,10 @@
 import { makeStyles } from '@material-ui/core';
 import classNames from 'classnames';
-import { makeRequired, TextField } from "mui-rff";
+import { makeRequired } from "mui-rff";
 import React from 'react';
 import * as yup from "yup";
 import { PhoneField } from "./fields/PhoneField";
+import { TextField } from "./fields/TextField";
 
 const useStyles = makeStyles(() => ({
   root: {
