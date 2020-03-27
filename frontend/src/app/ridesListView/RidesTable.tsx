@@ -110,6 +110,7 @@ const RidesTable: React.FC<Props> = ({items}) => {
               <TableCell>Očekávané doručení</TableCell>
               <TableCell>Doručeno</TableCell>
               <TableCell/>
+              <TableCell/>
             </TableRow>
           </TableHead>
           <TableBody>

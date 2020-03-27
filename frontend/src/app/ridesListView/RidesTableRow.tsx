@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {cancelableStatuses, DeliveryRide, RideStatus} from "../../firebase/model";
-import {Button, IconButton, Link, makeStyles, TableCell, TableRow,} from "@material-ui/core";
+import {Button, Link, makeStyles, TableCell, TableRow,} from "@material-ui/core";
 import {format} from 'date-fns'
 import {amber, green, lightBlue, red} from '@material-ui/core/colors';
 import RideStatusBlock from "./RideStatusBlock";
@@ -16,9 +16,7 @@ const useStyles = makeStyles(({spacing}) => ({
     marginRight: spacing(1),
   },
   actions: {
-    textAlign: 'right',
-    paddingTop: 0,
-    paddingBottom: 0,
+    padding: `0 ${spacing(0.5)}px`,
   },
   [RideStatus.PROCESSING]: {
     borderLeft: `5px solid ${amber[800]}`,
@@ -88,9 +86,18 @@ const RidesTableRow: React.FC<Props> = ({data, handleCancel}) => {
         {
           data.positionLink &&
           <Link href={data.positionLink} target="_blank">
-            <IconButton size="small"><PlaceOutlined/></IconButton>
+            <Button
+              color="primary"
+              size="small"
+              onClick={() => handleCancel(data.documentId)}
+              startIcon={<PlaceOutlined/>}
+            >
+              Mapa
+            </Button>
           </Link>
         }
+      </TableCell>
+      <TableCell className={classes.actions}>
         {
           data.userId === user?.uid && cancelableStatuses.includes(data.rideStatus) &&
           <Button
