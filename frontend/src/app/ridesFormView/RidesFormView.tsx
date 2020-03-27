@@ -1,9 +1,9 @@
-import { Alert } from "@material-ui/lab";
-import React, { useContext, useEffect, useState } from 'react';
-import { useHistory } from "react-router-dom";
-import { FirebaseContext } from "../../firebase";
-import RidesForm, { Stops } from "./components/RidesForm";
-import { createDeliveryRidesBody } from "./functions";
+import {Alert} from "@material-ui/lab";
+import React, {useContext, useEffect, useState} from 'react';
+import {useHistory} from "react-router-dom";
+import {FirebaseContext} from "../../firebase";
+import RidesForm, {Stops} from "./components/RidesForm";
+import {createDeliveryRidesBody} from "./functions";
 
 function RidesFormView() {
   const firebase = useContext(FirebaseContext);
@@ -34,7 +34,7 @@ function RidesFormView() {
     // TODO: in case of duplicity, submit again
     return firebase.addDeliveryRide(dataToSend)
       .then(_ => {
-        history.push('/detail')
+        history.push('/list/added')
       })
       .catch(_ => {
         setErrorMessage(`Chyba při odesílání: ${_}`);
