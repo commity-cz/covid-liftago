@@ -11,7 +11,14 @@ export type TextFieldProps = Partial<Omit<MuiTextFieldProps, 'type' | 'onChange'
 
 export function PhoneField(props: TextFieldProps) {
   const { name, fieldProps, helperText, fullWidth = true, ...rest } = props;
-  const { errors, submitErrors, submitFailed, touched } = useFormState();
+  const { errors, submitErrors, submitFailed, touched } = useFormState({
+    subscription: {
+      errors: true,
+      submitErrors: true,
+      submitFailed: true,
+      touched: true
+    }
+  });
   const [errorState, setErrorState] = useState<string | null>(null);
 
   useEffect(() => {
