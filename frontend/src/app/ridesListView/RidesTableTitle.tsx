@@ -18,7 +18,7 @@ const RidesTableTitle: React.FC = () => {
   return (
     <Grid container justify="space-between" alignItems="center" className={classes.title}>
       <Grid item>
-        <Typography variant="h4">Seznam rozvozů</Typography>
+        <Typography variant="h4">Přehled rozvozů</Typography>
       </Grid>
       <Grid item>
         <Link to="/" className={classes.link}>

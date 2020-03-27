@@ -1,5 +1,5 @@
 import {AppBar, Button, IconButton, makeStyles, Theme, Toolbar} from "@material-ui/core";
-import {ExitToApp, HelpOutline} from '@material-ui/icons';
+import {ExitToApp, HelpOutline, List} from '@material-ui/icons';
 import classNames from "classnames";
 import React, {useContext} from 'react';
 import {FirebaseContext} from "../../firebase";
@@ -33,10 +33,11 @@ const Header: React.FC<StandardProps> = ({ className, ...others }) => {
     <AppBar position="static" {...others} color={"transparent"} className={classNames(className, classes.root)}>
       <Toolbar>
         <img src={`${process.env.PUBLIC_URL}/logo.svg`} className={classes.logo} alt="Logo Dobrovoz"/>
+        <div className={classes.filler}/>
         {
           user &&
           <>
-            <Link to="/list" className={classes.link}><Button>Seznam</Button></Link>
+            <Link to="/list" className={classes.link}><Button startIcon={<List/>}>Přehled rozvozů</Button></Link>
           </>
         }
         <div className={classes.filler}/>
