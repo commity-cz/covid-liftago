@@ -15,7 +15,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     flexGrow: 1,
   },
   logo: {
-    marginRight: spacing(2),
+    marginRight: spacing(4),
     maxWidth: 170,
     width: '20%',
   },
@@ -33,7 +33,6 @@ const Header: React.FC<StandardProps> = ({ className, ...others }) => {
     <AppBar position="static" {...others} color={"transparent"} className={classNames(className, classes.root)}>
       <Toolbar>
         <img src={`${process.env.PUBLIC_URL}/logo.svg`} className={classes.logo} alt="Logo Dobrovoz"/>
-        <div className={classes.filler}/>
         {
           user &&
           <>
