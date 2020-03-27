@@ -1,11 +1,12 @@
 import { Grid, makeStyles } from '@material-ui/core';
 import classNames from 'classnames';
-import { makeRequired, TextField } from "mui-rff";
+import { makeRequired } from "mui-rff";
 import React from 'react';
 import * as yup from "yup";
 import { StopKind } from "../../../model";
 import AddressFormContainer, { addressSchema } from "./AddressFormContainer";
 import ContactFormContainer, { contactSchema } from "./ContactFormContainer";
+import { TextField } from "./fields/TextField";
 
 const useStyles = makeStyles(() => ({
   root: {},

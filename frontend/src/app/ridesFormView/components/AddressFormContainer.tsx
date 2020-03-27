@@ -1,11 +1,12 @@
 import { Button, makeStyles, Theme } from "@material-ui/core";
 import classNames from 'classnames';
-import { makeRequired, TextField } from "mui-rff";
+import { makeRequired } from "mui-rff";
 import React from 'react';
 import { useFormState } from "react-final-form";
 import * as yup from "yup";
 import { When } from "./Condition";
 import AddressAutocomplete from "./fields/AddressAutocomplete";
+import { TextField } from "./fields/TextField";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {

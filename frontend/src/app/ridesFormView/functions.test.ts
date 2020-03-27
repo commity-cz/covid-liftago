@@ -48,7 +48,6 @@ test('createDeliveryRidesBody - 2 stops', function () {
         stopId: '1',
         contact: {
           name: 'test',
-          company: '',
           phoneNumber: '+420 123 123 123'
         },
         location: {
@@ -58,7 +57,6 @@ test('createDeliveryRidesBody - 2 stops', function () {
             houseNumber: '1',
             zipCode: '281 02',
             country: 'Czech republic',
-            description: 'description 1'
           }
         },
         noteForDriver: 'noteForDriver 1',
@@ -68,7 +66,6 @@ test('createDeliveryRidesBody - 2 stops', function () {
         stopId: '2',
         contact: {
           name: 'test',
-          company: '',
           phoneNumber: '+420 123 123 123'
         },
         location: {
@@ -78,7 +75,6 @@ test('createDeliveryRidesBody - 2 stops', function () {
             houseNumber: '2',
             zipCode: '281 02',
             country: 'Czech republic',
-            description: ''
           }
         },
         noteForDriver: '',
@@ -98,7 +94,6 @@ test('createDeliveryRidesBody - 2 stops', function () {
             stopId: '1',
             contact: {
               name: 'test',
-              company: '',
               phoneNumber: '+420123123123'
             },
             location: {
@@ -108,7 +103,6 @@ test('createDeliveryRidesBody - 2 stops', function () {
                 houseNumber: '1',
                 zipCode: '281 02',
                 country: 'Czech republic',
-                description: 'description 1'
               }
             },
             noteForDriver: 'noteForDriver 1',
@@ -118,7 +112,6 @@ test('createDeliveryRidesBody - 2 stops', function () {
             stopId: '2',
             contact: {
               name: 'test',
-              company: '',
               phoneNumber: '+420123123123'
             },
             location: {
@@ -128,7 +121,6 @@ test('createDeliveryRidesBody - 2 stops', function () {
                 houseNumber: '2',
                 zipCode: '281 02',
                 country: 'Czech republic',
-                description: ''
               }
             },
             noteForDriver: 'COVID 19 cz',
@@ -147,7 +139,6 @@ test('createDeliveryRidesBody - 3 stops', function () {
         stopId: '1',
         contact: {
           name: 'test',
-          company: '',
           phoneNumber: '+420 123 123 123'
         },
         location: {
@@ -156,8 +147,7 @@ test('createDeliveryRidesBody - 3 stops', function () {
             street: 'Cerhenice',
             houseNumber: '1',
             zipCode: '281 02',
-            country: 'Czech republic',
-            description: 'description 1'
+            country: 'Czech republic'
           }
         },
         noteForDriver: 'noteForDriver 1',
@@ -167,7 +157,6 @@ test('createDeliveryRidesBody - 3 stops', function () {
         stopId: '2',
         contact: {
           name: 'test',
-          company: '',
           phoneNumber: '+420 123 123 123'
         },
         location: {
@@ -177,7 +166,6 @@ test('createDeliveryRidesBody - 3 stops', function () {
             houseNumber: '2',
             zipCode: '281 02',
             country: 'Czech republic',
-            description: ''
           }
         },
         noteForDriver: '',
@@ -187,7 +175,6 @@ test('createDeliveryRidesBody - 3 stops', function () {
         stopId: '3',
         contact: {
           name: 'test',
-          company: '',
           phoneNumber: '+420 123 123 123'
         },
         location: {
@@ -197,7 +184,6 @@ test('createDeliveryRidesBody - 3 stops', function () {
             houseNumber: '3',
             zipCode: '281 02',
             country: 'Czech republic',
-            description: ''
           }
         },
         noteForDriver: '',
@@ -217,7 +203,6 @@ test('createDeliveryRidesBody - 3 stops', function () {
             stopId: '1',
             contact: {
               name: 'test',
-              company: '',
               phoneNumber: '+420123123123'
             },
             location: {
@@ -227,7 +212,6 @@ test('createDeliveryRidesBody - 3 stops', function () {
                 houseNumber: '1',
                 zipCode: '281 02',
                 country: 'Czech republic',
-                description: 'description 1'
               }
             },
             noteForDriver: 'Doručení na více míst. noteForDriver 1',
@@ -237,7 +221,6 @@ test('createDeliveryRidesBody - 3 stops', function () {
             stopId: '2',
             contact: {
               name: 'test',
-              company: '',
               phoneNumber: '+420123123123'
             },
             location: {
@@ -247,7 +230,6 @@ test('createDeliveryRidesBody - 3 stops', function () {
                 houseNumber: '2',
                 zipCode: '281 02',
                 country: 'Czech republic',
-                description: ''
               }
             },
             noteForDriver: 'COVID 19 cz',
@@ -257,7 +239,6 @@ test('createDeliveryRidesBody - 3 stops', function () {
             stopId: '3',
             contact: {
               name: 'test',
-              company: '',
               phoneNumber: '+420123123123'
             },
             location: {
@@ -267,7 +248,6 @@ test('createDeliveryRidesBody - 3 stops', function () {
                 houseNumber: '3',
                 zipCode: '281 02',
                 country: 'Czech republic',
-                description: ''
               }
             },
             noteForDriver: 'COVID 19 cz',
