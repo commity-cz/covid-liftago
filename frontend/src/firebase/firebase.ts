@@ -4,6 +4,7 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/functions';
 import {DeliveryRidesAvailability} from "./model";
+import {endOfDay, startOfDay} from 'date-fns'
 
 class Firebase {
   private auth: firebase.auth.Auth;
@@ -50,11 +51,17 @@ class Firebase {
     this.auth.onAuthStateChanged(callback)
   };
 
-  getDeliveryRides = async (callback: any) => {
+  getDeliveryRides = async (callback: any, date?: Date | null) => {
     const token = await this.auth.currentUser?.getIdTokenResult();
     const organization = token?.claims.organization;
-    this.firestore.collection('deliveryRides')
+
+    const start = startOfDay(date || new Date());
+    const end = endOfDay(date|| new Date());
+
+    return this.firestore.collection('deliveryRides')
       .where('organizationId', '==', organization)
+      .where('created', '>=', start)
+      .where('created', '<=', end)
       .orderBy('created', 'desc')
       .onSnapshot(callback)
   };
