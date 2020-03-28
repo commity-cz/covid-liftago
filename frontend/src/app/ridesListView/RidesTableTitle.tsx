@@ -1,11 +1,11 @@
 import React from "react";
-import {Button, Grid, makeStyles, Typography} from "@material-ui/core";
-import {Add} from "@material-ui/icons";
+import {Button, Grid, IconButton, makeStyles, Typography} from "@material-ui/core";
+import {Add, ArrowLeft, ArrowRight} from "@material-ui/icons";
 import {Link} from "react-router-dom";
 import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import {cs} from "date-fns/locale";
-import format from "date-fns/format";
+import {addDays, format, subDays} from 'date-fns'
 
 const useStyles = makeStyles(({spacing}) => ({
   title: {
@@ -48,10 +48,12 @@ const RidesTableTitle: React.FC<Props> = ({date, setDate}) => {
           </Link>
         </Grid>
       </Grid>
+      <IconButton onClick={() => setDate(subDays(date || new Date(), 1))}><ArrowLeft/></IconButton>
       <MuiPickersUtilsProvider utils={LocalizedUtils} locale={cs}>
         <DatePicker
           autoOk
           disableFuture
+          maxDateMessage="Lze zobrazit pouze aktuální den a starší"
           format={'d. MMM yyyy'}
           label="Datum"
           className={classes.title}
@@ -59,6 +61,7 @@ const RidesTableTitle: React.FC<Props> = ({date, setDate}) => {
           onChange={setDate}
         />
       </MuiPickersUtilsProvider>
+      <IconButton onClick={() => setDate(addDays(date || new Date(), 1))}><ArrowRight/></IconButton>
     </>
   )
 };
