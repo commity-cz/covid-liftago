@@ -54,7 +54,7 @@ const ContactFormContainer: React.FC<Props> = ({name, kind, ...others}) => {
       {
         kind === StopKind.PICKUP &&
         <Checkbox
-          label="Jedná se o převoz lidi"
+          label="Jedná se o převoz lidí"
           name={`${name}.peopleFerry`}
         />
       }
