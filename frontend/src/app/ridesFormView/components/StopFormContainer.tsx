@@ -1,12 +1,12 @@
-import { Grid, makeStyles } from '@material-ui/core';
+import {Grid, makeStyles} from '@material-ui/core';
 import classNames from 'classnames';
-import { makeRequired } from "mui-rff";
+import {makeRequired} from "mui-rff";
 import React from 'react';
 import * as yup from "yup";
-import { StopKind } from "../../../model";
-import AddressFormContainer, { addressSchema } from "./AddressFormContainer";
-import ContactFormContainer, { contactSchema } from "./ContactFormContainer";
-import { TextField } from "./fields/TextField";
+import {StopKind} from "../../../model";
+import AddressFormContainer, {addressSchema} from "./AddressFormContainer";
+import ContactFormContainer, {contactSchema} from "./ContactFormContainer";
+import {TextField} from "./fields/TextField";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -24,7 +24,7 @@ export const stopSchema = yup.object().shape({
   }).required(),
   noteForDriver: yup.string()
     // eslint-disable-next-line no-template-curly-in-string
-    .max(70, 'Poznámka může obsahovat maximálně ${max} znaků'),
+    .max(60, 'Poznámka může obsahovat maximálně ${max} znaků'),
   kind: yup.string().oneOf(Object.keys(StopKind)),
 });
 
@@ -48,7 +48,7 @@ const StopFormContainer: React.FC<Props> = ({ kind, name, updateValues, ...other
            className={classNames(classes.root, others.className)} container spacing={3}>
 
       <Grid item xs={12} md={6}>
-        <ContactFormContainer name={`${name}.contact`}/>
+        <ContactFormContainer name={`${name}.contact`} kind={kind} />
       </Grid>
       <Grid item xs={12} md={6}>
         <AddressFormContainer name={addressName} updateAddress={(value) => updateValues(addressName, value)}/>

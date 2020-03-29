@@ -19,7 +19,9 @@ const useStyles = makeStyles(({spacing}) => ({
 }));
 
 type Props = {
-  items: DeliveryRide[]
+  items: DeliveryRide[],
+  date: Date | null,
+  setDate: (date: Date | null) => void;
 }
 
 type AlertData = {
@@ -72,7 +74,7 @@ const messageTexts = {
   'added': 'Úspěšně odesláno'
 };
 
-const RidesTable: React.FC<Props> = ({items}) => {
+const RidesTable: React.FC<Props> = ({items, date, setDate}) => {
   const classes = useStyles();
   const {message} = useParams();
   const [messageText, setMessageText] = useState();
@@ -94,7 +96,7 @@ const RidesTable: React.FC<Props> = ({items}) => {
         messageText &&
         <Alert severity="success" className={classes.spaceBottom}>{messageText}</Alert>
       }
-      <RidesTableTitle/>
+      <RidesTableTitle date={date} setDate={setDate}/>
       {
         alert &&
           <Alert severity={alert.severity} className={classes.spaceBottom}>{alert.message}</Alert>
