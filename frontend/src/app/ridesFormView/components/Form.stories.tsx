@@ -1,13 +1,13 @@
-import { Button } from '@material-ui/core';
-import { action } from '@storybook/addon-actions';
-import { Debug, makeValidate } from "mui-rff";
-import { assocPath, split } from "ramda";
-import React, { useState } from 'react';
-import { Form } from 'react-final-form'
+import {Button} from '@material-ui/core';
+import {action} from '@storybook/addon-actions';
+import {Debug, makeValidate} from "mui-rff";
+import {assocPath, split} from "ramda";
+import React, {useState} from 'react';
+import {Form} from 'react-final-form'
 import * as yup from "yup";
-import { StopKind } from "../../../model";
+import {StopKind} from "../../../model";
 import AddressFormContainer from "./AddressFormContainer";
-import ContactFormContainer, { contactSchema } from "./ContactFormContainer";
+import ContactFormContainer, {contactSchema} from "./ContactFormContainer";
 import RidesForm from "./RidesForm";
 import StopFormContainer from "./StopFormContainer";
 
@@ -48,7 +48,7 @@ export const ContactFormContainerStory = () => {
         return (
           <form onSubmit={props.handleSubmit}>
 
-            <ContactFormContainer name="contact"/>
+            <ContactFormContainer name="contact" kind={StopKind.PICKUP} />
 
             <Debug/>
             <Button type={"submit"}>Send</Button>
