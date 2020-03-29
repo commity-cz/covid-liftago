@@ -1,10 +1,12 @@
-import { makeStyles } from '@material-ui/core';
+import {makeStyles} from '@material-ui/core';
 import classNames from 'classnames';
-import { makeRequired } from "mui-rff";
+import {makeRequired} from "mui-rff";
 import React from 'react';
 import * as yup from "yup";
-import { PhoneField } from "./fields/PhoneField";
-import { TextField } from "./fields/TextField";
+import {PhoneField} from "./fields/PhoneField";
+import {TextField} from "./fields/TextField";
+import {Checkbox} from "./fields/Checkbox";
+import {StopKind} from "../../../model";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -18,6 +20,7 @@ export const contactSchema = yup.object().shape({
   phoneNumber: yup.string()
     .required("Vyplňte telefonní číslo ve formátu +420 777 123 456")
     .matches(/\+\d\d\d \d\d\d \d\d\d \d\d\d/, "Telefonní číslo zadejte ve formátu +420 777 123 456"),
+  peopleFerry: yup.boolean(),
 });
 
 export type Contact = yup.InferType<typeof contactSchema>
@@ -25,10 +28,11 @@ export type Contact = yup.InferType<typeof contactSchema>
 const required = makeRequired(contactSchema);
 
 type Props = StandardProps & {
-  name: string
+  name: string;
+  kind: StopKind;
 };
 
-const ContactFormContainer: React.FC<Props> = ({ name, ...others }) => {
+const ContactFormContainer: React.FC<Props> = ({name, kind, ...others}) => {
   const classes = useStyles();
 
   return (
@@ -46,6 +50,14 @@ const ContactFormContainer: React.FC<Props> = ({ name, ...others }) => {
         name={`${name}.phoneNumber`}
         required={required.phoneNumber}
       />
+
+      {
+        kind === StopKind.PICKUP &&
+        <Checkbox
+          label="Jedná se o převoz lidi"
+          name={`${name}.peopleFerry`}
+        />
+      }
 
     </div>
   )
