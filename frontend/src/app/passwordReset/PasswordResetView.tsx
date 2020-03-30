@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Redirect, useHistory } from "react-router-dom";
 import Firebase, { FirebaseContext } from "../../firebase";
 import UserContext from "../../user/context";
@@ -8,7 +8,6 @@ function PasswordResetView() {
   const firebase = useContext(FirebaseContext) as Firebase;
   const user = useContext(UserContext);
   const history = useHistory();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(function () {
     if (user) {
@@ -18,20 +17,19 @@ function PasswordResetView() {
 
   const resetPassword = ({ email }: { email: string }) => {
 
-    return firebase.sendPasswordResetEmail(email)
+    return firebase.sendPasswordResetEmail(email, window.location.origin + '/login')
       .then(function (v) {
-        history.push('/login?passwordReset=true')
+        history.push('/login?reset=true')
       }).catch(function (error) {
         if (error.code === 'auth/invalid-email') {
           return { 'email': "Zadejte validní email" }
         }
 
         if (error.code === 'auth/user-not-found') {
-          setErrorMessage("Pro uvedený email neexistuje v aplikaci užvatelský účet." );
-          return;
+          return { main: "Pro uvedený email neexistuje v aplikaci užvatelský účet." };
         }
 
-        setErrorMessage('Došlo k chybě, pokud se bude opakovat, kontaktujte dodavatele aplikace.' );
+        return { main: 'Došlo k chybě, pokud se bude opakovat, kontaktujte dodavatele aplikace.' };
       });
   };
 
@@ -40,7 +38,7 @@ function PasswordResetView() {
   }
 
   return (
-    <PasswordResetForm onSubmit={resetPassword} errorMessage={errorMessage}/>
+    <PasswordResetForm onSubmit={resetPassword}/>
   );
 }
 

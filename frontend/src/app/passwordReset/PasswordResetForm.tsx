@@ -33,11 +33,10 @@ export const formSchema = yup.object().shape({
 const validate = makeValidate(formSchema);
 
 type Props = {
-  errorMessage: string | null;
   onSubmit: (userData: any) => void;
 };
 
-const PasswordResetForm: React.FC<Props> = ({ onSubmit, errorMessage }) => {
+const PasswordResetForm: React.FC<Props> = ({ onSubmit }) => {
   const classes = useStyles();
 
   return (
@@ -45,7 +44,7 @@ const PasswordResetForm: React.FC<Props> = ({ onSubmit, errorMessage }) => {
       <Form
         onSubmit={onSubmit}
         validate={validate}
-        render={({ handleSubmit, form, submitting, pristine, values }) => (
+        render={({ handleSubmit, form, submitting, pristine, submitErrors }) => (
           <form onSubmit={handleSubmit} className={classes.margin} noValidate>
             <Grid container spacing={2} alignItems="flex-end">
               <Grid item xs={1}/>
@@ -65,8 +64,8 @@ const PasswordResetForm: React.FC<Props> = ({ onSubmit, errorMessage }) => {
               <Grid item xs={1}/>
               <Grid item xs={11}>
                 {
-                  errorMessage &&
-                  <Alert severity="error">{errorMessage}</Alert>
+                  submitErrors && submitErrors.main &&
+                  <Alert severity="error">{submitErrors.main}</Alert>
                 }
               </Grid>
             </Grid>
