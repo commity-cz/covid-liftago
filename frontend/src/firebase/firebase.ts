@@ -1,10 +1,10 @@
+import { endOfDay, startOfDay } from 'date-fns'
 import firebase from "firebase";
 import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/functions';
-import {DeliveryRidesAvailability} from "./model";
-import {endOfDay, startOfDay} from 'date-fns'
+import { DeliveryRidesAvailability } from "./model";
 
 class Firebase {
   private auth: firebase.auth.Auth;
@@ -29,6 +29,10 @@ class Firebase {
   doSignOut = () => this.auth.signOut();
   doSignIn = (email: string, password: string) => {
     return this.auth.signInWithEmailAndPassword(email, password);
+  };
+
+  sendPasswordResetEmail = (email: string) => {
+    return this.auth.sendPasswordResetEmail(email);
   };
 
   addDeliveryRide = (data: Object) => {
