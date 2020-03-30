@@ -20,7 +20,7 @@ export const contactSchema = yup.object().shape({
   phoneNumber: yup.string()
     .required("Vyplňte telefonní číslo ve formátu +420 777 123 456")
     .matches(/\+\d\d\d \d\d\d \d\d\d \d\d\d/, "Telefonní číslo zadejte ve formátu +420 777 123 456"),
-  peopleFerry: yup.boolean(),
+  peopleFerry: yup.bool().notRequired().default(undefined),
 });
 
 export type Contact = yup.InferType<typeof contactSchema>

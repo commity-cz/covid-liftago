@@ -1,4 +1,4 @@
-import { StopKind } from "../../model";
+import {StopKind} from "../../model";
 import {
   createDeliveryRidesBody,
   removeSpacesFromPhoneNumber,
@@ -256,7 +256,131 @@ test('createDeliveryRidesBody - 3 stops', function () {
         ]
       }
     );
+});
 
+test('createDeliveryRidesBody - people ferry', function () {
+  const body = createDeliveryRidesBody({
+    stops: [
+      {
+        stopId: '1',
+        contact: {
+          name: 'test',
+          phoneNumber: '+420 123 123 123',
+          peopleFerry: true,
+        },
+        location: {
+          address: {
+            city: 'Cerhenice',
+            street: 'Cerhenice',
+            houseNumber: '1',
+            zipCode: '281 02',
+            country: 'Czech republic'
+          }
+        },
+        noteForDriver: 'noteForDriver 1',
+        kind: StopKind.PICKUP
+      },
+      {
+        stopId: '2',
+        contact: {
+          name: 'test',
+          phoneNumber: '+420 123 123 123'
+        },
+        location: {
+          address: {
+            city: 'Cerhenice',
+            street: 'Cerhenice',
+            houseNumber: '2',
+            zipCode: '281 02',
+            country: 'Czech republic',
+          }
+        },
+        noteForDriver: '',
+        kind: StopKind.DESTINATION
+      },
+      {
+        stopId: '3',
+        contact: {
+          name: 'test',
+          phoneNumber: '+420 123 123 123'
+        },
+        location: {
+          address: {
+            city: 'Cerhenice',
+            street: 'Cerhenice',
+            houseNumber: '3',
+            zipCode: '281 02',
+            country: 'Czech republic',
+          }
+        },
+        noteForDriver: '',
+        kind: StopKind.DESTINATION
+      }
+    ]
+  });
+
+  expect({
+    stops: body.stops
+  })
+    .toEqual({
+        stops: [
+          {
+            stopId: '1',
+            contact: {
+              name: 'test',
+              phoneNumber: '+420123123123'
+            },
+            location: {
+              address: {
+                city: 'Cerhenice',
+                street: 'Cerhenice',
+                houseNumber: '1',
+                zipCode: '281 02',
+                country: 'Czech republic',
+              }
+            },
+            noteForDriver: 'Převoz lidí. Doručení na více míst. noteForDriver 1',
+            kind: StopKind.PICKUP
+          },
+          {
+            stopId: '2',
+            contact: {
+              name: 'test',
+              phoneNumber: '+420123123123'
+            },
+            location: {
+              address: {
+                city: 'Cerhenice',
+                street: 'Cerhenice',
+                houseNumber: '2',
+                zipCode: '281 02',
+                country: 'Czech republic',
+              }
+            },
+            noteForDriver: 'COVID 19 cz',
+            kind: 'DESTINATION'
+          },
+          {
+            stopId: '3',
+            contact: {
+              name: 'test',
+              phoneNumber: '+420123123123'
+            },
+            location: {
+              address: {
+                city: 'Cerhenice',
+                street: 'Cerhenice',
+                houseNumber: '3',
+                zipCode: '281 02',
+                country: 'Czech republic',
+              }
+            },
+            noteForDriver: 'COVID 19 cz',
+            kind: 'DESTINATION'
+          }
+        ]
+      }
+    );
 });
 
 

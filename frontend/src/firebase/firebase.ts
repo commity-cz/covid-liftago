@@ -1,10 +1,10 @@
+import { endOfDay, startOfDay } from 'date-fns'
 import firebase from "firebase";
 import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/functions';
-import {DeliveryRidesAvailability} from "./model";
-import {endOfDay, startOfDay} from 'date-fns'
+import { DeliveryRidesAvailability } from "./model";
 
 class Firebase {
   private auth: firebase.auth.Auth;
@@ -29,6 +29,11 @@ class Firebase {
   doSignOut = () => this.auth.signOut();
   doSignIn = (email: string, password: string) => {
     return this.auth.signInWithEmailAndPassword(email, password);
+  };
+
+  sendPasswordResetEmail = (email: string, returnUrl: string) => {
+    const options = returnUrl ? { url: returnUrl } : null;
+    return this.auth.sendPasswordResetEmail(email, options);
   };
 
   addDeliveryRide = (data: Object) => {
@@ -56,7 +61,7 @@ class Firebase {
     const organization = token?.claims.organization;
 
     const start = startOfDay(date || new Date());
-    const end = endOfDay(date|| new Date());
+    const end = endOfDay(date || new Date());
 
     return this.firestore.collection('deliveryRides')
       .where('organizationId', '==', organization)
@@ -67,7 +72,7 @@ class Firebase {
   };
 
   cancelDeliveryRide = (rideDocumentId: string) => {
-    return this.cancelDeliveryRideCallable({rideDocumentId});
+    return this.cancelDeliveryRideCallable({ rideDocumentId });
   };
 }
 
