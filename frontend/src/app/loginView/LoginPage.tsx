@@ -45,7 +45,7 @@ const LoginPage: React.FC<Props> = ({ onSubmit, errorMessage }) => {
       <Paper className={classes.paper}>
         {
           passwordReset &&
-          <Alert severity="success">Na Váš email byl zaslán odkaz pro změnu hesla.</Alert>
+          <Alert severity="info">Na Váš email byl zaslán odkaz pro změnu hesla.</Alert>
         }
         {
           errorMessage &&

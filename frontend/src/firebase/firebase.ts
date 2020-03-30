@@ -31,8 +31,9 @@ class Firebase {
     return this.auth.signInWithEmailAndPassword(email, password);
   };
 
-  sendPasswordResetEmail = (email: string) => {
-    return this.auth.sendPasswordResetEmail(email);
+  sendPasswordResetEmail = (email: string, returnUrl: string) => {
+    const options = returnUrl ? { url: returnUrl } : null;
+    return this.auth.sendPasswordResetEmail(email, options);
   };
 
   addDeliveryRide = (data: Object) => {
@@ -60,7 +61,7 @@ class Firebase {
     const organization = token?.claims.organization;
 
     const start = startOfDay(date || new Date());
-    const end = endOfDay(date|| new Date());
+    const end = endOfDay(date || new Date());
 
     return this.firestore.collection('deliveryRides')
       .where('organizationId', '==', organization)
@@ -71,7 +72,7 @@ class Firebase {
   };
 
   cancelDeliveryRide = (rideDocumentId: string) => {
-    return this.cancelDeliveryRideCallable({rideDocumentId});
+    return this.cancelDeliveryRideCallable({ rideDocumentId });
   };
 }
 
