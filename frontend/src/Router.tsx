@@ -1,13 +1,14 @@
+import { Container, makeStyles, Theme } from "@material-ui/core";
 import React from 'react';
-import {BrowserRouter, Route, Switch} from "react-router-dom";
-import LoginView from "./app/loginView/LoginView";
-import {Container, makeStyles, Theme} from "@material-ui/core";
-import RidesFormView from "./app/ridesFormView/RidesFormView";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Footer from "./app/common/Footer";
 import Header from "./app/common/Header";
 import PrivateRoute from "./app/common/ProtectedRoute";
-import Footer from "./app/common/Footer";
-import RideUnavailableView from "./app/rideUnavailableView/RideUnavailableView";
+import LoginView from "./app/loginView/LoginView";
+import PasswordResetView from "./app/passwordReset/PasswordResetView";
+import RidesFormView from "./app/ridesFormView/RidesFormView";
 import RidesListView from "./app/ridesListView/RidesListView";
+import RideUnavailableView from "./app/rideUnavailableView/RideUnavailableView";
 
 const useStyles = makeStyles(({palette}: Theme) => ({
   '@global': {
@@ -39,6 +40,9 @@ function Router() {
           <Switch>
             <Route path="/login">
               <LoginView/>
+            </Route>
+            <Route path="/password-reset">
+              <PasswordResetView/>
             </Route>
             <PrivateRoute path="/ride-unavailable">
               <RideUnavailableView/>
